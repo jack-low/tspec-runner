@@ -168,3 +168,22 @@ Per-step policies (optional):
 - `timeout_ms`: hard timeout (ms)
 - `retry`: `{ max, backoff_ms }`
 - `on_error`: `{ action: abort|skip_case|continue, note }`
+
+
+## Pytest reporting (pytest / pytest-html)
+Legacy JSON report remains the default. When requested and available, pytest-based reports can be generated from the JSON without rerunning UI actions.
+
+Install:
+```bash
+uv pip install -e ".[report]"
+```
+
+Generate during run:
+```bash
+tspec run examples/android_login.tspec.md --backend appium --report out/android.json --pytest-html out/android.html --pytest-junitxml out/android.xml
+```
+
+Generate from existing JSON:
+```bash
+tspec pytest-report out/android.json --html out/android.html
+```

@@ -21,6 +21,7 @@ from .doctor_android import check_android_env
 from .doctor_selenium import check_selenium_env
 from .doctor_ios import check_ios_env
 from .mcp_server import start as mcp_start
+from .pytest_reporting import generate_pytest_reports
 from .report_view import load_report, filter_cases, summarize_failures, format_error_message
 
 app = typer.Typer(add_completion=False, help="TSpec runner\nMarkdown + ```tspec blocks.")
@@ -344,6 +345,9 @@ def run(
     config: Optional[Path] = typer.Option(None, "--config", help="Path to tspec.toml"),
     watch: bool = typer.Option(False, "--watch/--no-watch", help="Live step progress logs"),
     step_timeout_ms: Optional[int] = typer.Option(None, "--step-timeout-ms", help="Override suite default hard step timeout (ms)"),
+    pytest_html: Optional[str] = typer.Option(None, "--pytest-html", help="Write pytest-html report (requires extras: report)"),
+    pytest_junitxml: Optional[str] = typer.Option(None, "--pytest-junitxml", help="Write pytest junitxml (requires extras: report)"),
+    pytest_arg: List[str] = typer.Option([], "--pytest-arg", help="Extra arg passed to pytest (repeatable)"),
     on_error: str = typer.Option("abort", "--on-error", help="Default error policy: abort|skip_case|continue"),
 ):
     """Run cases. ui.* requires a backend."""
@@ -421,13 +425,67 @@ def run(
             out.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
             console.print(f"Report: {out}")
 
-        _exit(0 if failed == 0 else 1)
+        
+        # Optional: pytest-based reports (does not rerun tests; converts JSON report -> pytest)
+        if pytest_html or pytest_junitxml:
+            try:
+                # ensure we have a JSON report path; if not requested, write a default one
+                if not report:
+                    out = Path("out/report.json")
+                    out.parent.mkdir(parents=True, exist_ok=True)
+                    out.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+                    console.print(f"Report: {out}")
+                else:
+                    out = Path(report)
 
+                html_path = Path(pytest_html) if pytest_html else None
+                junit_path = Path(pytest_junitxml) if pytest_junitxml else None
+                produced = generate_pytest_reports(
+                    out,
+                    html=html_path,
+                    junitxml=junit_path,
+                    title=str(doc.suite.name),
+                    extra_args=list(pytest_arg or []),
+                )
+                if "html" in produced:
+                    console.print(f"pytest-html: {produced['html']}")
+                if "junitxml" in produced:
+                    console.print(f"pytest-junitxml: {produced['junitxml']}")
+            except Exception as e:
+                # Forward compatible: keep legacy JSON report behavior even if pytest tooling is unavailable
+                console.print(f"[yellow]WARN[/yellow] pytest reporting not generated: {e}")
+        _exit(0 if failed == 0 else 1)
     except (ParseError, SpecVersionError, ValidationError) as e:
         _exit(2, f"ERROR: {e}")
     except ExecutionError as e:
         _exit(3, f"RUNTIME ERROR: {e}")
 
+
+
+
+@app.command()
+def pytest_report(
+    report: str = typer.Argument(..., help="Path to tspec JSON report"),
+    html: Optional[str] = typer.Option(None, "--html", help="Write pytest-html report (requires extras: report)"),
+    junitxml: Optional[str] = typer.Option(None, "--junitxml", help="Write junitxml (requires extras: report)"),
+    pytest_arg: List[str] = typer.Option([], "--pytest-arg", help="Extra arg passed to pytest (repeatable)"),
+):
+    """Generate pytest-based reports from an existing tspec JSON report."""
+    try:
+        out = Path(report)
+        produced = generate_pytest_reports(
+            out,
+            html=Path(html) if html else None,
+            junitxml=Path(junitxml) if junitxml else None,
+            extra_args=list(pytest_arg or []),
+        )
+        if "html" in produced:
+            console.print(f"pytest-html: {produced['html']}")
+        if "junitxml" in produced:
+            console.print(f"pytest-junitxml: {produced['junitxml']}")
+        _exit(0)
+    except Exception as e:
+        _exit(3, f"ERROR: {e}")
 
 
 @app.command()

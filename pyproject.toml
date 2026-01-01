@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tspec-runner"
-version = "0.3.0a2.post1"
+version = "0.3.0a3.post1"
 description = "TSpec runner: Markdown + tspec fenced blocks for test automation (spec-versioned)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -29,9 +29,11 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+report = ["pytest>=8.2.0", "pytest-html>=4.1.0"]
 mcp = ["mcp>=1.7,<2"]
 dev = [
   "pytest>=8.2.0",
+  "pytest-html>=4.1.0",
   "ruff>=0.5.0",
 ]
 selenium = [
