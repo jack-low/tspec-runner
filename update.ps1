@@ -6,3 +6,5 @@ Expand-Archive -Force -Path "$HOME\Downloads\tspec-runner-0.3.0a4.post1-log-anal
 git add -A
 git commit -m "fix: versions command imports __version__"
 git tag v0.3.0a4.post1
+clear
+tspec versions
