@@ -37,7 +37,21 @@ class AppiumUIDriver(UIDriver):
         options = AppiumOptions()
         options.load_capabilities(caps or {})
         # Appium-Python-Client v4+: pass options=
-        self.driver = webdriver.Remote(command_executor=server_url, options=options)
+        try:
+            self.driver = webdriver.Remote(command_executor=server_url, options=options)
+        except Exception as e:
+            msg = str(e)
+            # Common: Appium server not running / wrong URL
+            if "Max retries exceeded with url: /session" in msg or "NewConnectionError" in msg:
+                raise ExecutionError(f"Cannot reach Appium server at {server_url!r}. Start appium and confirm /status.") from e
+            # Common: wrong appActivity
+            if "Activity class" in msg and "does not exist" in msg:
+                raise ExecutionError(
+                    "Cannot start app: appActivity not found. "
+                    "Run: adb shell cmd package resolve-activity --brief <appPackage> "
+                    "and set appActivity to the returned value."
+                ) from e
+            raise ExecutionError(f"Appium session creation failed: {msg}") from e
 
         # Fast failure: ensure target app is in foreground (Android).
         try:

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import List, Optional
 
@@ -455,12 +456,95 @@ def run(
                 # Forward compatible: keep legacy JSON report behavior even if pytest tooling is unavailable
                 console.print(f"[yellow]WARN[/yellow] pytest reporting not generated: {e}")
         _exit(0 if failed == 0 else 1)
+
     except (ParseError, SpecVersionError, ValidationError) as e:
         _exit(2, f"ERROR: {e}")
     except ExecutionError as e:
         _exit(3, f"RUNTIME ERROR: {e}")
 
 
+
+
+
+
+@app.command()
+def analyze_log(
+    path: Path = typer.Argument(..., help="Path to a log file (Appium/Selenium/etc.)"),
+):
+    """Analyze logs and print actionable fixes."""
+    txt = path.read_text(encoding="utf-8", errors="replace")
+    findings = []
+
+    # Appium: missing activity
+    m = re.search(r"Activity class \{([^}]+)\} does not exist", txt)
+    if m:
+        findings.append(("appium.activity_not_found", m.group(1)))
+
+    # Appium: missing ANDROID_HOME
+    if "Neither ANDROID_HOME nor ANDROID_SDK_ROOT" in txt:
+        findings.append(("android.sdk_env_missing", ""))
+
+    # Connection refused to Appium server
+    if "Max retries exceeded with url: /session" in txt or "NewConnectionError" in txt:
+        findings.append(("appium.server_unreachable", ""))
+
+    if not findings:
+        console.print("[green]No known fatal patterns found.[/green]")
+        _exit(0)
+
+    for kind, detail in findings:
+        if kind == "appium.activity_not_found":
+            console.print("[red]Appium: Activity not found[/red]")
+            console.print(f"  detail: {detail}")
+            console.print("  Fix: set correct appActivity for your app. Run:")
+            console.print("    adb shell cmd package resolve-activity --brief <appPackage>")
+            console.print("  Then set appActivity to the returned activity (expand leading '.' to full package).")
+        elif kind == "android.sdk_env_missing":
+            console.print("[red]Android SDK env missing[/red]")
+            console.print("  Fix: set ANDROID_SDK_ROOT (or ANDROID_HOME) to your SDK path.")
+        elif kind == "appium.server_unreachable":
+            console.print("[red]Appium server unreachable[/red]")
+            console.print("  Fix: start appium and confirm /status:")
+            console.print("    appium --address 127.0.0.1 --port 4723")
+            console.print("    curl http://127.0.0.1:4723/status")
+    _exit(1)
+
+
+@app.command()
+def versions(
+    appium_server: Optional[str] = typer.Option(None, "--appium-server", help="Optionally query Appium server /status"),
+):
+    """Show tspec-runner and dependency versions."""
+    import platform
+    from importlib import metadata
+    console.print(f"tspec-runner: {__version__}")
+    console.print(f"python: {platform.python_version()} ({platform.platform()})")
+
+    def _v(pkg: str) -> str:
+        try:
+            return metadata.version(pkg)
+        except Exception:
+            return "not-installed"
+
+    console.print(f"pytest: {_v('pytest')}")
+    console.print(f"pytest-html: {_v('pytest-html')}")
+    console.print(f"selenium: {_v('selenium')}")
+    console.print(f"pywinauto: {_v('pywinauto')}")
+    console.print(f"Appium-Python-Client: {_v('Appium-Python-Client')}")
+
+    # Optional: Appium server version
+    if appium_server:
+        try:
+            import requests
+            r = requests.get(appium_server.rstrip('/') + '/status', timeout=3)
+            console.print(f"appium-server: HTTP {r.status_code}")
+            if r.ok:
+                try:
+                    console.print_json(r.text)
+                except Exception:
+                    console.print(r.text[:4000])
+        except Exception as e:
+            console.print(f"[yellow]WARN[/yellow] cannot query appium server: {e}")
 
 
 @app.command()
