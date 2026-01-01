@@ -515,9 +515,10 @@ def versions(
     appium_server: Optional[str] = typer.Option(None, "--appium-server", help="Optionally query Appium server /status"),
 ):
     """Show tspec-runner and dependency versions."""
+    from . import __version__ as _tspec_version
     import platform
     from importlib import metadata
-    console.print(f"tspec-runner: {__version__}")
+    console.print(f"tspec-runner: {_tspec_version}")
     console.print(f"python: {platform.python_version()} ({platform.platform()})")
 
     def _v(pkg: str) -> str:

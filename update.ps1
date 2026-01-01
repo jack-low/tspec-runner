@@ -1,11 +1,8 @@
-git switch -c upgrade/pytest-reporting-fix
+git switch -c upgrade/0.3.0a4-post1
 
-# zip 展開（パスは置き場所に合わせて）
-Expand-Archive -Force -Path "$HOME\Downloads\tspec-runner-0.3.0a4-log-analyze-versions.zip" -DestinationPath "."
-
-.venv\Scripts\activate
-uv pip install -e ".[dev]"
+# zip展開（場所は適宜）
+Expand-Archive -Force -Path "$HOME\Downloads\tspec-runner-0.3.0a4.post1-log-analyze-versions.zip" -DestinationPath "."
 
 git add -A
-git commit -m "fix: cli syntax + pytest-html reporting (0.3.0a3.post1)"
-git tag v0.3.0a3.post1
+git commit -m "fix: versions command imports __version__"
+git tag v0.3.0a4.post1

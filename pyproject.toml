@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tspec-runner"
-version = "0.3.0a4"
+version = "0.3.0a4.post1"
 description = "TSpec runner: Markdown + tspec fenced blocks for test automation (spec-versioned)"
 readme = "README.md"
 requires-python = ">=3.11"
