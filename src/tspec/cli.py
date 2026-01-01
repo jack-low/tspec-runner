@@ -13,6 +13,7 @@ from .validate import load_and_validate
 from .spec_versions import SUPPORTED_SPECS, supported_window
 from .config import load_config
 from .context import RunContext
+from .model import OnError
 from .runner import Runner, build_registry
 from .actions_ui import create_ui_driver
 from .manual_loader import discover_manuals, find_manual_by_id, load_manual
@@ -341,6 +342,9 @@ def run(
     report: Optional[str] = typer.Option(None, "--report", help="Write JSON report to path"),
     backend: Optional[str] = typer.Option(None, "--backend", help="ui backend: selenium|appium|pywinauto"),
     config: Optional[Path] = typer.Option(None, "--config", help="Path to tspec.toml"),
+    watch: bool = typer.Option(False, "--watch/--no-watch", help="Live step progress logs"),
+    step_timeout_ms: Optional[int] = typer.Option(None, "--step-timeout-ms", help="Override suite default hard step timeout (ms)"),
+    on_error: str = typer.Option("abort", "--on-error", help="Default error policy: abort|skip_case|continue"),
 ):
     """Run cases. ui.* requires a backend."""
     try:
@@ -362,6 +366,20 @@ def run(
             # pick backend-specific config table
             backend_cfg = cfg.selenium if ui_backend == "selenium" else (cfg.appium if ui_backend == "appium" else cfg.pywinauto)
             ctx.ui = create_ui_driver(cfg.ui, backend, backend_cfg)
+
+        # live watch logs
+        ctx.env["__watch"] = bool(watch)
+
+        # override suite-level hard timeout if provided
+        if step_timeout_ms is not None:
+            doc.suite.default_timeout_ms = int(step_timeout_ms)
+
+        # set default error policy
+        if on_error:
+            oe = on_error.strip().lower()
+            if oe not in ("abort", "skip_case", "continue"):
+                raise ExecutionError(f"Invalid --on-error: {on_error!r} (expected abort|skip_case|continue)")
+            doc.suite.default_on_error = OnError(action=oe)
 
         reg = build_registry()
         runner = Runner(doc, ctx=ctx, registry=reg)

@@ -39,6 +39,30 @@ class AppiumUIDriver(UIDriver):
         # Appium-Python-Client v4+: pass options=
         self.driver = webdriver.Remote(command_executor=server_url, options=options)
 
+        # Fast failure: ensure target app is in foreground (Android).
+        try:
+            platform = str((caps or {}).get("platformName", "")).lower()
+            expected_pkg = (caps or {}).get("appium:appPackage") or (caps or {}).get("appPackage")
+            if platform == "android" and expected_pkg:
+                deadline = time.time() + 6.0
+                last_pkg = None
+                while time.time() < deadline:
+                    try:
+                        last_pkg = getattr(self.driver, "current_package", None)
+                        if last_pkg == expected_pkg:
+                            break
+                    except Exception:
+                        pass
+                    time.sleep(0.25)
+                if last_pkg != expected_pkg:
+                    raise ExecutionError(f"App did not come to foreground: expected package={expected_pkg!r}, current={last_pkg!r}. Check appActivity/appWaitActivity or app crash.")
+        except ExecutionError:
+            # keep error
+            raise
+        except Exception:
+            # never block session creation on this check
+            pass
+
     def _ensure(self):
         if self.driver is None:
             raise ExecutionError("Appium driver is not started. Call ui.open_app first.")

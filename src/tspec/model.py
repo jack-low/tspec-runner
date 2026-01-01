@@ -8,6 +8,18 @@ class Retry(BaseModel):
     max: int = 0
     backoff_ms: int = 0
 
+class OnError(BaseModel):
+    """Error handling policy for a step/case.
+
+    action:
+      - abort: mark case failed/error and stop running further steps in the case (default)
+      - skip_case: mark the whole case as skipped (useful when env-dependent)
+      - continue: record the error but continue with next steps
+    """
+    model_config = ConfigDict(extra="forbid")
+    action: str = "abort"  # abort|skip_case|continue
+    note: str = ""
+
 class Step(BaseModel):
     model_config = ConfigDict(extra="forbid")
     do: str
@@ -16,6 +28,7 @@ class Step(BaseModel):
     save: Optional[Union[str, Dict[str, Any]]] = None
     retry: Optional[Retry] = None
     timeout_ms: Optional[int] = None
+    on_error: Optional[OnError] = None
     when: Optional[str] = None
     skip: Optional[Union[bool, str]] = None
 
@@ -32,6 +45,7 @@ class Suite(BaseModel):
     tags: List[str] = Field(default_factory=list)
     default_timeout_ms: int = 15000
     default_retry: Optional[Retry] = None
+    default_on_error: Optional[OnError] = None
     fail_fast: bool = False
     artifact_dir: str = "artifacts"
 

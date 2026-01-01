@@ -12,3 +12,10 @@ class ValidationError(TSpecError):
 
 class ExecutionError(TSpecError):
     """Runtime execution errors."""
+
+class SkipCaseError(ExecutionError):
+    """Abort current case as skipped (used by on_error=skip_case)."""
+
+class StepTimeoutError(ExecutionError):
+    """Step exceeded hard timeout (runner-side)."""
+

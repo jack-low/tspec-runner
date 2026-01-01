@@ -1,4 +1,4 @@
-# tspec-runner 0.2.0a1
+# tspec-runner 0.3.0a2
 
 TSpec（Markdown + ```tspec）を読み込み、CLI から自動実行する runner です。
 
@@ -152,3 +152,19 @@ $tspectest
 ```
 
 マニュアル: `tspec manual show mcp-env --full`
+
+
+## Live monitoring / robust error handling (0.3.0a2)
+
+`tspec run` can now emit *live* step progress logs and enforce a runner-side hard timeout per step
+(useful when a backend call blocks until its own timeout).
+
+```bash
+tspec run examples/android_youtube_search_play.tspec.md --backend appium --watch --step-timeout-ms 60000 --on-error abort
+```
+
+Per-step policies (optional):
+
+- `timeout_ms`: hard timeout (ms)
+- `retry`: `{ max, backoff_ms }`
+- `on_error`: `{ action: abort|skip_case|continue, note }`
