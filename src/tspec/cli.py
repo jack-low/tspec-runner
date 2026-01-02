@@ -575,6 +575,9 @@ def versions(
             console.print(f"[yellow]WARN[/yellow] cannot query appium server: {e}")
 
 
+
+
+
 @app.command()
 def pytest_report(
     report: str = typer.Argument(..., help="Path to tspec JSON report"),
@@ -585,10 +588,12 @@ def pytest_report(
     """Generate pytest-based reports from an existing tspec JSON report."""
     try:
         out = Path(report)
+        h = _coerce_opt_str(html)
+        j = _coerce_opt_str(junitxml)
         produced = generate_pytest_reports(
             out,
-            html=(Path(html[0]) if isinstance(html, builtins.list) and html else Path(html)) if html else None,
-            junitxml=(Path(junitxml[0]) if isinstance(junitxml, builtins.list) and junitxml else Path(junitxml)) if junitxml else None,
+            html=Path(h) if h else None,
+            junitxml=Path(j) if j else None,
             extra_args=list(pytest_arg or []),
         )
         if "html" in produced:
@@ -598,7 +603,6 @@ def pytest_report(
         _exit(0)
     except Exception as e:
         _exit(3, f"ERROR: {e}")
-
 
 
 @app.command()
