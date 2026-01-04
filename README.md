@@ -150,6 +150,11 @@ tspec manual show ios-env --full
 tspec doctor --ios
 ```
 
+### TSPEC-Z1 圧縮マニュアル
+```bash
+tspec manual show tspec-z1 --full
+```
+
 
 ## MCP (AI連携)
 MCP Server として起動し、AIクライアントから TSpec をツール呼び出しできます。
@@ -161,6 +166,20 @@ $tspectest
 ```
 
 マニュアル: `tspec manual show mcp-env --full`
+
+
+## TSPEC-Z1 圧縮（AI引き渡し用）
+AIに渡す仕様を、独自形式で短くまとめるための圧縮形式です。
+
+アルゴリズム（復元ルール）:
+- 先頭に `Z1|` を置く
+- `D{...}`: 辞書。`key=value` を `;` 区切り
+- `P{...}`: ペイロード。`|` 区切りでセクション、各セクションは `TAG:...`
+- `@k` は辞書参照（`k` は辞書キー）
+- `#` はファイルパス、`!` は動作要件、`+` は追加/変更点、`=` は値
+- 文字列中の `|` と `}` は `\|` と `\}` でエスケープ
+
+拡張子は `*.tspecz1` を推奨。
 
 
 ## Live monitoring / robust error handling (0.3.0a2)
