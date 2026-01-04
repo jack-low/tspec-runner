@@ -34,6 +34,18 @@ manual:
     - title: "6) エスケープ"
       body: |
         | と } は \| と \} にエスケープする。
+    - title: "7) CLI で decode"
+      body: |
+        構造化データに変換:
+          tspec z1-decode docs/selenium_spec.tspecz1 --format text
+          tspec z1-decode docs/selenium_spec.tspecz1 --format json
+          tspec z1-decode docs/selenium_spec.tspecz1 --format yaml
+    - title: "8) CLI で decompile"
+      body: |
+        人間可読な展開テキストに変換:
+          tspec z1-decompile docs/selenium_spec.tspecz1 --format text
+          tspec z1-decompile docs/selenium_spec.tspecz1 --format json
+          tspec z1-decompile docs/selenium_spec.tspecz1 --format yaml
   references:
     - "README.md の TSPEC-Z1 圧縮（AI引き渡し用）"
 ```

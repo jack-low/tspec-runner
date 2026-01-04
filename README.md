@@ -181,6 +181,23 @@ AIに渡す仕様を、独自形式で短くまとめるための圧縮形式で
 
 拡張子は `*.tspecz1` を推奨。
 
+CLI:
+```bash
+tspec z1-decode docs/selenium_spec.tspecz1 --format text
+tspec z1-decode docs/selenium_spec.tspecz1 --format json
+tspec z1-decompile docs/selenium_spec.tspecz1 --format text
+tspec z1-decompile docs/selenium_spec.tspecz1 --format yaml
+```
+
+Python API:
+```python
+from pathlib import Path
+from tspec.tspec_z1 import decode_z1_file, decompile_z1_file
+
+doc = decode_z1_file(Path("docs/selenium_spec.tspecz1"))
+text = decompile_z1_file(Path("docs/selenium_spec.tspecz1"))
+```
+
 
 ## Live monitoring / robust error handling (0.3.0a2)
 

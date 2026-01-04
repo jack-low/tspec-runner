@@ -26,6 +26,7 @@ from .mcp_server import start as mcp_start
 from .assets import list_assets, extract_asset
 from .pytest_reporting import generate_pytest_reports
 from .report_view import load_report, filter_cases, summarize_failures, format_error_message
+from .tspec_z1 import decode_z1_file, decompile_z1_file, expand_z1_sections, Z1Doc
 
 
 def _coerce_opt_str(v):
@@ -49,6 +50,45 @@ def _exit(code: int, msg: Optional[str] = None):
         console.print(msg)
     raise typer.Exit(code)
 
+def _z1_doc_to_dict(doc: Z1Doc) -> dict:
+    return {
+        "dictionary": dict(doc.dictionary),
+        "sections": [{"tag": s.tag, "body": s.body} for s in doc.sections],
+    }
+
+def _z1_print(format: str, payload: dict | str) -> None:
+    fmt = (format or "text").strip().lower()
+    if fmt == "text":
+        console.print(payload if isinstance(payload, str) else json.dumps(payload, ensure_ascii=False, indent=2))
+        return
+    if fmt == "json":
+        console.print_json(json.dumps(payload, ensure_ascii=False, indent=2))
+        return
+    if fmt == "yaml":
+        try:
+            import yaml
+        except Exception as e:
+            raise ExecutionError(f"YAML output requires PyYAML: {e}") from e
+        console.print(yaml.safe_dump(payload, allow_unicode=False, sort_keys=False).rstrip())
+        return
+    raise ExecutionError(f"Unknown format: {format!r} (expected text|json|yaml)")
+
+
+def _z1_doc_to_text(doc: Z1Doc) -> str:
+    lines = ["TSPEC-Z1 DECODED", "DICT:"]
+    if doc.dictionary:
+        for key, value in doc.dictionary.items():
+            lines.append(f"  {key}={value}")
+    else:
+        lines.append("  (empty)")
+    lines.append("SECTIONS:")
+    if doc.sections:
+        for sec in doc.sections:
+            lines.append(f"[{sec.tag}]")
+            lines.append(sec.body)
+    else:
+        lines.append("  (empty)")
+    return "\n".join(lines).rstrip()
 
 def _short_error(err, max_len: int = 160):
     try:
@@ -216,6 +256,49 @@ def manual_show(
         console.print(rt)
 
     _exit(0)
+
+@app.command("z1-decode")
+def z1_decode(
+    path: Path = typer.Argument(..., help="Path to a .tspecz1 file"),
+    format: str = typer.Option("text", "--format", "-f", help="Output format: text|json|yaml"),
+):
+    """Decode TSPEC-Z1 into structured sections."""
+    try:
+        doc = decode_z1_file(path)
+        fmt = (format or "text").strip().lower()
+        if fmt == "text":
+            _z1_print(format, _z1_doc_to_text(doc))
+        else:
+            _z1_print(format, _z1_doc_to_dict(doc))
+        _exit(0)
+    except Exception as e:
+        _exit(3, f"ERROR: {e}")
+
+
+@app.command("z1-decompile")
+def z1_decompile(
+    path: Path = typer.Argument(..., help="Path to a .tspecz1 file"),
+    format: str = typer.Option("text", "--format", "-f", help="Output format: text|json|yaml"),
+):
+    """Decompile TSPEC-Z1 into a human-readable expanded text."""
+    try:
+        text = decompile_z1_file(path)
+        fmt = (format or "text").strip().lower()
+        if fmt == "text":
+            _z1_print(format, text)
+            _exit(0)
+        # For json/yaml, include expanded sections for machine use
+        doc = decode_z1_file(path)
+        expanded = expand_z1_sections(doc)
+        payload = {
+            "text": text,
+            "dictionary": dict(doc.dictionary),
+            "sections": [{"tag": s.tag, "body": s.body} for s in expanded],
+        }
+        _z1_print(format, payload)
+        _exit(0)
+    except Exception as e:
+        _exit(3, f"ERROR: {e}")
 
 @app.command()
 def validate(
