@@ -66,6 +66,15 @@ implicit_wait_ms = 2000
 
 [selenium]
 browser = "chrome"  # chrome|firefox
+driver_path = ""    # optional: chromedriver/geckodriver path
+browser_binary = "" # optional: custom browser binary
+args = ["--lang=ja-JP"]
+prefs = { "intl.accept_languages" = "ja-JP" }
+download_dir = "artifacts/downloads"
+window_size = "1280x720"
+auto_wait_ms = 3000
+page_load_timeout_ms = 30000
+script_timeout_ms = 30000
 ```
 
 ---
@@ -80,7 +89,7 @@ browser = "chrome"  # chrome|firefox
 - `ui.screenshot` with `{path}`
 - `ui.close`
 
-> selector は backend ごとに解釈されます（Seleniumは CSS を基本、Appium/pywinautoは運用で統一）。
+> selector は backend ごとに解釈されます（Seleniumは CSS を基本、`css=`/`xpath=`/`id=`/`name=`/`link=` などのprefixも可）。
 
 作成日: 2025-12-30
 
