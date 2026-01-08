@@ -1,6 +1,11 @@
-# tspec-runner 0.3.0a2
+# tspec-runner 0.4.0a5
 
 TSpec（Markdown + ```tspec）を読み込み、CLI から自動実行する runner です。
+
+## MCP (AI clients)
+- `tspec mcp` で MCP server を起動できます。
+- 追加: `NEKO_BASE_URL` を設定すると `neko.*` ツール群が利用可能になります（詳細: `docs/neko_mcp.md`）。
+
 
 ## できること（この版）
 - Spec バージョン解決（無指定＝最新 / 範囲指定 / 3世代前まで）
