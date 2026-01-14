@@ -1,0 +1,23 @@
+# Continuation Notes
+
+Date: 2026-01-16
+
+Status
+- agent-browser backend works on Windows via protocol fallback when CLI daemon fails.
+- WSL fallback is optional (use tspec.toml if Windows CLI not available).
+
+Last known good command
+- tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"
+
+Windows install workaround
+- & "$env:APPDATA\\npm\\node_modules\\agent-browser\\bin\\agent-browser-win32-x64.exe" install
+
+WSL fallback config (optional)
+- In tspec.toml:
+  [agent_browser]
+  wsl_fallback = true
+  wsl_distro = "Ubuntu-24.04"
+  wsl_workdir = "/mnt/c/WorkSpace/Private/Python/tspec-runner"
+
+Tests
+- pytest -q (19 passed)

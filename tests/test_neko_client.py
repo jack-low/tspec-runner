@@ -1,5 +1,6 @@
 import pytest
-import httpx
+
+httpx = pytest.importorskip("httpx")
 
 from tspec.neko_client import NekoClient, NekoAuth
 from tspec.errors import ValidationError, ExecutionError

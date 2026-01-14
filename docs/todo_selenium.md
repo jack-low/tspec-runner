@@ -7,3 +7,8 @@
 - [x] README と Selenium マニュアルを更新
 - [x] TestCase 仕様を作成
 - [x] テストを追加（selector/ウィンドウサイズ/バージョン抽出）
+
+## Current errors (general)
+- [x] Neko テスト依存 (httpx) を extras/dev に追加
+- [x] manual show が tag/path 指定でも解決できるように修正
+- [x] pytest を再実行して結果を確認

@@ -1,0 +1,26 @@
+# tspec.toml
+[ui]
+backend = "selenium"  # selenium|appium|pywinauto|agent-browser
+headless = true
+implicit_wait_ms = 2000
+
+[selenium]
+browser = "chrome"  # chrome|firefox
+driver_path = ""    # optional: chromedriver/geckodriver path
+browser_binary = "" # optional: custom browser binary
+args = ["--lang=ja-JP"]
+prefs = { "intl.accept_languages" = "ja-JP" }
+download_dir = "artifacts/downloads"
+window_size = "1280x720"
+auto_wait_ms = 3000
+page_load_timeout_ms = 30000
+script_timeout_ms = 30000
+
+[agent_browser]
+binary = "agent-browser"
+timeout_ms = 30000
+poll_ms = 250
+extra_args = []
+wsl_fallback = true
+wsl_distro = "Ubuntu-24.04"
+wsl_workdir = "/mnt/c/WorkSpace/Private/Python/tspec-runner"

@@ -12,7 +12,7 @@ TSpec（Markdown + ```tspec）を読み込み、CLI から自動実行する run
 - validate / list / run / spec / init / doctor
 - `assert.*` 実装
 - **UI 自動化インターフェース（統一 API）**を実装：`ui.*`
-  - backend: `selenium` / `appium`(Android/iOS) / `pywinauto`
+  - backend: `selenium` / `appium`(Android/iOS) / `pywinauto` / `agent-browser`
   - 依存は extras で追加（軽いコア）
 
 > Android/iOS は Appium を前提にしています（Appium Server + driver は別途セットアップ）。
@@ -43,6 +43,16 @@ pip install -e ".[appium]"
 pip install -e ".[pywinauto]"
 ```
 
+### agent-browser（軽量 headless）
+```bash
+npm install -g agent-browser
+agent-browser install
+```
+Windows で install が失敗する場合は exe を直接実行する：
+```powershell
+& "$env:APPDATA\\npm\\node_modules\\agent-browser\\bin\\agent-browser-win32-x64.exe" install
+```
+
 ---
 
 ## 使い方
@@ -65,7 +75,7 @@ tspec run examples/selenium_google.tspec.md --backend selenium --report out/ui.j
 
 ```toml
 [ui]
-backend = "selenium"  # selenium|appium|pywinauto
+backend = "selenium"  # selenium|appium|pywinauto|agent-browser
 headless = true
 implicit_wait_ms = 2000
 
@@ -80,12 +90,21 @@ window_size = "1280x720"
 auto_wait_ms = 3000
 page_load_timeout_ms = 30000
 script_timeout_ms = 30000
+
+[agent_browser]
+binary = "agent-browser"
+timeout_ms = 30000
+poll_ms = 250
+extra_args = []
+wsl_fallback = false
+wsl_distro = ""
+wsl_workdir = ""
 ```
 
 ---
 
 ## 実装している `ui.*`
-- `ui.open` with `{url}` （Seleniumのみ）
+- `ui.open` with `{url}` （Selenium / agent-browser）
 - `ui.open_app` with `{caps, server_url}` （Appium）
 - `ui.click` with `{selector}`
 - `ui.type` with `{selector, text}`
@@ -158,6 +177,11 @@ tspec doctor --ios
 ### TSPEC-Z1 圧縮マニュアル
 ```bash
 tspec manual show tspec-z1 --full
+```
+
+### agent-browser マニュアル
+```bash
+tspec manual show agent-browser-env --full
 ```
 
 

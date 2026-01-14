@@ -5,6 +5,7 @@
 ## 事前準備
 - Neko を起動しておく（Docker 推奨）
 - `tspec` MCP server 起動前に、接続先を環境変数で指定
+- Neko 連携を使う場合は extras を入れる（`pip install -e ".[neko]"`）
 
 ## 環境変数
 - `NEKO_BASE_URL` (必須): 例 `http://localhost:8080`
@@ -27,4 +28,3 @@ FastMCP の `name=` が使える環境では `neko.*` 形式で登録します�
 - `neko.screen.screenshot`（JPEG を base64 で返却）
 - `neko.clipboard.get` / `neko.clipboard.set`
 - `neko.upload.dialog` / `neko.upload.drop`
-
