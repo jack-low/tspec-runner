@@ -27,6 +27,18 @@ from .assets import list_assets, extract_asset
 from .pytest_reporting import generate_pytest_reports
 from .report_view import load_report, filter_cases, summarize_failures, format_error_message
 
+
+def _coerce_opt_str(v):
+    """Typer may return a list if an option is repeated; normalize to last value."""
+    if v is None:
+        return None
+    try:
+        import builtins as _b
+        if isinstance(v, (_b.list, _b.tuple)) and v:
+            return v[-1]
+    except Exception:
+        pass
+    return v
 app = typer.Typer(add_completion=False, help="TSpec runner\nMarkdown + ```tspec blocks.")
 manual_app = typer.Typer(add_completion=False, help="Environment / ops manuals (tspec-backed).")
 app.add_typer(manual_app, name="manual")
@@ -446,6 +458,8 @@ def run(
                     pytest_html = pytest_html[0] if pytest_html else None
                 if isinstance(pytest_junitxml, builtins.list):
                     pytest_junitxml = pytest_junitxml[0] if pytest_junitxml else None
+                pytest_html = _coerce_opt_str(pytest_html)
+                pytest_junitxml = _coerce_opt_str(pytest_junitxml)
                 html_path = Path(pytest_html) if pytest_html else None
                 junit_path = Path(pytest_junitxml) if pytest_junitxml else None
                 produced = generate_pytest_reports(
