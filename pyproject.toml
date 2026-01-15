@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tspec-runner"
-version = "0.3.0a4.post1"
+version = "0.3.0a4.post3"
 description = "TSpec runner: Markdown + tspec fenced blocks for test automation (spec-versioned)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -48,6 +48,17 @@ pywinauto = [
 
 [project.scripts]
 tspec = "tspec.cli:app"
+
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src/**",
+  "scripts/**",
+  "docs/**",
+  "examples/**",
+  "README.md",
+  "pyproject.toml",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/tspec"]

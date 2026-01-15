@@ -22,6 +22,7 @@ from .doctor_android import check_android_env
 from .doctor_selenium import check_selenium_env
 from .doctor_ios import check_ios_env
 from .mcp_server import start as mcp_start
+from .assets import list_assets, extract_asset
 from .pytest_reporting import generate_pytest_reports
 from .report_view import load_report, filter_cases, summarize_failures, format_error_message
 
@@ -533,17 +534,23 @@ def versions(
     console.print(f"pywinauto: {_v('pywinauto')}")
     console.print(f"Appium-Python-Client: {_v('Appium-Python-Client')}")
 
-    # Optional: Appium server version
+    # Optional: Appium server status (stdlib urllib; no extra deps)
     if appium_server:
         try:
-            import requests
-            r = requests.get(appium_server.rstrip('/') + '/status', timeout=3)
-            console.print(f"appium-server: HTTP {r.status_code}")
-            if r.ok:
-                try:
-                    console.print_json(r.text)
-                except Exception:
-                    console.print(r.text[:4000])
+            import json as _json
+            from urllib.request import urlopen, Request
+
+            url = appium_server.rstrip('/') + '/status'
+            req = Request(url, headers={'User-Agent': 'tspec-runner'})
+            with urlopen(req, timeout=3) as resp:
+                status = resp.status
+                body = resp.read().decode('utf-8', errors='replace')
+            console.print(f"appium-server: HTTP {status}")
+            # Pretty-print JSON if possible
+            try:
+                console.print_json(_json.dumps(_json.loads(body), ensure_ascii=False))
+            except Exception:
+                console.print(body)
         except Exception as e:
             console.print(f"[yellow]WARN[/yellow] cannot query appium server: {e}")
 
@@ -568,6 +575,29 @@ def pytest_report(
             console.print(f"pytest-html: {produced['html']}")
         if "junitxml" in produced:
             console.print(f"pytest-junitxml: {produced['junitxml']}")
+        _exit(0)
+    except Exception as e:
+        _exit(3, f"ERROR: {e}")
+
+
+
+@app.command()
+def asset(
+    name: str = typer.Argument("list", help="Asset name, or 'list'"),
+    to: Path = typer.Option(Path("."), "--to", help="Destination path (when extracting)"),
+):
+    """List or extract bundled helper assets (e.g., update.ps1)."""
+    try:
+        if name == "list":
+            for a in list_assets():
+                console.print(a)
+            _exit(0)
+        out = to
+        # if --to points to a directory, write there with original filename
+        if out.exists() and out.is_dir():
+            out = out / name
+        p = extract_asset(name, out)
+        console.print(f"extracted: {p}")
         _exit(0)
     except Exception as e:
         _exit(3, f"ERROR: {e}")

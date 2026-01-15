@@ -187,3 +187,19 @@ Generate from existing JSON:
 ```bash
 tspec pytest-report out/android.json --html out/android.html
 ```
+
+
+## Update helper (PowerShell)
+同梱の `scripts/update.ps1` は、配布zipを安全に取り込むための補助スクリプトです。
+
+```powershell
+# list bundled assets
+# tspec asset list
+
+# extract the update script from installed package (optional)
+tspectool="tspec asset update.ps1 --to ."
+$tspectool
+
+# apply a downloaded zip into current repo
+.\scripts\update.ps1 -ZipPath "$HOME\Downloads\tspec-runner-<version>.zip" -RepoDir .
+```
