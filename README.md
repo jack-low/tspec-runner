@@ -20,6 +20,13 @@ TSpec（Markdown + ```tspec）を読み込み、CLI から自動実行する run
 ---
 
 ## 開発環境
+推奨: uv
+```bash
+uv venv
+uv sync
+```
+
+pip を使う場合:
 ```bash
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
