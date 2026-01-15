@@ -1,0 +1,58 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tspec-runner"
+version = "0.3.0a4.post1"
+description = "TSpec runner: Markdown + tspec fenced blocks for test automation (spec-versioned)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "tspec", email = "devnull@example.com" }]
+keywords = ["testing", "automation", "spec", "markdown", "yaml", "selenium", "appium", "pywinauto"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+]
+
+dependencies = [
+  "typer>=0.12.3",
+  "rich>=13.7.1",
+  "pydantic>=2.7.0",
+  "PyYAML>=6.0.1",
+  "packaging>=24.1",
+  "jsonschema>=4.22.0",
+]
+
+[project.optional-dependencies]
+report = ["pytest>=8.2.0", "pytest-html>=4.1.0"]
+mcp = ["mcp>=1.7,<2"]
+dev = [
+  "pytest>=8.2.0",
+  "pytest-html>=4.1.0",
+  "ruff>=0.5.0",
+]
+selenium = [
+  "selenium>=4.22.0",
+]
+appium = [
+  "Appium-Python-Client>=4.0.0",
+]
+pywinauto = [
+  "pywinauto>=0.6.8",
+]
+
+[project.scripts]
+tspec = "tspec.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tspec"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+select = ["E", "F", "I", "UP", "B"]

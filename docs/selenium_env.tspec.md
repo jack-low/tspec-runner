@@ -1,0 +1,70 @@
+# Selenium 環境構築マニュアル（macOS / Windows / Linux）
+
+このファイルは編集可能です。内容は ` ```tspec ` ブロックに格納されており、
+`tspec manual` コマンドで読み込んで表示できます。
+
+```tspec
+manual:
+  id: selenium-env
+  title: "Selenium 環境構築（Chrome中心）"
+  tags: [selenium, web, chrome, setup]
+  summary: |
+    Selenium は「Python側のselenium」と「ブラウザ本体」と「WebDriver（例: chromedriver）」の
+    3点セットが揃って初めて安定する。詰まりポイントが多いので手順を固定化する。
+  prerequisites:
+    - "Python 3.10+"
+    - "Chrome or Chromium（推奨）"
+  steps:
+    - title: "1) Python 依存を入れる"
+      body: |
+        本プロジェクトでは extras を用意している：
+          pip install -e ".[selenium]"
+    - title: "2) ブラウザを用意"
+      body: |
+        - Chrome（推奨）または Chromium をインストールする。
+        - headless 実行する場合もブラウザ本体は必要。
+    - title: "3) ChromeDriver を用意"
+      body: |
+        方式は2つ：
+        (A) PATHにchromedriverを置く（シンプル）
+        (B) webdriver-manager等で自動管理（将来拡張可）
+
+        (A) の確認：
+          which chromedriver
+          chromedriver --version
+
+        注意：Chrome と ChromeDriver のメジャーバージョン不一致が最頻出の事故。
+    - title: "4) 最小実行（Smoke）"
+      body: |
+        実行：
+          tspec run examples/selenium_google.tspec.md --backend selenium --report out/selenium.json
+
+        表示：
+          tspec report out/selenium.json --only-errors --show-steps
+    - title: "5) 環境チェック（doctor）"
+      body: |
+        Selenium環境の事前チェック：
+          tspec doctor --selenium
+
+        NG が出た場合のヒント：
+          tspec manual show selenium-env --full
+  troubleshooting:
+    - title: "chromedriver が見つからない"
+      body: |
+        PATHに入っていない。
+        macOS(Homebrew例):
+          brew install chromedriver
+        もしくは手動で入れて PATH を通す。
+    - title: "session not created: This version of ChromeDriver..."
+      body: |
+        Chrome と ChromeDriver のバージョン不一致。
+        Chromeのバージョンを確認し、同メジャーのChromeDriverに合わせる。
+    - title: "Googleの同意画面などで selector が変わる"
+      body: |
+        リダイレクトや地域設定でDOMが変化する。
+        - wait_for の selector を頑丈にする
+        - 失敗時の鑑識セット（forensics）で page_source / screenshot を確認する
+  references:
+    - "Selenium Documentation: https://www.selenium.dev/documentation/"
+    - "ChromeDriver: https://chromedriver.chromium.org/"
+```
