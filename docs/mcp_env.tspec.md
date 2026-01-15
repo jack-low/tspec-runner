@@ -46,3 +46,8 @@ manual:
         セキュリティのため workdir 配下のみアクセス可能。
         tspec mcp --workdir <project-root> を正しく指定。
 ```
+
+## 設定/手順まとめ
+- install: `pip install -e ".[mcp]"`
+- run: `tspec mcp --transport stdio --workdir .`
+- HTTP: `tspec mcp --transport streamable-http --host 127.0.0.1 --port 8765`

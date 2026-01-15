@@ -27,3 +27,7 @@ manual:
       body: |
         先に git init / commit を作ってから利用する。
 ```
+
+## 設定/手順まとめ
+- run: `.\scripts\update.ps1 -ZipPath "<zip>" -RepoDir .`
+- optional: `tspec asset update.ps1 --to .` でスクリプト抽出

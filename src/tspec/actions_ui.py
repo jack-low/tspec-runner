@@ -9,6 +9,7 @@ from .ui.base import UISettings, ensure_supported_backend
 from .ui.selenium_driver import SeleniumUIDriver, SeleniumSettings
 from .ui.appium_driver import AppiumUIDriver
 from .ui.pywinauto_driver import PyWinAutoUIDriver
+from .ui.agent_browser_driver import AgentBrowserUIDriver, AgentBrowserSettings
 
 @dataclass
 class UIContext:
@@ -48,6 +49,24 @@ def create_ui_driver(ui_cfg: Dict[str, Any], backend_override: Optional[str], ba
         return UIContext(driver=AppiumUIDriver(ui), backend="appium")
     if ui.backend == "pywinauto":
         return UIContext(driver=PyWinAutoUIDriver(ui), backend="pywinauto")
+    if ui.backend == "agent-browser":
+        def _as_list(value: Any) -> list[str]:
+            if value is None:
+                return []
+            if isinstance(value, (list, tuple)):
+                return [str(v) for v in value]
+            return [str(value)]
+
+        agent_browser = AgentBrowserSettings(
+            binary=str(backend_cfg.get("binary", "agent-browser")),
+            timeout_ms=int(backend_cfg.get("timeout_ms", 30000) or 30000),
+            poll_ms=int(backend_cfg.get("poll_ms", 250) or 250),
+            extra_args=_as_list(backend_cfg.get("extra_args")),
+            wsl_fallback=bool(backend_cfg.get("wsl_fallback", False)),
+            wsl_distro=backend_cfg.get("wsl_distro"),
+            wsl_workdir=backend_cfg.get("wsl_workdir"),
+        )
+        return UIContext(driver=AgentBrowserUIDriver(ui, agent_browser), backend="agent-browser")
     raise ExecutionError(f"Unknown backend: {ui.backend}")
 
 

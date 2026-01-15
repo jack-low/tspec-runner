@@ -40,7 +40,7 @@ def run_spec_file(
     uses_ui = any((s.do or "").startswith("ui.") for c in doc.cases for s in c.steps)
     if uses_ui:
         ui_backend = backend or cfg.ui.get("backend", "selenium")
-        backend_cfg = cfg.selenium if ui_backend == "selenium" else (cfg.appium if ui_backend == "appium" else cfg.pywinauto)
+        backend_cfg = cfg.selenium if ui_backend == "selenium" else (cfg.appium if ui_backend == "appium" else (cfg.pywinauto if ui_backend == "pywinauto" else cfg.agent_browser))
         ctx.ui = create_ui_driver(cfg.ui, ui_backend, backend_cfg)
 
     runner = Runner(doc, ctx=ctx, registry=reg)

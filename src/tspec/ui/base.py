@@ -7,7 +7,7 @@ from ..errors import ExecutionError
 
 @dataclass
 class UISettings:
-    backend: str = "selenium"  # selenium|appium|pywinauto
+    backend: str = "selenium"  # selenium|appium|pywinauto|agent-browser
     headless: bool = True
     implicit_wait_ms: int = 0
 
@@ -22,7 +22,7 @@ class UIDriver(Protocol):
     def close(self) -> None: ...
 
 def ensure_supported_backend(name: str) -> str:
-    n = (name or "").strip().lower()
-    if n in ("selenium", "appium", "pywinauto"):
+    n = (name or "").strip().lower().replace("_", "-")
+    if n in ("selenium", "appium", "pywinauto", "agent-browser"):
         return n
-    raise ExecutionError(f"Unknown ui backend: {name!r} (expected selenium|appium|pywinauto)")
+    raise ExecutionError(f"Unknown ui backend: {name!r} (expected selenium|appium|pywinauto|agent-browser)")

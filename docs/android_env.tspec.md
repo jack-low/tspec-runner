@@ -85,3 +85,9 @@ manual:
   references:
     - "Android SDK 環境変数: https://developer.android.com/studio/command-line/variables"
 ```
+
+## 設定/手順まとめ
+- SDK: Android Studio で SDK を入れ、`ANDROID_SDK_ROOT`/`ANDROID_HOME`/`PATH` を設定
+- emulator: AVD を作成して起動、`adb devices -l` で確認
+- appium: `npm i -g appium` + `appium driver install uiautomator2`
+- run: `pip install -e ".[appium]"` → `tspec run examples/android_login.tspec.md --backend appium --report out/android.json`

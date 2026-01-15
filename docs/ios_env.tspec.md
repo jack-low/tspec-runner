@@ -98,3 +98,9 @@ manual:
     - "Appium XCUITest driver: https://github.com/appium/appium-xcuitest-driver"
     - "Apple Xcode: https://developer.apple.com/xcode/"
 ```
+
+## 設定/手順まとめ
+- Xcode/CLT: `xcodebuild -version` / `xcrun simctl list devices` で確認
+- appium: `npm i -g appium` + `appium driver install xcuitest`
+- simulator: まず Simulator で動作確認
+- run: `pip install -e ".[appium]"` → `tspec run examples/ios_smoke.tspec.md --backend appium --report out/ios.json`

@@ -101,7 +101,11 @@ def _short_error(err, max_len: int = 160):
         return s
 
 @app.command()
-def spec():
+def spec(
+    android: bool = typer.Option(False, "--android", help="Run Android/Appium environment checks"),
+    selenium: bool = typer.Option(False, "--selenium", help="Run Selenium/ChromeDriver environment checks"),
+    ios: bool = typer.Option(False, "--ios", help="Run iOS/Xcode/XCUITest environment checks"),
+):
     """Show runner spec support window."""
     g_min, g_latest, latest = supported_window(SUPPORTED_SPECS)
     table = Table(title="Spec support")
@@ -439,7 +443,7 @@ def report(
 def run(
     target: str = typer.Argument(..., help=".tspec.md file"),
     report: Optional[str] = typer.Option(None, "--report", help="Write JSON report to path"),
-    backend: Optional[str] = typer.Option(None, "--backend", help="ui backend: selenium|appium|pywinauto"),
+    backend: Optional[str] = typer.Option(None, "--backend", help="ui backend: selenium|appium|pywinauto|agent-browser"),
     config: Optional[Path] = typer.Option(None, "--config", help="Path to tspec.toml"),
     watch: bool = typer.Option(False, "--watch/--no-watch", help="Live step progress logs"),
     step_timeout_ms: Optional[int] = typer.Option(None, "--step-timeout-ms", help="Override suite default hard step timeout (ms)"),
@@ -466,7 +470,7 @@ def run(
         if uses_ui:
             ui_backend = backend or cfg.ui.get("backend", "selenium")
             # pick backend-specific config table
-            backend_cfg = cfg.selenium if ui_backend == "selenium" else (cfg.appium if ui_backend == "appium" else cfg.pywinauto)
+            backend_cfg = cfg.selenium if ui_backend == "selenium" else (cfg.appium if ui_backend == "appium" else (cfg.pywinauto if ui_backend == "pywinauto" else cfg.agent_browser))
             ctx.ui = create_ui_driver(cfg.ui, backend, backend_cfg)
 
         # live watch logs

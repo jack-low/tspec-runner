@@ -17,10 +17,11 @@ class RunnerConfig:
     selenium: Dict[str, Any]
     appium: Dict[str, Any]
     pywinauto: Dict[str, Any]
+    agent_browser: Dict[str, Any]
 
 def load_config(path: Optional[Path]) -> RunnerConfig:
     if path is None:
-        return RunnerConfig(ui={}, selenium={}, appium={}, pywinauto={})
+        return RunnerConfig(ui={}, selenium={}, appium={}, pywinauto={}, agent_browser={})
     if tomllib is None:
         raise ValidationError("tomllib is not available; use Python 3.11+")
     p = path.resolve()
@@ -36,4 +37,5 @@ def load_config(path: Optional[Path]) -> RunnerConfig:
         selenium=dict(data.get("selenium", {})),
         appium=dict(data.get("appium", {})),
         pywinauto=dict(data.get("pywinauto", {})),
+        agent_browser=dict(data.get("agent_browser", {})),
     )
