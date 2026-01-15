@@ -81,3 +81,9 @@ manual:
     - "Selenium Documentation: https://www.selenium.dev/documentation/"
     - "ChromeDriver: https://chromedriver.chromium.org/"
 ```
+
+## 設定/手順まとめ
+- install: `pip install -e ".[selenium]"` + Chrome/Chromium + ChromeDriver
+- config: `tspec.toml` の `[selenium]` を必要に応じて設定
+- run: `tspec run examples/selenium_google.tspec.md --backend selenium --report out/selenium.json`
+- doctor: `tspec doctor --selenium`

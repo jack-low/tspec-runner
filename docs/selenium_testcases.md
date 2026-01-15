@@ -13,3 +13,7 @@
 ## Manual / Integration (optional)
 - TC-SI-001: `tspec doctor --selenium` で Chrome/ChromeDriver の major 乖離が検出できる
 - TC-SI-002: `selenium.args`/`selenium.prefs`/`selenium.download_dir` が起動オプションに反映される
+
+## 設定/手順まとめ
+- unit: `pytest -q`
+- manual: `tspec doctor --selenium`

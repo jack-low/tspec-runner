@@ -25,3 +25,8 @@ manual:
       body: |
         extras が未導入: uv pip install -e ".[report]"
 ```
+
+## 設定/手順まとめ
+- install: `uv pip install -e ".[report]"`
+- run + html: `tspec run <spec> --report out/report.json --pytest-html out/report.html`
+- json -> html: `tspec pytest-report out/report.json --html out/report.html`

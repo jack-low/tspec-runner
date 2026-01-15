@@ -53,3 +53,8 @@ manual:
   references:
     - "agent-browser: https://github.com/vercel-labs/agent-browser"
 ```
+
+## 設定/手順まとめ
+- install: `npm install -g agent-browser` → `agent-browser install`（Windows は exe 直叩きも可）
+- run: `tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report out/agent-browser.json`
+- Windows fallback: `[agent_browser] binary=...` または `wsl_fallback=true`

@@ -1,4 +1,4 @@
-# tspec-runner 0.4.0a5
+# tspec-runner 1.0.0
 
 TSpec（Markdown + ```tspec）を読み込み、CLI から自動実行する runner です。
 

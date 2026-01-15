@@ -127,3 +127,8 @@ NameError: name 'android' is not defined
 - cause: rust CLI could not connect/start daemon; Windows client reported generic error
 - fix: add protocol-based fallback via direct daemon TCP commands
 - status: resolved
+
+### examples/selenium_google.tspec.md YAML parse failure
+- cause: stray trailing "a" after ui.screenshot path line
+- fix: remove extra character
+- status: resolved

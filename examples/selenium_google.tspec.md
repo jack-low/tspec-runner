@@ -29,7 +29,7 @@ cases:
         with: { text: "${page_title}", substring: "Google" }
 
       - do: ui.screenshot
-        with: { path: "artifacts/google.png" }a
+        with: { path: "artifacts/google.png" }
 
       - do: ui.close
         with: {}

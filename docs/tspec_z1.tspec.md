@@ -49,3 +49,7 @@ manual:
   references:
     - "README.md の TSPEC-Z1 圧縮（AI引き渡し用）"
 ```
+
+## 設定/手順まとめ
+- decode: `tspec z1-decode docs/selenium_spec.tspecz1 --format text|json|yaml`
+- decompile: `tspec z1-decompile docs/selenium_spec.tspecz1 --format text|json|yaml`

@@ -28,3 +28,8 @@ FastMCP の `name=` が使える環境では `neko.*` 形式で登録します�
 - `neko.screen.screenshot`（JPEG を base64 で返却）
 - `neko.clipboard.get` / `neko.clipboard.set`
 - `neko.upload.dialog` / `neko.upload.drop`
+
+## 設定/手順まとめ
+- install: `pip install -e ".[neko]"`
+- env: `NEKO_BASE_URL` + `NEKO_ALLOWLIST_HOSTS` を設定
+- run: `tspec mcp --transport stdio`（NEKO_* を事前設定）

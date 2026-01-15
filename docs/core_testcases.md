@@ -13,3 +13,7 @@
 
 ## Manual / Integration (optional)
 - TC-CORE-005: `tspec manual show android --full` が android-env を表示する
+
+## 設定/手順まとめ
+- unit: `pytest -q`
+- manual: `tspec manual show <id> --full`
