@@ -8,3 +8,4 @@
 
 ## Current errors
 - [x] pytest を再実行して結果を確認（19 passed）
+- [x] 全ドキュメント出力テスト完了（manual show/validate/read）

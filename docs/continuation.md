@@ -5,6 +5,8 @@ Date: 2026-01-16
 Status
 - agent-browser backend works on Windows via protocol fallback when CLI daemon fails.
 - WSL fallback is optional (use tspec.toml if Windows CLI not available).
+- main branch merged with all upgrade branches; main is current default.
+- TestPyPI and PyPI release published for 1.0.0.
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"
