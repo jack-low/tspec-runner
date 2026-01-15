@@ -5,6 +5,8 @@ import subprocess
 from dataclasses import dataclass
 from typing import Optional
 
+from .ui.selenium_utils import extract_major_version
+
 @dataclass(frozen=True)
 class Check:
     name: str
@@ -13,6 +15,19 @@ class Check:
 
 def _which(cmd: str) -> Optional[str]:
     return shutil.which(cmd)
+
+def _first_in_path(candidates: list[str]) -> Optional[str]:
+    for cmd in candidates:
+        found = _which(cmd)
+        if found:
+            return found
+    return None
+
+def _run_version(cmd: str) -> Optional[str]:
+    try:
+        return subprocess.check_output([cmd, "--version"], text=True, stderr=subprocess.STDOUT).strip()
+    except Exception:
+        return None
 
 def check_selenium_env() -> list[Check]:
     checks: list[Check] = []
@@ -31,16 +46,33 @@ def check_selenium_env() -> list[Check]:
     checks.append(Check("geckodriver", bool(geckodriver), geckodriver or "not found in PATH (optional)"))
 
     # browsers (best-effort; varies by OS)
-    chrome = _which("google-chrome") or _which("chrome")
+    chrome = _first_in_path(["google-chrome", "chrome", "chromium", "chromium-browser"])
     checks.append(Check("chrome", bool(chrome), chrome or "not found in PATH (macOS app may still exist)"))
     firefox = _which("firefox")
     checks.append(Check("firefox", bool(firefox), firefox or "not found in PATH (optional)"))
 
     # versions (best-effort)
+    chrome_version = _run_version(chrome) if chrome else None
+    if chrome and chrome_version:
+        checks.append(Check("chrome --version", True, chrome_version))
+    elif chrome:
+        checks.append(Check("chrome --version", False, "version check failed"))
+
+    chromedriver_version = _run_version(chromedriver) if chromedriver else None
     if chromedriver:
-        try:
-            out = subprocess.check_output([chromedriver, "--version"], text=True, stderr=subprocess.STDOUT).strip()
-            checks.append(Check("chromedriver --version", True, out))
-        except Exception as e:
-            checks.append(Check("chromedriver --version", False, str(e)))
+        if chromedriver_version:
+            checks.append(Check("chromedriver --version", True, chromedriver_version))
+        else:
+            checks.append(Check("chromedriver --version", False, "version check failed"))
+
+    # major version match (Chrome vs ChromeDriver)
+    if chrome_version and chromedriver_version:
+        chrome_major = extract_major_version(chrome_version)
+        driver_major = extract_major_version(chromedriver_version)
+        if chrome_major and driver_major:
+            ok = chrome_major == driver_major
+            detail = f"chrome={chrome_major} chromedriver={driver_major}"
+            if not ok:
+                detail += " (mismatch)"
+            checks.append(Check("chrome/chromedriver major", ok, detail))
     return checks

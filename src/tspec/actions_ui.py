@@ -22,7 +22,27 @@ def create_ui_driver(ui_cfg: Dict[str, Any], backend_override: Optional[str], ba
         implicit_wait_ms=int(ui_cfg.get("implicit_wait_ms", 0) or 0),
     )
     if ui.backend == "selenium":
-        selenium = SeleniumSettings(browser=str(backend_cfg.get("browser", "chrome")))
+        def _as_list(value: Any) -> list[str]:
+            if value is None:
+                return []
+            if isinstance(value, (list, tuple)):
+                return [str(v) for v in value]
+            return [str(value)]
+
+        prefs = backend_cfg.get("prefs")
+        selenium = SeleniumSettings(
+            browser=str(backend_cfg.get("browser", "chrome")),
+            driver_path=backend_cfg.get("driver_path"),
+            browser_binary=backend_cfg.get("browser_binary"),
+            args=_as_list(backend_cfg.get("args")),
+            prefs=dict(prefs) if isinstance(prefs, dict) else {},
+            user_data_dir=backend_cfg.get("user_data_dir"),
+            download_dir=backend_cfg.get("download_dir"),
+            window_size=backend_cfg.get("window_size"),
+            page_load_timeout_ms=int(backend_cfg.get("page_load_timeout_ms", 0) or 0),
+            script_timeout_ms=int(backend_cfg.get("script_timeout_ms", 0) or 0),
+            auto_wait_ms=int(backend_cfg.get("auto_wait_ms", 0) or 0),
+        )
         return UIContext(driver=SeleniumUIDriver(ui, selenium), backend="selenium")
     if ui.backend == "appium":
         return UIContext(driver=AppiumUIDriver(ui), backend="appium")

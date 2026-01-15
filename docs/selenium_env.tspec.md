@@ -34,14 +34,27 @@ manual:
           chromedriver --version
 
         注意：Chrome と ChromeDriver のメジャーバージョン不一致が最頻出の事故。
-    - title: "4) 最小実行（Smoke）"
+    - title: "4) 実行オプション（任意）"
+      body: |
+        `tspec.toml` の `[selenium]` でドライバや起動オプションを上書きできる。
+        例：
+          driver_path = "C:/tools/chromedriver.exe"
+          browser_binary = "C:/Program Files/Google/Chrome/Application/chrome.exe"
+          args = ["--lang=ja-JP"]
+          prefs = { "intl.accept_languages" = "ja-JP" }
+          download_dir = "artifacts/downloads"
+          window_size = "1280x720"
+          auto_wait_ms = 3000
+          page_load_timeout_ms = 30000
+          script_timeout_ms = 30000
+    - title: "5) 最小実行（Smoke）"
       body: |
         実行：
           tspec run examples/selenium_google.tspec.md --backend selenium --report out/selenium.json
 
         表示：
           tspec report out/selenium.json --only-errors --show-steps
-    - title: "5) 環境チェック（doctor）"
+    - title: "6) 環境チェック（doctor）"
       body: |
         Selenium環境の事前チェック：
           tspec doctor --selenium
