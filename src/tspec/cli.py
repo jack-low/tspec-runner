@@ -440,6 +440,11 @@ def run(
                 else:
                     out = Path(report)
 
+                                # Typer should pass str, but be defensive if a list slips in
+                if isinstance(pytest_html, list):
+                    pytest_html = pytest_html[0] if pytest_html else None
+                if isinstance(pytest_junitxml, list):
+                    pytest_junitxml = pytest_junitxml[0] if pytest_junitxml else None
                 html_path = Path(pytest_html) if pytest_html else None
                 junit_path = Path(pytest_junitxml) if pytest_junitxml else None
                 produced = generate_pytest_reports(
@@ -567,8 +572,8 @@ def pytest_report(
         out = Path(report)
         produced = generate_pytest_reports(
             out,
-            html=Path(html) if html else None,
-            junitxml=Path(junitxml) if junitxml else None,
+            html=(Path(html[0]) if isinstance(html, list) and html else Path(html)) if html else None,
+            junitxml=(Path(junitxml[0]) if isinstance(junitxml, list) and junitxml else Path(junitxml)) if junitxml else None,
             extra_args=list(pytest_arg or []),
         )
         if "html" in produced:
