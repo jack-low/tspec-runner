@@ -209,3 +209,10 @@ __marimo__/
 # Project outputs
 out/
 artifacts/
+
+# Local-only items
+.python-version
+agent-browser-work/
+docs/asdfg
+docs/tre
+main.py
