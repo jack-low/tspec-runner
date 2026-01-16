@@ -1,26 +1,36 @@
-# Unity MCP 連携マニュアル
+# Unity MCP manual
+JP: Unity MCP 連携マニュアル
 
 ```tspec
 manual:
   id: unity-mcp
-  title: "Unity MCP 連携セットアップ"
+  title: "Unity MCP setup"
   tags: [mcp, unity, integration, setup]
   summary: |
-    Unity の HTTP エンドポイントを MCP tool として呼び出すための設定。
+    EN: Configure Unity MCP HTTP endpoint as tspec MCP tools.
+    JP: Unity の HTTP エンドポイントを MCP tool として呼び出すための設定。
   prerequisites:
     - "pip install -e '.[mcp,unity]'"
-    - "Unity MCP の HTTP サーバ（/health と /mcp）が起動していること"
+    - "Unity MCP HTTP server exposes /health and /mcp"
   steps:
-    - title: "1) 環境変数を設定"
+    - title: "1) Set environment variables"
       body: |
-        UNITY_MCP_MODE=mcp-http
-        UNITY_MCP_MCP_URL=http://localhost:8080/mcp
-        UNITY_MCP_ALLOWLIST_HOSTS=localhost,localhost:8080
-        (任意) UNITY_MCP_AUTH_MODE=none|bearer|token
-    - title: "2) MCP サーバを起動"
+        EN:
+          UNITY_MCP_MODE=mcp-http
+          UNITY_MCP_MCP_URL=http://localhost:8080/mcp
+          UNITY_MCP_ALLOWLIST_HOSTS=localhost,localhost:8080
+          (optional) UNITY_MCP_AUTH_MODE=none|bearer|token
+        JP:
+          UNITY_MCP_MODE=mcp-http
+          UNITY_MCP_MCP_URL=http://localhost:8080/mcp
+          UNITY_MCP_ALLOWLIST_HOSTS=localhost,localhost:8080
+          (任意) UNITY_MCP_AUTH_MODE=none|bearer|token
+    - title: "2) Start tspec MCP server"
       body: |
         tspec mcp --transport stdio --workdir .
-    - title: "3) ツール動作確認"
+        EN: Optional CLI override:
+          tspec mcp --transport stdio --unity-mcp-url http://localhost:8080/mcp
+    - title: "3) Verify tools"
       body: |
         unity.health
         unity.tool(name="debug_request_context", arguments={})

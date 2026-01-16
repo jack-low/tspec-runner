@@ -1,3 +1,6 @@
+# Update notes (English primary)
+JP: 更新メモ（日本語は下記）
+
 # update.md
 
 ## 設定/手順まとめ

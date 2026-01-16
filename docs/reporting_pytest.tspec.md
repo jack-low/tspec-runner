@@ -1,32 +1,23 @@
-# Pytest / pytest-html レポート（追加出力）
+# pytest reporting manual
+JP: pytest レポート生成マニュアル
 
 ```tspec
 manual:
   id: reporting-pytest
-  title: "Pytest / pytest-html レポート出力"
-  tags: [report, pytest, pytest-html]
+  title: "pytest report generation"
+  tags: [report, pytest, html, junit]
   summary: |
-    tspec の既存 JSON レポートはそのまま維持しつつ、必要な場合のみ pytest / pytest-html を使って
-    HTML や junitxml を追加出力する。
+    EN: Convert tspec JSON reports into pytest-html / junitxml.
+    JP: tspec の JSON レポートを pytest-html / junitxml に変換する。
   prerequisites:
-    - "uv pip install -e '.[report]'"
+    - "pip install -e '.[report]'"
   steps:
-    - title: "Run と同時に HTML を生成"
+    - title: "1) Run a spec with JSON report"
       body: |
-        tspec run <spec> --report out/report.json --pytest-html out/report.html
-    - title: "既存 JSON から HTML を生成"
+        tspec run examples/assert_only.tspec.md --report out/report.json
+    - title: "2) Generate pytest-html / junitxml"
       body: |
+        tspec report out/report.json --only-errors --show-steps
         tspec pytest-report out/report.json --html out/report.html
-    - title: "CI向け junitxml"
-      body: |
-        tspec run <spec> --report out/report.json --pytest-junitxml out/report.xml
-  troubleshooting:
-    - title: "pytest-html が無い"
-      body: |
-        extras が未導入: uv pip install -e ".[report]"
+        tspec pytest-report out/report.json --junitxml out/report.xml
 ```
-
-## 設定/手順まとめ
-- install: `uv pip install -e ".[report]"`
-- run + html: `tspec run <spec> --report out/report.json --pytest-html out/report.html`
-- json -> html: `tspec pytest-report out/report.json --html out/report.html`

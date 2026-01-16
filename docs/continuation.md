@@ -1,3 +1,6 @@
+# Continuation Notes (English primary)
+JP: 継続メモ（日本語は下記）
+
 # Continuation Notes
 
 Date: 2026-01-17
@@ -26,6 +29,10 @@ Status
 - Blender MCP viewport screenshot captured and added to README.
 - Blender MCP modeling demo captured (GIF) and added to README.
 - PyPI 1.0.8 uploaded (use --disable-progress-bar on Windows if needed).
+- Demo assets update flow documented (docs/demo_assets.md).
+- `tspec mcp` supports --unity-mcp-url / --blender-mcp-url flags.
+- Docs switched to English-first with Japanese subtext; version bumped to 1.0.9.
+- PyPI 1.0.9 uploaded; README.rst formatting validated via twine check.
 - pytest.ini added to ignore local_notes during test discovery.
 - Blender MCP UI auto-start script succeeded (socket get_scene_info OK).
 

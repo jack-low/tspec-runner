@@ -1,3 +1,6 @@
+# Knowledge.md - Issue log (English primary)
+JP: 現在のエラー/知見（日本語は下記）
+
 # Knowledge.md - 作業中のエラー/知見
 
 ## 2026-01-15
@@ -256,4 +259,9 @@ NameError: name 'android' is not defined
 ### twine upload failed on Windows console encoding
 - cause: rich progress bar emitted Unicode bullet that cp932 couldn't encode
 - fix: use `python -m twine upload --disable-progress-bar dist/*`
+- status: resolved
+
+### PyPI README.rst render error (text/x-rst)
+- cause: README.rst had list formatting without blank lines
+- fix: reformat README.rst and validate with `python -m twine check dist/*`
 - status: resolved

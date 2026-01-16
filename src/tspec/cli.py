@@ -720,9 +720,26 @@ def mcp(
     workdir: Path = typer.Option(Path("."), "--workdir", help="Base directory for safe file access"),
     host: str = typer.Option("127.0.0.1", "--host", help="HTTP host (streamable-http only)"),
     port: int = typer.Option(8765, "--port", help="HTTP port (streamable-http only)"),
+    unity_mcp_url: Optional[str] = typer.Option(
+        None,
+        "--unity-mcp-url",
+        help="Unity MCP /mcp URL (sets UNITY_MCP_MCP_URL + UNITY_MCP_MODE)",
+    ),
+    blender_mcp_url: Optional[str] = typer.Option(
+        None,
+        "--blender-mcp-url",
+        help="Blender MCP base URL (sets BLENDER_MCP_BASE_URL)",
+    ),
 ):
     """Start MCP server exposing tspec tools for AI clients."""
     try:
-        mcp_start(transport=transport, workdir=str(workdir), host=host, port=port)
+        mcp_start(
+            transport=transport,
+            workdir=str(workdir),
+            host=host,
+            port=port,
+            unity_mcp_url=unity_mcp_url,
+            blender_mcp_url=blender_mcp_url,
+        )
     except Exception as e:
         _exit(3, f"MCP ERROR: {e}")

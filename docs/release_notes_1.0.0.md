@@ -1,3 +1,6 @@
+# Release Notes 1.0.0 (English primary)
+JP: リリースノート（日本語は下記）
+
 # Release Notes 1.0.0
 
 ## Highlights

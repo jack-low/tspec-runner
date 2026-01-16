@@ -1,89 +1,40 @@
-# Selenium 環境構築マニュアル（macOS / Windows / Linux）
+# Selenium Environment Setup
+JP: Selenium 環境構築
 
-このファイルは編集可能です。内容は ` ```tspec ` ブロックに格納されており、
-`tspec manual` コマンドで読み込んで表示できます。
+This file is editable; the manual is in the ` ```tspec ` block.
+JP: このファイルは編集可能で、内容は ` ```tspec ` ブロックにあります。
 
 ```tspec
 manual:
   id: selenium-env
-  title: "Selenium 環境構築（Chrome中心）"
-  tags: [selenium, web, chrome, setup]
+  title: "Selenium setup"
+  tags: [selenium, web, setup]
   summary: |
-    Selenium は「Python側のselenium」と「ブラウザ本体」と「WebDriver（例: chromedriver）」の
-    3点セットが揃って初めて安定する。詰まりポイントが多いので手順を固定化する。
+    EN: Install Selenium and browser drivers for UI automation.
+    JP: Selenium とブラウザドライバを準備して UI 自動化を行う。
   prerequisites:
-    - "Python 3.10+"
-    - "Chrome or Chromium（推奨）"
+    - "Chrome or Firefox"
+    - "ChromeDriver / GeckoDriver"
   steps:
-    - title: "1) Python 依存を入れる"
+    - title: "1) Install Selenium extras"
       body: |
-        本プロジェクトでは extras を用意している：
-          pip install -e ".[selenium]"
-    - title: "2) ブラウザを用意"
-      body: |
-        - Chrome（推奨）または Chromium をインストールする。
-        - headless 実行する場合もブラウザ本体は必要。
-    - title: "3) ChromeDriver を用意"
-      body: |
-        方式は2つ：
-        (A) PATHにchromedriverを置く（シンプル）
-        (B) webdriver-manager等で自動管理（将来拡張可）
+        EN: Install Python extras.
+        JP: Python extras をインストール。
 
-        (A) の確認：
-          which chromedriver
-          chromedriver --version
-
-        注意：Chrome と ChromeDriver のメジャーバージョン不一致が最頻出の事故。
-    - title: "4) 実行オプション（任意）"
+        pip install -e ".[selenium]"
+    - title: "2) Install driver"
       body: |
-        `tspec.toml` の `[selenium]` でドライバや起動オプションを上書きできる。
-        例：
-          driver_path = "C:/tools/chromedriver.exe"
-          browser_binary = "C:/Program Files/Google/Chrome/Application/chrome.exe"
-          args = ["--lang=ja-JP"]
-          prefs = { "intl.accept_languages" = "ja-JP" }
-          download_dir = "artifacts/downloads"
-          window_size = "1280x720"
-          auto_wait_ms = 3000
-          page_load_timeout_ms = 30000
-          script_timeout_ms = 30000
-    - title: "5) 最小実行（Smoke）"
+        EN: Install the matching driver and add to PATH.
+        JP: ドライバを入れて PATH を通す。
+    - title: "3) Run sample"
       body: |
-        実行：
-          tspec run examples/selenium_google.tspec.md --backend selenium --report out/selenium.json
+        EN: Run a sample spec.
+        JP: サンプルを実行。
 
-        表示：
-          tspec report out/selenium.json --only-errors --show-steps
-    - title: "6) 環境チェック（doctor）"
-      body: |
-        Selenium環境の事前チェック：
-          tspec doctor --selenium
-
-        NG が出た場合のヒント：
-          tspec manual show selenium-env --full
+        tspec run examples/selenium_google.tspec.md --backend selenium --report out/ui.json
   troubleshooting:
-    - title: "chromedriver が見つからない"
+    - title: "Driver not found"
       body: |
-        PATHに入っていない。
-        macOS(Homebrew例):
-          brew install chromedriver
-        もしくは手動で入れて PATH を通す。
-    - title: "session not created: This version of ChromeDriver..."
-      body: |
-        Chrome と ChromeDriver のバージョン不一致。
-        Chromeのバージョンを確認し、同メジャーのChromeDriverに合わせる。
-    - title: "Googleの同意画面などで selector が変わる"
-      body: |
-        リダイレクトや地域設定でDOMが変化する。
-        - wait_for の selector を頑丈にする
-        - 失敗時の鑑識セット（forensics）で page_source / screenshot を確認する
-  references:
-    - "Selenium Documentation: https://www.selenium.dev/documentation/"
-    - "ChromeDriver: https://chromedriver.chromium.org/"
+        EN: Set driver path in tspec.toml or PATH.
+        JP: tspec.toml か PATH を確認。
 ```
-
-## 設定/手順まとめ
-- install: `pip install -e ".[selenium]"` + Chrome/Chromium + ChromeDriver
-- config: `tspec.toml` の `[selenium]` を必要に応じて設定
-- run: `tspec run examples/selenium_google.tspec.md --backend selenium --report out/selenium.json`
-- doctor: `tspec doctor --selenium`

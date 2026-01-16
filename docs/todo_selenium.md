@@ -1,3 +1,6 @@
+# Selenium ToDo (English primary)
+JP: Selenium ToDo（日本語は下記）
+
 # Selenium 強化 ToDo
 
 - [x] docs/selenium_env.tspec.md を参照し、改善対象を整理

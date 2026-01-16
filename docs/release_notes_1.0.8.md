@@ -1,3 +1,6 @@
+# Release Notes 1.0.8 (English primary)
+JP: リリースノート（日本語は下記）
+
 # Release Notes 1.0.8
 
 - Unity MCP (HTTP) の動作検証を強化し、README にデモ GIF を追加

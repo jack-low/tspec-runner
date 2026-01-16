@@ -30,6 +30,8 @@ def start(
     workdir: Optional[str] = None,
     host: str = "127.0.0.1",
     port: int = 8765,
+    unity_mcp_url: Optional[str] = None,
+    blender_mcp_url: Optional[str] = None,
 ) -> None:
     """Start tspec MCP server.
 
@@ -48,6 +50,12 @@ def start(
     from .report_view import load_report as load_report_view, format_error_message
     from .programmatic import run_spec_file
     from .validate import load_and_validate
+
+    if unity_mcp_url:
+        os.environ["UNITY_MCP_MCP_URL"] = unity_mcp_url
+        os.environ.setdefault("UNITY_MCP_MODE", "mcp-http")
+    if blender_mcp_url:
+        os.environ["BLENDER_MCP_BASE_URL"] = blender_mcp_url
 
     wd = _resolve_workdir(workdir)
 

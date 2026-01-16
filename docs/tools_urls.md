@@ -1,3 +1,6 @@
+# Tool URLs (English primary)
+JP: 各ツールのURL一覧（日本語は下記）
+
 # Tools URLs
 
 ## Core
