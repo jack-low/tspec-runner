@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tspec-runner"
-version = "1.0.1"
+version = "1.0.2"
 description = "TSpec runner: Markdown + tspec fenced blocks for test automation (spec-versioned)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -67,5 +67,5 @@ packages = ["src/tspec"]
 
 [tool.ruff]
 line-length = 100
-target-version = "py311"
+target-version = "1.0.2"
 select = ["E", "F", "I", "UP", "B"]
