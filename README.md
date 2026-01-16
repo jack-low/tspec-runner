@@ -1,4 +1,4 @@
-# tspec-runner 1.0.6
+# tspec-runner 1.0.7
 
 TSpec（Markdown + `tspec`）を読み込み、CLI で検証・実行・レポートまで完結する自動化ランナーです。
 Markdown の中にある `tspec` ブロックを読み取り、同じ手順を複数環境で再現できます。
@@ -180,6 +180,35 @@ tspec mcp --transport stdio --workdir .
 ```
 
 詳細: `docs/neko_mcp.md`
+
+---
+
+## Blender / Unity MCP 連携
+Blender / Unity の MCP 対応エンドポイントを呼び出すツールを追加しました。
+`/health` と `/rpc` を前提にしています（`/rpc` は `{method, params}` を受け取る JSON）。
+
+Blender:
+- `pip install -e ".[mcp,blender]"`
+- 環境変数:
+  - `BLENDER_MCP_BASE_URL`（例: `http://localhost:7300`）
+  - `BLENDER_MCP_ALLOWLIST_HOSTS`（推奨: `localhost,localhost:7300`）
+  - 任意: `BLENDER_MCP_AUTH_MODE` (`none` / `bearer` / `token`)
+  - 任意: `BLENDER_MCP_BEARER_TOKEN`, `BLENDER_MCP_TOKEN_QUERY`
+
+Unity:
+- `pip install -e ".[mcp,unity]"`
+- 環境変数:
+  - `UNITY_MCP_BASE_URL`（例: `http://localhost:7400`）
+  - `UNITY_MCP_ALLOWLIST_HOSTS`（推奨: `localhost,localhost:7400`）
+  - 任意: `UNITY_MCP_AUTH_MODE` (`none` / `bearer` / `token`)
+  - 任意: `UNITY_MCP_BEARER_TOKEN`, `UNITY_MCP_TOKEN_QUERY`
+
+起動:
+```bash
+tspec mcp --transport stdio --workdir .
+```
+
+詳細: `docs/blender_mcp.md`, `docs/unity_mcp.md`
 
 ---
 

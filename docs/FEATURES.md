@@ -9,6 +9,11 @@
 - [x] Android smoke サンプル追加（YouTube 起動 + スクリーンショット）
 - [x] README に Appium 実行例とスクリーンショットを追加
 
+## フェーズ2（Blender / Unity MCP）
+- [x] Blender MCP の接続ツールを追加
+- [x] Unity MCP の接続ツールを追加
+- [x] ドキュメント / TestCase 仕様を追加
+
 
 ---
-最終更新: 2026-01-16
+最終更新: 2026-01-17

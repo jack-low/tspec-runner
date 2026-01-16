@@ -14,3 +14,5 @@
 - [x] PyPI の README 画像が表示されない問題を reST に切り替えて解消
 - [x] PyPI CSP 対策で README.rst に data URI の縮小画像を埋め込み
 - [x] PyPI README 画像を削除し GitHub 参照に切り替え
+- [x] Blender MCP / Unity MCP のツールを追加
+- [x] Blender/Unity MCP の仕様書と TestCase 仕様を追加

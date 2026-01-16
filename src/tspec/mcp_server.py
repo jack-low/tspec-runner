@@ -450,6 +450,130 @@ def start(
         return _get_neko().post_json("/api/members_bulk/delete", json=body)
 
 
+    # ---------- Blender MCP Tools ----------
+    # Enabled when BLENDER_MCP_BASE_URL is set.
+    _blender_state: Dict[str, Any] = {}
+
+    def _get_blender():
+        if "client" in _blender_state:
+            return _blender_state["client"]
+
+        base_url = os.environ.get("BLENDER_MCP_BASE_URL", "").strip()
+        if not base_url:
+            raise ValidationError("BLENDER_MCP_BASE_URL is required to use blender tools")
+
+        try:
+            from .blender_client import BlenderAuth, BlenderClient, _parse_allowlist_hosts
+        except Exception as e:  # pragma: no cover
+            raise ExecutionError("Blender MCP support requires: pip install -e '.[blender]'") from e
+
+        allow = _parse_allowlist_hosts(os.environ.get("BLENDER_MCP_ALLOWLIST_HOSTS"))
+        auth_mode = (os.environ.get("BLENDER_MCP_AUTH_MODE") or "none").strip()
+        auth = BlenderAuth(
+            mode=auth_mode,
+            bearer_token=os.environ.get("BLENDER_MCP_BEARER_TOKEN"),
+            token_query=os.environ.get("BLENDER_MCP_TOKEN_QUERY"),
+        )
+        timeout_ms = int(os.environ.get("BLENDER_MCP_TIMEOUT_MS") or "10000")
+        verify_tls = (os.environ.get("BLENDER_MCP_VERIFY_TLS") or "true").lower() not in {"0", "false", "no"}
+
+        client = BlenderClient(
+            base_url=base_url,
+            auth=auth,
+            timeout_ms=timeout_ms,
+            allowlist_hosts=allow,
+            verify_tls=verify_tls,
+        )
+        _blender_state["client"] = client
+        return client
+
+    @_tool("blender.config")
+    def blender_config() -> Dict[str, Any]:
+        """Show current Blender MCP config (secrets redacted)."""
+        base_url = os.environ.get("BLENDER_MCP_BASE_URL", "").strip()
+        return {
+            "base_url": base_url,
+            "auth_mode": (os.environ.get("BLENDER_MCP_AUTH_MODE") or "none").strip(),
+            "allowlist_hosts": os.environ.get("BLENDER_MCP_ALLOWLIST_HOSTS", ""),
+            "timeout_ms": int(os.environ.get("BLENDER_MCP_TIMEOUT_MS") or "10000"),
+            "verify_tls": (os.environ.get("BLENDER_MCP_VERIFY_TLS") or "true").lower() not in {"0", "false", "no"},
+        }
+
+    @_tool("blender.health")
+    def blender_health() -> Dict[str, Any]:
+        """GET /health (no auth)."""
+        c = _get_blender()
+        r = c.request("GET", "/health", auth_required=False)
+        return {"ok": True, "status_code": r.status_code, "body": r.text}
+
+    @_tool("blender.rpc")
+    def blender_rpc(method: str, params: Optional[Dict[str, Any]] = None, path: str = "/rpc") -> Dict[str, Any]:
+        """POST /rpc {method, params}."""
+        return _get_blender().rpc(method, params=params, path=path)
+
+
+    # ---------- Unity MCP Tools ----------
+    # Enabled when UNITY_MCP_BASE_URL is set.
+    _unity_state: Dict[str, Any] = {}
+
+    def _get_unity():
+        if "client" in _unity_state:
+            return _unity_state["client"]
+
+        base_url = os.environ.get("UNITY_MCP_BASE_URL", "").strip()
+        if not base_url:
+            raise ValidationError("UNITY_MCP_BASE_URL is required to use unity tools")
+
+        try:
+            from .unity_client import UnityAuth, UnityClient, _parse_allowlist_hosts
+        except Exception as e:  # pragma: no cover
+            raise ExecutionError("Unity MCP support requires: pip install -e '.[unity]'") from e
+
+        allow = _parse_allowlist_hosts(os.environ.get("UNITY_MCP_ALLOWLIST_HOSTS"))
+        auth_mode = (os.environ.get("UNITY_MCP_AUTH_MODE") or "none").strip()
+        auth = UnityAuth(
+            mode=auth_mode,
+            bearer_token=os.environ.get("UNITY_MCP_BEARER_TOKEN"),
+            token_query=os.environ.get("UNITY_MCP_TOKEN_QUERY"),
+        )
+        timeout_ms = int(os.environ.get("UNITY_MCP_TIMEOUT_MS") or "10000")
+        verify_tls = (os.environ.get("UNITY_MCP_VERIFY_TLS") or "true").lower() not in {"0", "false", "no"}
+
+        client = UnityClient(
+            base_url=base_url,
+            auth=auth,
+            timeout_ms=timeout_ms,
+            allowlist_hosts=allow,
+            verify_tls=verify_tls,
+        )
+        _unity_state["client"] = client
+        return client
+
+    @_tool("unity.config")
+    def unity_config() -> Dict[str, Any]:
+        """Show current Unity MCP config (secrets redacted)."""
+        base_url = os.environ.get("UNITY_MCP_BASE_URL", "").strip()
+        return {
+            "base_url": base_url,
+            "auth_mode": (os.environ.get("UNITY_MCP_AUTH_MODE") or "none").strip(),
+            "allowlist_hosts": os.environ.get("UNITY_MCP_ALLOWLIST_HOSTS", ""),
+            "timeout_ms": int(os.environ.get("UNITY_MCP_TIMEOUT_MS") or "10000"),
+            "verify_tls": (os.environ.get("UNITY_MCP_VERIFY_TLS") or "true").lower() not in {"0", "false", "no"},
+        }
+
+    @_tool("unity.health")
+    def unity_health() -> Dict[str, Any]:
+        """GET /health (no auth)."""
+        c = _get_unity()
+        r = c.request("GET", "/health", auth_required=False)
+        return {"ok": True, "status_code": r.status_code, "body": r.text}
+
+    @_tool("unity.rpc")
+    def unity_rpc(method: str, params: Optional[Dict[str, Any]] = None, path: str = "/rpc") -> Dict[str, Any]:
+        """POST /rpc {method, params}."""
+        return _get_unity().rpc(method, params=params, path=path)
+
+
     # ---------- Resources (read-only) ----------
     @mcp.resource("file://workdir")
     def workdir_info() -> str:

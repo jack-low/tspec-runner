@@ -1,4 +1,4 @@
-tspec-runner 1.0.6
+tspec-runner 1.0.7
 ==================
 
 TSpec (Markdown + ``tspec``) を読み込み、CLI で検証・実行・レポートまで完結する自動化ランナーです。
@@ -72,9 +72,39 @@ UI 実行（例：agent-browser）
 
 画面キャプチャ（実行例）
 ----------------------------------------
-PyPI では画像が表示されない場合があるため、以下のリポジトリで確認してください。
+agent-browser による smoke 実行のスクリーンショット:
 
-- https://github.com/jack-low/tspec-runner
+.. image:: https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/agent-browser-smoke.png
+   :alt: agent-browser smoke
+
+Selenium（Example Domain）のスクリーンショット:
+
+.. image:: https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/selenium-example.png
+   :alt: selenium example
+
+Appium（YouTube / Androidエミュレータ）のスクリーンショット:
+
+.. image:: https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/android-youtube-home.png
+   :alt: appium android youtube
+
+Appium 検索フロー（Home -> Search -> Results -> Player）:
+
+.. image:: https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/android-youtube-search.png
+   :alt: appium youtube search
+
+.. image:: https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/android-youtube-results.png
+   :alt: appium youtube results
+
+.. image:: https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/android-youtube-player.png
+   :alt: appium youtube player
+
+レポート HTML のスクリーンショット:
+
+.. image:: https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/report-example.png
+   :alt: report example
+
+.. note::
+   Android/iOS のスクリーンショットは Appium Server と実機/エミュレータが必要です。
 
 UI backend を使う場合（extras）
 ----------------------------------------
@@ -174,6 +204,37 @@ MCP Server で ``neko.*`` を有効化し、Neko の REST API をツールとし
    tspec mcp --transport stdio --workdir .
 
 詳細: ``docs/neko_mcp.md``
+
+Blender / Unity MCP 連携
+----------------------------------------
+Blender / Unity の MCP 対応エンドポイントを呼び出すツールを追加しました。
+``/health`` と ``/rpc`` を前提にしています（``/rpc`` は ``{method, params}`` を受け取る JSON）。
+
+Blender:
+
+- ``pip install -e ".[mcp,blender]"``
+- 環境変数:
+  - ``BLENDER_MCP_BASE_URL``（例: ``http://localhost:7300``）
+  - ``BLENDER_MCP_ALLOWLIST_HOSTS``（推奨: ``localhost,localhost:7300``）
+  - 任意: ``BLENDER_MCP_AUTH_MODE`` (``none`` / ``bearer`` / ``token``)
+  - 任意: ``BLENDER_MCP_BEARER_TOKEN``, ``BLENDER_MCP_TOKEN_QUERY``
+
+Unity:
+
+- ``pip install -e ".[mcp,unity]"``
+- 環境変数:
+  - ``UNITY_MCP_BASE_URL``（例: ``http://localhost:7400``）
+  - ``UNITY_MCP_ALLOWLIST_HOSTS``（推奨: ``localhost,localhost:7400``）
+  - 任意: ``UNITY_MCP_AUTH_MODE`` (``none`` / ``bearer`` / ``token``)
+  - 任意: ``UNITY_MCP_BEARER_TOKEN``, ``UNITY_MCP_TOKEN_QUERY``
+
+起動:
+
+.. code-block:: bash
+
+   tspec mcp --transport stdio --workdir .
+
+詳細: ``docs/blender_mcp.md``, ``docs/unity_mcp.md``
 
 レポート表示
 ----------------------------------------

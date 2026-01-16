@@ -189,3 +189,13 @@ NameError: name 'android' is not defined
 - cause: PyPI rendering/CSP and client-side blocking
 - fix: remove images from PyPI README and refer to GitHub for screenshots
 - status: resolved
+
+## 2026-01-17
+### Blender/Unity MCP integration added
+- change: add blender/unity MCP clients and MCP tools (config/health/rpc)
+- status: resolved
+
+### PyPI screenshots restored (public repo)
+- cause: repo was private so raw URLs returned 404
+- fix: make repo public and restore README.rst image directives
+- status: resolved

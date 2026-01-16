@@ -22,6 +22,12 @@
 - Neko (m1k1o/neko): https://github.com/m1k1o/neko
 - Neko API docs: https://neko.m1k1o.net/docs/v3/api/
 
+## Game engines / DCC
+- Blender: https://www.blender.org/
+- Blender API docs: https://docs.blender.org/api/current/
+- Unity: https://unity.com/
+- Unity scripting API: https://docs.unity3d.com/ScriptReference/
+
 ## Testing / Reporting
 - pytest: https://docs.pytest.org/
 - pytest-html: https://github.com/pytest-dev/pytest-html
