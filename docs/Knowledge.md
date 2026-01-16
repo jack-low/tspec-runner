@@ -177,3 +177,9 @@ NameError: name 'android' is not defined
 - cause: PyPI did not render Markdown image syntax in long_description
 - fix: switch long_description to README.rst (reStructuredText) with image directives
 - status: resolved
+
+## 2026-01-16
+### PyPI screenshots still not rendering after reST switch
+- cause: PyPI CSP blocks external images (img-src 'self' data:)
+- fix: embed resized screenshots as data URIs in README.rst
+- status: resolved

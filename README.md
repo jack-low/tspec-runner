@@ -1,4 +1,4 @@
-# tspec-runner 1.0.4
+# tspec-runner 1.0.5
 
 TSpec（Markdown + `tspec`）を読み込み、CLI で検証・実行・レポートまで完結する自動化ランナーです。
 Markdown の中にある `tspec` ブロックを読み取り、同じ手順を複数環境で再現できます。
