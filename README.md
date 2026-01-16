@@ -3,6 +3,10 @@
 TSpec（Markdown + `tspec`）を読み込み、CLI で検証・実行・レポートまで完結する自動化ランナーです。
 Markdown の中にある `tspec` ブロックを読み取り、同じ手順を複数環境で再現できます。
 
+## リンク
+- GitHub: https://github.com/jack-low/tspec-runner
+- PyPI: https://pypi.org/project/tspec-runner/
+
 ## できること
 - Spec バージョン解決（無指定＝最新 / 範囲指定 / 3世代前まで）
 - validate / list / run / spec / init / doctor / report

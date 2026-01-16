@@ -35,8 +35,8 @@ def _coerce_opt_str(v):
         return None
     try:
         import builtins as _b
-        if isinstance(v, (_b.list, _b.tuple)) and v:
-            return v[-1]
+        while isinstance(v, (_b.list, _b.tuple)) and v:
+            v = v[-1]
     except Exception:
         pass
     return v
