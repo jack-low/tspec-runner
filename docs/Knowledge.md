@@ -183,3 +183,9 @@ NameError: name 'android' is not defined
 - cause: PyPI CSP blocks external images (img-src 'self' data:)
 - fix: embed resized screenshots as data URIs in README.rst
 - status: resolved
+
+## 2026-01-16
+### PyPI screenshots not visible for some clients
+- cause: PyPI rendering/CSP and client-side blocking
+- fix: remove images from PyPI README and refer to GitHub for screenshots
+- status: resolved

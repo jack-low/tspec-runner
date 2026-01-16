@@ -11,6 +11,7 @@ Status
 - Appium Android smoke example added (YouTube open + screenshot).
 - PyPI long description switched to README.rst for image rendering.
 - PyPI CSP (img-src self) workaround: embed data URI thumbnails in README.rst.
+- PyPI screenshots removed; README.rst points to GitHub for images.
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"
