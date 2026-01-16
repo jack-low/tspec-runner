@@ -4,9 +4,9 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tspec-runner"
-version = "1.0.3"
+version = "1.0.4"
 description = "TSpec runner: Markdown + tspec fenced blocks for test automation (spec-versioned)"
-readme = "README.md"
+readme = { file = "README.rst", content-type = "text/x-rst" }
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "tspec", email = "devnull@example.com" }]
@@ -59,6 +59,7 @@ include = [
   "docs/**",
   "examples/**",
   "README.md",
+  "README.rst",
   "pyproject.toml",
 ]
 

@@ -11,3 +11,4 @@
 - [x] 全ドキュメント出力テスト完了（manual show/validate/read）
 - [x] Appium smoke 実行（YouTube 起動 + スクリーンショット）を追加
 - [x] android_youtube_search_play の検索/再生手順を UI 構造に合わせて locator 調整
+- [x] PyPI の README 画像が表示されない問題を reST に切り替えて解消

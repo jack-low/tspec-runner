@@ -9,6 +9,7 @@ Status
 - TestPyPI and PyPI release published for 1.0.0.
 - docs/ restored from remote main after local disappearance.
 - Appium Android smoke example added (YouTube open + screenshot).
+- PyPI long description switched to README.rst for image rendering.
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"

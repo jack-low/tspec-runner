@@ -171,3 +171,9 @@ NameError: name 'android' is not defined
 - cause: YouTube UI の検索/結果画面の resource-id 構造が想定と異なり wait_for がタイムアウト
 - fix: 検索アイコン/検索入力/サジェスト/結果/プレーヤーの selector を実機 UI に合わせて更新
 - status: resolved
+
+## 2026-01-16
+### PyPI screenshots not rendering in Markdown README
+- cause: PyPI did not render Markdown image syntax in long_description
+- fix: switch long_description to README.rst (reStructuredText) with image directives
+- status: resolved
