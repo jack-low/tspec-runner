@@ -138,3 +138,18 @@ NameError: name 'android' is not defined
 - cause: local checkout missing docs directory
 - fix: restore docs from remote main
 - status: resolved
+
+### selenium google smoke timeout
+- cause: ui.wait_for timed out on https://www.google.com
+- fix: add stable selenium example (example.com) for screenshots
+- status: resolved
+
+### appium android login could not reach server
+- cause: Appium server not running on 127.0.0.1:4723
+- fix: start appium server (see docs/android_env.tspec.md)
+- status: blocked (env)
+
+### pytest-report html generation failures
+- cause: generated test module string formatting errors and JSON null usage
+- fix: escape newline in generated code and parse JSON via json.loads
+- status: resolved

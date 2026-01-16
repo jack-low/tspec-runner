@@ -57,6 +57,16 @@ agent-browser による smoke 実行のスクリーンショット:
 
 ![agent-browser smoke](docs/assets/agent-browser-smoke.png)
 
+Selenium（Example Domain）のスクリーンショット:
+
+![selenium example](docs/assets/selenium-example.png)
+
+レポート HTML のスクリーンショット:
+
+![report example](docs/assets/report-example.png)
+
+> Android/iOS のスクリーンショットは Appium Server と実機/エミュレータが必要です。
+
 ---
 
 ## UI backend を使う場合（extras）
