@@ -65,25 +65,25 @@ tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report
 ## 画面キャプチャ（実行例）
 agent-browser による smoke 実行のスクリーンショット:
 
-![agent-browser smoke](https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/agent-browser-smoke.png)
+![agent-browser smoke](docs/assets/agent-browser-smoke.png)
 
 Selenium（Example Domain）のスクリーンショット:
 
-![selenium example](https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/selenium-example.png)
+![selenium example](docs/assets/selenium-example.png)
 
 Appium（YouTube / Androidエミュレータ）のスクリーンショット:
 
-![appium android youtube](https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/android-youtube-home.png)
+![appium android youtube](docs/assets/android-youtube-home.png)
 
 Appium 検索フロー（Home -> Search -> Results -> Player）:
 
-![appium youtube search](https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/android-youtube-search.png)
-![appium youtube results](https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/android-youtube-results.png)
-![appium youtube player](https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/android-youtube-player.png)
+![appium youtube search](docs/assets/android-youtube-search.png)
+![appium youtube results](docs/assets/android-youtube-results.png)
+![appium youtube player](docs/assets/android-youtube-player.png)
 
 レポート HTML のスクリーンショット:
 
-![report example](https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/report-example.png)
+![report example](docs/assets/report-example.png)
 
 > Android/iOS のスクリーンショットは Appium Server と実機/エミュレータが必要です。
 
