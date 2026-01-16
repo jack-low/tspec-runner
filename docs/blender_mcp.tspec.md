@@ -10,6 +10,7 @@ manual:
   prerequisites:
     - "pip install -e '.[mcp,blender]'"
     - "Blender 側に /health と /rpc の HTTP エンドポイントがあること"
+    - "blender-mcp は stdio のため、そのままでは REST 連携不可"
   steps:
     - title: "1) 環境変数を設定"
       body: |

@@ -199,3 +199,61 @@ NameError: name 'android' is not defined
 - cause: repo was private so raw URLs returned 404
 - fix: make repo public and restore README.rst image directives
 - status: resolved
+
+## 2026-01-17
+### Blender MCP background run does not respond
+- cause: Blender addon server relies on bpy.app.timers; background/headless execution does not progress timers
+- fix: start Blender UI and click "Connect" in BlenderMCP panel, then test socket
+- status: pending (UI action required)
+
+## 2026-01-17
+### Blender MCP UI auto-start test succeeded
+- action: started Blender UI with a startup script that calls `bpy.ops.blendermcp.start_server()`
+- result: TCP `get_scene_info` returned 正常レスポンス (Scene/Cube/Light/Camera)
+- status: resolved (UI flow)
+
+### Unity MCP /rpc returns 404
+- cause: unity-mcp HTTP server exposes `/health` and `/mcp` (Streamable HTTP), not `/rpc`
+- fix: add MCP HTTP client (`unity.tool`) with `UNITY_MCP_MODE=mcp-http` + `UNITY_MCP_MCP_URL`, update docs/testcases
+- status: resolved
+
+### Unity MCP streamable HTTP tool call confirmed
+- action: `UnityMcpHttpClient` -> `debug_request_context` on `http://localhost:8090/mcp`
+- result: response payload returned (structuredContent + content)
+- status: resolved
+
+### Unity Editor launch shows licensing warnings
+- cause: Unity licensing client reports missing entitlements / access token (log shows Code 404 and com.unity.editor.ui not found)
+- fix: sign in via Unity Hub and refresh license/entitlements, then reopen project
+- status: resolved (Hub login/update)
+
+### Unity Editor short-run log still shows access token warning
+- action: launch Unity Editor for ~15s and scan log
+- result: `Licensing::Module` reported "Access token is unavailable; failed to update"
+- status: resolved (after ~60s run, access token updated successfully)
+
+### pytest -q picked up local_notes unity-mcp tests and failed
+- cause: local_notes contains cloned unity-mcp repo with its own tests and missing deps
+- fix: add `pytest.ini` to limit testpaths to `tests` and ignore local_notes
+- status: resolved
+
+### Unity MCP package compile error: ITestResultAdaptor not found
+- error: `Library\\PackageCache\\com.coplaydev.unity-mcp@...\\Editor\\Services\\TestRunnerService.cs(483,88)`
+- cause: Unity Test Framework package is missing (type defined in test framework)
+- fix: install `com.unity.test-framework` via Package Manager, then reimport/recompile
+- status: resolved (manifest updated, batch recompile OK)
+
+### Unity Test Framework not in manifest.json
+- action: checked `UnityMCPTest/Packages/manifest.json`
+- result: `com.unity.test-framework` entry missing; added `1.4.5` manually
+- status: resolved (batch recompile has no related errors)
+
+### Unity MCP HTTP session verified (localhost:8080)
+- action: started MCP for Unity from Editor (HTTP 8080)
+- result: `debug_request_context`, `mcpforunity://instances`, and `manage_scene(action=get_hierarchy)` returned OK
+- status: resolved
+
+### twine upload failed on Windows console encoding
+- cause: rich progress bar emitted Unicode bullet that cp932 couldn't encode
+- fix: use `python -m twine upload --disable-progress-bar dist/*`
+- status: resolved

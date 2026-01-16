@@ -1,4 +1,4 @@
-tspec-runner 1.0.7
+tspec-runner 1.0.8
 ==================
 
 TSpec (Markdown + ``tspec``) を読み込み、CLI で検証・実行・レポートまで完結する自動化ランナーです。
@@ -106,6 +106,41 @@ Appium 検索フロー（Home -> Search -> Results -> Player）:
 .. note::
    Android/iOS のスクリーンショットは Appium Server と実機/エミュレータが必要です。
 
+Unity MCP 操作デモ
+----------------------------------------
+Unity MCP で「Cube 作成 → マテリアル変更 → 位置/回転変更」を実行した例です。
+操作の流れが追えるように、キャプチャをアニメーションにしています。
+
+.. image:: https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/unity-mcp-demo.gif
+   :alt: unity mcp demo
+
+実行した内容:
+- ``manage_gameobject`` で Cube 作成
+- ``manage_material`` でマテリアル作成 + 色変更 + Renderer へ割当
+- ``manage_gameobject`` で位置/回転を更新
+
+追加デモ: Sphere を作成してマテリアルを適用し、Prefab 化する流れです。
+
+.. image:: https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/unity-mcp-prefab-demo.gif
+   :alt: unity mcp prefab demo
+
+実行した内容:
+- ``manage_gameobject`` で Sphere 作成
+- ``manage_material`` で色付きマテリアル作成 + Renderer へ割当
+- ``manage_prefabs`` で Prefab を作成
+
+Blender MCP 操作デモ
+----------------------------------------
+Blender MCP でビューポートのスクリーンショットを取得した例です。
+
+.. image:: https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/blender-mcp-demo.png
+   :alt: blender mcp demo
+
+追加デモ: モデリング操作の流れ（オブジェクト生成 → Bevel/Subdivision → マテリアル付与 → 位置/回転変更）です。
+
+.. image:: https://raw.githubusercontent.com/jack-low/tspec-runner/main/docs/assets/blender-mcp-modeling-demo.gif
+   :alt: blender mcp modeling demo
+
 UI backend を使う場合（extras）
 ----------------------------------------
 Selenium
@@ -207,8 +242,8 @@ MCP Server で ``neko.*`` を有効化し、Neko の REST API をツールとし
 
 Blender / Unity MCP 連携
 ----------------------------------------
-Blender / Unity の MCP 対応エンドポイントを呼び出すツールを追加しました。
-``/health`` と ``/rpc`` を前提にしています（``/rpc`` は ``{method, params}`` を受け取る JSON）。
+Blender / Unity の MCP サーバと連携するツールを追加しました。
+Unity MCP は ``/health`` と ``/mcp`` (Streamable HTTP) を前提にしています。
 
 Blender:
 
@@ -218,15 +253,18 @@ Blender:
   - ``BLENDER_MCP_ALLOWLIST_HOSTS``（推奨: ``localhost,localhost:7300``）
   - 任意: ``BLENDER_MCP_AUTH_MODE`` (``none`` / ``bearer`` / ``token``)
   - 任意: ``BLENDER_MCP_BEARER_TOKEN``, ``BLENDER_MCP_TOKEN_QUERY``
+  - 備考: blender-mcp (ahujasid) は stdio のため REST 互換ではありません
 
 Unity:
 
 - ``pip install -e ".[mcp,unity]"``
 - 環境変数:
-  - ``UNITY_MCP_BASE_URL``（例: ``http://localhost:7400``）
-  - ``UNITY_MCP_ALLOWLIST_HOSTS``（推奨: ``localhost,localhost:7400``）
+  - ``UNITY_MCP_MODE=mcp-http``
+  - ``UNITY_MCP_MCP_URL``（例: ``http://localhost:8080/mcp``）
+  - ``UNITY_MCP_ALLOWLIST_HOSTS``（推奨: ``localhost,localhost:8080``）
   - 任意: ``UNITY_MCP_AUTH_MODE`` (``none`` / ``bearer`` / ``token``)
   - 任意: ``UNITY_MCP_BEARER_TOKEN``, ``UNITY_MCP_TOKEN_QUERY``
+  - REST 互換モード: ``UNITY_MCP_BASE_URL`` を指定
 
 起動:
 

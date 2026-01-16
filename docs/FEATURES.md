@@ -12,6 +12,7 @@
 ## フェーズ2（Blender / Unity MCP）
 - [x] Blender MCP の接続ツールを追加
 - [x] Unity MCP の接続ツールを追加
+- [x] Unity MCP の Streamable HTTP (`/mcp`) 呼び出しに対応
 - [x] ドキュメント / TestCase 仕様を追加
 
 

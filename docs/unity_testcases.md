@@ -1,8 +1,8 @@
 # Unity MCP TestCases
 
 ## 前提
-- Unity 側に `/health` と `/rpc` の HTTP エンドポイントがある
-- `UNITY_MCP_BASE_URL` と `UNITY_MCP_ALLOWLIST_HOSTS` を設定済み
+- Unity MCP の `/health` と `/mcp` が起動している
+- `UNITY_MCP_MODE=mcp-http` と `UNITY_MCP_MCP_URL` を設定済み
 - `pip install -e ".[mcp,unity]"`
 
 ## TestCase 一覧
@@ -17,7 +17,7 @@
 - 手順: `unity.health`
 - 期待結果: `status_code=200` と `ok=true`
 
-### UN-MCP-003: rpc 呼び出し
-- 目的: `/rpc` に method/params を送れる
-- 手順: `unity.rpc(method="scene.list", params={})`
-- 期待結果: Unity 側のレスポンス JSON が返る
+### UN-MCP-003: tool 呼び出し
+- 目的: MCP tool が呼び出せる
+- 手順: `unity.tool(name="debug_request_context", arguments={})`
+- 期待結果: Unity MCP 側のレスポンス JSON が返る

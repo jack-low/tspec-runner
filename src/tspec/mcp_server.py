@@ -515,6 +515,24 @@ def start(
     # ---------- Unity MCP Tools ----------
     # Enabled when UNITY_MCP_BASE_URL is set.
     _unity_state: Dict[str, Any] = {}
+    _unity_mcp_state: Dict[str, Any] = {}
+
+    def _unity_mode() -> str:
+        raw = (os.environ.get("UNITY_MCP_MODE") or "").strip().lower()
+        if raw:
+            return raw
+        if os.environ.get("UNITY_MCP_MCP_URL"):
+            return "mcp-http"
+        return "rest"
+
+    def _unity_mcp_url() -> str:
+        mcp_url = os.environ.get("UNITY_MCP_MCP_URL", "").strip()
+        if mcp_url:
+            return mcp_url
+        base_url = os.environ.get("UNITY_MCP_BASE_URL", "").strip()
+        if not base_url:
+            return ""
+        return f"{base_url.rstrip('/')}/mcp"
 
     def _get_unity():
         if "client" in _unity_state:
@@ -549,12 +567,47 @@ def start(
         _unity_state["client"] = client
         return client
 
+    def _get_unity_mcp_http():
+        if "client" in _unity_mcp_state:
+            return _unity_mcp_state["client"]
+
+        mcp_url = _unity_mcp_url()
+        if not mcp_url:
+            raise ValidationError("UNITY_MCP_MCP_URL or UNITY_MCP_BASE_URL is required to use unity.tool")
+
+        try:
+            from .unity_client import UnityAuth, UnityMcpHttpClient, _parse_allowlist_hosts
+        except Exception as e:  # pragma: no cover
+            raise ExecutionError("Unity MCP HTTP support requires: pip install -e '.[unity,mcp]'") from e
+
+        allow = _parse_allowlist_hosts(os.environ.get("UNITY_MCP_ALLOWLIST_HOSTS"))
+        auth_mode = (os.environ.get("UNITY_MCP_AUTH_MODE") or "none").strip()
+        auth = UnityAuth(
+            mode=auth_mode,
+            bearer_token=os.environ.get("UNITY_MCP_BEARER_TOKEN"),
+            token_query=os.environ.get("UNITY_MCP_TOKEN_QUERY"),
+        )
+        timeout_ms = int(os.environ.get("UNITY_MCP_TIMEOUT_MS") or "10000")
+        verify_tls = (os.environ.get("UNITY_MCP_VERIFY_TLS") or "true").lower() not in {"0", "false", "no"}
+
+        client = UnityMcpHttpClient(
+            mcp_url=mcp_url,
+            auth=auth,
+            timeout_ms=timeout_ms,
+            allowlist_hosts=allow,
+            verify_tls=verify_tls,
+        )
+        _unity_mcp_state["client"] = client
+        return client
+
     @_tool("unity.config")
     def unity_config() -> Dict[str, Any]:
         """Show current Unity MCP config (secrets redacted)."""
         base_url = os.environ.get("UNITY_MCP_BASE_URL", "").strip()
         return {
             "base_url": base_url,
+            "mcp_url": _unity_mcp_url(),
+            "mode": _unity_mode(),
             "auth_mode": (os.environ.get("UNITY_MCP_AUTH_MODE") or "none").strip(),
             "allowlist_hosts": os.environ.get("UNITY_MCP_ALLOWLIST_HOSTS", ""),
             "timeout_ms": int(os.environ.get("UNITY_MCP_TIMEOUT_MS") or "10000"),
@@ -572,6 +625,14 @@ def start(
     def unity_rpc(method: str, params: Optional[Dict[str, Any]] = None, path: str = "/rpc") -> Dict[str, Any]:
         """POST /rpc {method, params}."""
         return _get_unity().rpc(method, params=params, path=path)
+
+    @_tool("unity.tool")
+    def unity_tool(name: str, arguments: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Call a Unity MCP tool via streamable HTTP."""
+        mode = _unity_mode()
+        if mode not in {"mcp-http", "mcp_http", "mcp"}:
+            raise ValidationError("unity.tool requires UNITY_MCP_MODE=mcp-http")
+        return _get_unity_mcp_http().call_tool(name, arguments or {})
 
 
     # ---------- Resources (read-only) ----------

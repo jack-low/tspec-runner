@@ -2,7 +2,7 @@ import pytest
 
 httpx = pytest.importorskip("httpx")
 
-from tspec.unity_client import UnityAuth, UnityClient
+from tspec.unity_client import UnityAuth, UnityClient, UnityMcpHttpClient
 from tspec.errors import ValidationError
 
 
@@ -30,3 +30,13 @@ def test_unity_request_auth_bearer_header():
     out = c.get_json("/health")
     assert out["ok"] is True
     assert seen["auth"] == "Bearer TESTTOKEN"
+
+
+def test_unity_mcp_url_required():
+    with pytest.raises(ValidationError):
+        UnityMcpHttpClient(mcp_url="")
+
+
+def test_unity_mcp_allowlist_blocks():
+    with pytest.raises(ValidationError):
+        UnityMcpHttpClient(mcp_url="http://example.com:8080/mcp", allowlist_hosts=["localhost:8080"])

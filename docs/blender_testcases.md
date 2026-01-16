@@ -4,6 +4,7 @@
 - Blender 側に `/health` と `/rpc` の HTTP エンドポイントがある
 - `BLENDER_MCP_BASE_URL` と `BLENDER_MCP_ALLOWLIST_HOSTS` を設定済み
 - `pip install -e ".[mcp,blender]"`
+- blender-mcp (ahujasid) は stdio のため、REST 連携にはプロキシが必要
 
 ## TestCase 一覧
 

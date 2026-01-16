@@ -25,6 +25,12 @@
 - `GET /health` -> 200 OK
 - `POST /rpc` with JSON: `{ "method": "scene.list", "params": {} }`
 
+## blender-mcp との関係
+- `blender-mcp` (ahujasid) は MCP/stdio で動作し、`/health` や `/rpc` の HTTP API は持ちません
+- `tspec-runner` の `blender.*` ツールは REST ラッパー用です
+- `blender-mcp` をそのまま使う場合は、MCP クライアントから直接接続してください
+- `tspec-runner` 経由で使う場合は REST プロキシを用意する必要があります
+
 ## 設定/手順まとめ
 - install: `pip install -e ".[mcp,blender]"`
 - env: `BLENDER_MCP_BASE_URL` + `BLENDER_MCP_ALLOWLIST_HOSTS`
