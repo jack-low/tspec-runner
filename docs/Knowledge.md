@@ -132,3 +132,9 @@ NameError: name 'android' is not defined
 - cause: stray trailing "a" after ui.screenshot path line
 - fix: remove extra character
 - status: resolved
+
+## 2026-01-16
+### docs directory missing in local working tree
+- cause: local checkout missing docs directory
+- fix: restore docs from remote main
+- status: resolved
