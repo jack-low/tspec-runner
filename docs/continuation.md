@@ -8,9 +8,11 @@ Status
 - main branch merged with all upgrade branches; main is current default.
 - TestPyPI and PyPI release published for 1.0.0.
 - docs/ restored from remote main after local disappearance.
+- Appium Android smoke example added (YouTube open + screenshot).
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"
+- tspec run examples/android_youtube_smoke.tspec.md --backend appium --report "out/android_youtube_smoke.json"
 
 Windows install workaround
 - & "$env:APPDATA\\npm\\node_modules\\agent-browser\\bin\\agent-browser-win32-x64.exe" install

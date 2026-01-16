@@ -82,6 +82,19 @@ manual:
         安定させるなら caps に udid を指定：
           caps:
             udid: "emulator-5554"
+    - title: "UiAutomator2 の instrumentation が 30000ms で起動しない"
+      body: |
+        emulator が遅い場合はタイムアウトを延ばす：
+          caps:
+            uiautomator2ServerInstallTimeout: 120000
+            uiautomator2ServerLaunchTimeout: 120000
+    - title: "hidden_api_policy の設定がタイムアウトする"
+      body: |
+        端末設定の書き込みが遅い場合は以下を追加：
+          caps:
+            ignoreHiddenApiPolicyError: true
+            adbExecTimeout: 120000
+            skipDeviceInitialization: true
   references:
     - "Android SDK 環境変数: https://developer.android.com/studio/command-line/variables"
 ```
@@ -91,3 +104,16 @@ manual:
 - emulator: AVD を作成して起動、`adb devices -l` で確認
 - appium: `npm i -g appium` + `appium driver install uiautomator2`
 - run: `pip install -e ".[appium]"` → `tspec run examples/android_login.tspec.md --backend appium --report out/android.json`
+
+## 実行イメージ（YouTube サンプル）
+Home:
+![android youtube home](assets/android-youtube-home.png)
+
+Search:
+![android youtube search](assets/android-youtube-search.png)
+
+Results:
+![android youtube results](assets/android-youtube-results.png)
+
+Player:
+![android youtube player](assets/android-youtube-player.png)

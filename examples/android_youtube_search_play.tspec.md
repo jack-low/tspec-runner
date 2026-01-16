@@ -32,23 +32,28 @@ vars:
   query: "OpenAI"
 
   # ---------- Robust selectors ----------
-  # Search button: content-desc が Search/検索 のどちらでも拾う + resource-id に search が含まれるものも拾う
-  sel_search_btn: "xpath=//*[@content-desc='Search' or @content-desc='検索' or contains(@resource-id,'search') or contains(@resource-id,'menu_search')]"
+  # Search button: top bar search icon (content-desc=検索/Search)
+  sel_search_btn: "xpath=//*[@resource-id='com.google.android.youtube:id/menu_item_view' and (@content-desc='検索' or @content-desc='Search')]"
 
-  # Search input: 既知ID or contains
-  sel_search_input: "xpath=//*[@resource-id='com.google.android.youtube:id/search_edit_text' or contains(@resource-id,'search_edit')]"
+  # Search input: search box edit text
+  sel_search_input: "id=com.google.android.youtube:id/search_edit_text"
 
-  # First result: title系の先頭
-  sel_first_result: "xpath=(//*[@resource-id='com.google.android.youtube:id/title' or contains(@resource-id,'title')])[1]"
+  # Search suggestions list + first suggestion
+  sel_suggest_list: "id=com.google.android.youtube:id/results_recycler_view"
+  sel_suggest_first: "xpath=(//*[@resource-id='com.google.android.youtube:id/results_recycler_view']//android.view.ViewGroup[@clickable='true'])[1]"
 
-  # Player area: player を含む resource-id を広く拾う
-  sel_player_any: "xpath=//*[contains(@resource-id,'player') or contains(@resource-id,'player_view')]"
+  # First result: results list first video (content-desc includes 動画を再生/Play)
+  sel_first_result: "xpath=(//*[@resource-id='com.google.android.youtube:id/results']//android.view.ViewGroup[contains(@content-desc,'動画を再生') or contains(@content-desc,'Play')])[1]"
+
+  # Player area: watch player container
+  sel_player_any: "id=com.google.android.youtube:id/watch_player"
 
 cases:
   - id: "YT-001"
     title: "Launch YouTube, search query, play first result, exit"
     steps:
       - do: ui.open_app
+        timeout_ms: 120000
         with:
           server_url: "${vars.appium_server}"
           caps:
@@ -67,9 +72,13 @@ cases:
 
             newCommandTimeout: 180
             noReset: true
+            forceAppLaunch: true
             autoGrantPermissions: true
-            adbExecTimeout: 60000
-            uiautomator2ServerInstallTimeout: 60000
+            adbExecTimeout: 120000
+            uiautomator2ServerInstallTimeout: 120000
+            uiautomator2ServerLaunchTimeout: 120000
+            ignoreHiddenApiPolicyError: true
+            skipDeviceInitialization: true
 
       # 起動直後の状態を保存（ホーム画面に戻っているか等が一発で分かる）
       - do: ui.screenshot
@@ -97,12 +106,21 @@ cases:
           selector: "${vars.sel_search_input}"
           text: "${vars.query}"
 
-      # 検索実行（多くの場合、同じ検索アイコンが確定操作になる）
+      # サジェスト先頭をクリックして検索実行
+      - do: ui.wait_for
+        with:
+          selector: "${vars.sel_suggest_list}"
+        timeout_ms: 60000
+
       - do: ui.click
         with:
-          selector: "${vars.sel_search_btn}"
+          selector: "${vars.sel_suggest_first}"
 
       # 結果先頭を再生
+      - do: ui.wait_for
+        with:
+          selector: "id=com.google.android.youtube:id/results"
+        timeout_ms: 60000
       - do: ui.wait_for
         with:
           selector: "${vars.sel_first_result}"

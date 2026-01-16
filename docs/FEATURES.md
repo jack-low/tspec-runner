@@ -5,6 +5,10 @@
 - [x] ヘッダーレスブラウザ「agent-browser」を導入し、軽量、高速化を図りたい。
 - 関連 ToDo: docs/todo_features.md
 
+## フェーズ1（Android/Appium）
+- [x] Android smoke サンプル追加（YouTube 起動 + スクリーンショット）
+- [x] README に Appium 実行例とスクリーンショットを追加
+
 
 ---
 最終更新: 2026-01-16

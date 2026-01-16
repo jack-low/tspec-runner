@@ -1,6 +1,6 @@
-# tspec-runner 1.0.0
+# tspec-runner 1.0.1
 
-TSpec（Markdown + ```tspec）を読み込み、CLI で検証・実行・レポートまで完結する自動化ランナーです。
+TSpec（Markdown + `tspec`）を読み込み、CLI で検証・実行・レポートまで完結する自動化ランナーです。
 Markdown の中にある `tspec` ブロックを読み取り、同じ手順を複数環境で再現できます。
 
 ## できること
@@ -45,6 +45,12 @@ tspec report out/report.json --only-errors --show-steps
 tspec run examples/selenium_google.tspec.md --backend selenium --report out/ui.json
 ```
 
+## UI 実行（例：Appium/Android）
+```bash
+tspec run examples/android_youtube_smoke.tspec.md --backend appium --report out/android_youtube_smoke.json
+```
+検索ありのサンプルは YouTube UI 変更の影響を受けやすいので、`examples/android_youtube_search_play.tspec.md` の selector を環境に合わせて調整してください。
+
 ## UI 実行（例：agent-browser）
 ```bash
 tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report out/agent-browser.json
@@ -60,6 +66,16 @@ agent-browser による smoke 実行のスクリーンショット:
 Selenium（Example Domain）のスクリーンショット:
 
 ![selenium example](docs/assets/selenium-example.png)
+
+Appium（YouTube / Androidエミュレータ）のスクリーンショット:
+
+![appium android youtube](docs/assets/android-youtube-home.png)
+
+Appium 検索フロー（Home -> Search -> Results -> Player）:
+
+![appium youtube search](docs/assets/android-youtube-search.png)
+![appium youtube results](docs/assets/android-youtube-results.png)
+![appium youtube player](docs/assets/android-youtube-player.png)
 
 レポート HTML のスクリーンショット:
 

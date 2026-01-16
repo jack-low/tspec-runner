@@ -153,3 +153,21 @@ NameError: name 'android' is not defined
 - cause: generated test module string formatting errors and JSON null usage
 - fix: escape newline in generated code and parse JSON via json.loads
 - status: resolved
+
+## 2026-01-16
+### Appium session creation timeouts on Android emulator
+- cause: UiAutomator2 hidden_api_policy setup and instrumentation launch timed out on API 36 emulator
+- fix: add capabilities to examples:
+  - forceAppLaunch: true
+  - ignoreHiddenApiPolicyError: true
+  - adbExecTimeout: 120000
+  - uiautomator2ServerInstallTimeout: 120000
+  - uiautomator2ServerLaunchTimeout: 120000
+  - skipDeviceInitialization: true
+  - open_app timeout_ms: 120000
+- status: mitigated (android_youtube_smoke passes; search/play flow may still be flaky)
+
+### android_youtube_search_play の locator 調整
+- cause: YouTube UI の検索/結果画面の resource-id 構造が想定と異なり wait_for がタイムアウト
+- fix: 検索アイコン/検索入力/サジェスト/結果/プレーヤーの selector を実機 UI に合わせて更新
+- status: resolved
