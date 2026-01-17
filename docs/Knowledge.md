@@ -189,6 +189,11 @@ JP: 作業中のエラー/知見（日本語は下記）
 - action: bump version to 1.1.1 and add release notes
 - status: resolved (repo)
 
+### Unreal Engine MCP setup attempt
+- action: cloned unreal-engine-mcp and ran `uv run unreal_mcp_server_advanced.py`
+- result: uv environment created; server run timed out waiting for UE/plugin connection
+- status: blocked (requires Unreal Engine running)
+
 ### Release notes policy
 - action: add release notes per version in docs/release_notes_<version>.md
 - status: resolved (documented in update.md)

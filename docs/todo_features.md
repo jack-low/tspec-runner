@@ -11,6 +11,7 @@ JP: ToDo 一覧（日本語は下記）
 - [x] Split README into English/Japanese files
 - [x] Add script to switch PyPI long_description language
 - [x] Add Playwright backend (UI + allowlist guard)
+- [x] Add Unreal Engine MCP docs and manuals
 
 ## Current errors
 - [x] Re-run pytest and confirm results (27 passed)
@@ -42,6 +43,7 @@ JP: ToDo 一覧（日本語は下記）
 - [x] README を英語/日本語に分割
 - [x] PyPI long_description 切替スクリプトを追加
 - [x] Playwright backend を追加（UI + allowlist 制御）
+- [x] Unreal Engine MCP のドキュメント/マニュアルを追加
 
 ## Current errors
 - [x] pytest を再実行して結果を確認（27 passed）

@@ -281,6 +281,18 @@ Details: `docs/blender_mcp.md`, `docs/unity_mcp.md`
 
 ---
 
+## Unreal Engine MCP integration
+Unreal Engine MCP runs as a separate MCP server.
+
+Setup:
+- Repo: https://github.com/flopperam/unreal-engine-mcp
+- Start server: `uv run unreal_mcp_server_advanced.py` (from `unreal-engine-mcp/Python`)
+- Configure MCP client to run the server (see `docs/unreal_mcp.md`)
+
+Manual (EN/JP): `tspec manual show unreal-mcp --full --lang en` / `tspec manual show unreal-mcp --full --lang jp`
+
+---
+
 ## Report view
 ```bash
 tspec report out/report.json

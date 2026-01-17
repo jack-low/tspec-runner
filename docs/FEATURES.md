@@ -24,11 +24,13 @@ JP:
 - [x] Add Unity MCP connection tools
 - [x] Support Unity MCP Streamable HTTP (`/mcp`)
 - [x] Add documentation and TestCase specs
+- [x] Add Unreal Engine MCP docs and setup guide
 JP:
 - [x] Blender MCP の接続ツールを追加
 - [x] Unity MCP の接続ツールを追加
 - [x] Unity MCP の Streamable HTTP (`/mcp`) 呼び出しに対応
 - [x] ドキュメント / TestCase 仕様を追加
+- [x] Unreal Engine MCP のドキュメントと手順を追加
 
 ## Phase 3 (next proposals)
 - [ ] Standardize Unity MCP on `unity.tool` and add CLI subcommands for `unity_instances` / `read_resource`

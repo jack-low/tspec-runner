@@ -280,6 +280,18 @@ tspec mcp --transport stdio --workdir .
 
 ---
 
+## Unreal Engine MCP 連携
+Unreal Engine MCP は別プロセスの MCP サーバとして起動します。
+
+手順:
+- リポジトリ: https://github.com/flopperam/unreal-engine-mcp
+- サーバ起動: `uv run unreal_mcp_server_advanced.py`（`unreal-engine-mcp/Python` から）
+- MCP クライアント設定は `docs/unreal_mcp.md` を参照
+
+マニュアル: `tspec manual show unreal-mcp --full --lang jp`
+
+---
+
 ## レポート表示
 ```bash
 tspec report out/report.json

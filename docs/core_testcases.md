@@ -49,6 +49,12 @@ JP: TSPEC_MANUAL_LANG で既定言語が切り替わる
 - Expected: run completes (Playwright installed)
 JP: Playwright backend が選択できる
 
+### TC-CORE-009: Unreal MCP manual
+- Goal: Unreal MCP manual is available
+- Steps: `tspec manual show unreal-mcp --full --lang en`
+- Expected: Unreal MCP setup instructions render
+JP: Unreal MCP のマニュアル表示
+
 
 ## JP (original)
 # Core TestCase 仕様
@@ -70,6 +76,7 @@ JP: Playwright backend が選択できる
 - TC-CORE-006: `tspec manual show android-env --full --lang jp` が日本語を表示する
 - TC-CORE-007: `TSPEC_MANUAL_LANG=jp` の場合、`tspec manual show android-env --full` で日本語を表示する
 - TC-CORE-008: `--backend playwright` が利用できる
+- TC-CORE-009: `tspec manual show unreal-mcp --full --lang en` が表示できる
 
 ## 設定/手順まとめ
 - unit: `pytest -q`

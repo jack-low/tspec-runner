@@ -46,6 +46,7 @@ Status
 - Added release notes for 1.1.0.post1 and noted release note policy.
 - Added Playwright backend with allowlist guard and docs/manuals.
 - Version bumped to 1.1.1 (Playwright release notes added).
+- Unreal Engine MCP docs/manuals added; server setup requires Unreal Engine running.
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"
@@ -111,6 +112,7 @@ Status
 - 1.1.0.post1 のリリースノートを追加し、リリースノート運用を明記。
 - Playwright backend を追加し、allowlist 制御とドキュメントを整備。
 - バージョンを 1.1.1 に更新し、リリースノートを追加。
+- Unreal Engine MCP のドキュメント/マニュアルを追加（UE 起動が前提）。
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"
