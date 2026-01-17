@@ -26,6 +26,12 @@ JP: MCP クライアントでツール一覧取得
 - Expected: spec finishes with `castle.success == true` and reports the castle message (~769 actors).
 JP: `examples/unreal_castle.tspec.md` を実行し、`unreal.create_castle` による城づくりを検証
 
+### UE-004: Futuristic metropolis spec
+- Goal: Run `examples/unreal_city.tspec.md` to build a metropolis-style town.
+- Steps: `tspec run examples/unreal_city.tspec.md --auto-mcp`
+- Expected: spec completes with `city.success == true` and records the futuristic town summary.
+JP: `examples/unreal_city.tspec.md` を `--auto-mcp` で実行し、未来都市生成を検証
+
 ## JP (original)
 # Unreal Engine MCP TestCase 仕様
 

@@ -256,4 +256,5 @@ def build_registry() -> ActionRegistry:
     reg.register("ui.screenshot", lambda ctx, a: actions_ui.ui_screenshot(ctx, a))
     reg.register("ui.close", lambda ctx, a: actions_ui.ui_close(ctx, a))
     reg.register("unreal.create_castle", lambda ctx, a: actions_unreal.create_castle(ctx, a))
+    reg.register("unreal.create_city", lambda ctx, a: actions_unreal.create_city(ctx, a))
     return reg

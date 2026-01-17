@@ -89,3 +89,29 @@ def create_castle(ctx: RunContext, args: Dict[str, Any]) -> Dict[str, Any]:
 
     result = _run_tool(script_path, tool_name, tool_args, timeout_ms)
     return result
+
+
+def _embed_city_args(args: Dict[str, Any]) -> Dict[str, Any]:
+    location = _to_float_list(args.get("location"), 3)
+    return {
+        "town_size": args.get("town_size", "metropolis"),
+        "building_density": float(args.get("building_density", 0.85) or 0.85),
+        "location": location,
+        "name_prefix": args.get("name_prefix", "FutureCity"),
+        "include_infrastructure": bool(args.get("include_infrastructure", True)),
+        "architectural_style": args.get("architectural_style", "futuristic"),
+    }
+
+
+def create_city(ctx: RunContext, args: Dict[str, Any]) -> Dict[str, Any]:
+    script_arg = args.get("server_script")
+    script_path = Path(script_arg or "local_notes/unreal-engine-mcp/Python/unreal_mcp_server_advanced.py").resolve()
+    if not script_path.exists():
+        raise ExecutionError(f"Unreal MCP server script not found at {script_path}")
+
+    tool_name = args.get("tool", "create_town")
+    timeout_ms = int(args.get("timeout_ms", 420000) or 420000)
+    tool_args = _embed_city_args(args)
+
+    result = _run_tool(script_path, tool_name, tool_args, timeout_ms)
+    return result

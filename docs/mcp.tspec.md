@@ -43,6 +43,10 @@ manual:
       body: |
         tspec run examples/unreal_castle.tspec.md --auto-mcp
         (This launches Unreal/Unity/Blender helper scripts via `uv` before the run.)
+    - title: Build a futuristic metropolis
+      body: |
+        tspec run examples/unreal_city.tspec.md --auto-mcp
+        (Futuristic city tool uses `town_size=metropolis` and `architectural_style=futuristic`.)
     - title: Review Blender/Unity/Unreal MCP guides
       body: |
         tspec manual show blender-mcp --lang en
