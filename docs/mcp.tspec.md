@@ -31,6 +31,10 @@ manual:
       body: |
         tspec doctor
         Look for `agent-browser` and `uv` rows marked OK; if missing, install the CLI or uv runtime.
+    - title: Check Unity/Blender/Unreal MCP health
+      body: |
+        tspec doctor --unity-mcp-health --blender-mcp-health --unreal-mcp-health
+        (default ports: Unity=8080, Blender=7300, Unreal=8090)
     - title: Review Blender/Unity/Unreal MCP guides
       body: |
         tspec manual show blender-mcp --lang en

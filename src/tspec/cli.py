@@ -170,6 +170,15 @@ def doctor(
     mcp_health: bool = typer.Option(False, "--mcp-health", help="Try hitting tspec MCP streamable-http /health"),
     mcp_host: str = typer.Option("127.0.0.1", "--mcp-host", help="Host for MCP health checks"),
     mcp_port: int = typer.Option(8765, "--mcp-port", help="Port for MCP health checks"),
+    unreal_mcp_health: bool = typer.Option(False, "--unreal-mcp-health", help="Check Unreal MCP HTTP health"),
+    unreal_mcp_host: str = typer.Option("127.0.0.1", "--unreal-mcp-host", help="Unreal MCP host"),
+    unreal_mcp_port: int = typer.Option(8090, "--unreal-mcp-port", help="Unreal MCP port"),
+    unity_mcp_health: bool = typer.Option(False, "--unity-mcp-health", help="Check Unity MCP HTTP health"),
+    unity_mcp_host: str = typer.Option("127.0.0.1", "--unity-mcp-host", help="Unity MCP host"),
+    unity_mcp_port: int = typer.Option(8080, "--unity-mcp-port", help="Unity MCP port"),
+    blender_mcp_health: bool = typer.Option(False, "--blender-mcp-health", help="Check Blender MCP HTTP health"),
+    blender_mcp_host: str = typer.Option("127.0.0.1", "--blender-mcp-host", help="Blender MCP host"),
+    blender_mcp_port: int = typer.Option(7300, "--blender-mcp-port", help="Blender MCP port"),
 ):
     """Check optional backends availability."""
     rows: list[tuple[str, str, str]] = []
@@ -212,22 +221,31 @@ def doctor(
         table.add_row(*r)
     console.print(table)
 
-    if mcp_health:
+    def _health_probe(name: str, host: str, port: int, path: str = "/health") -> None:
         from urllib.request import urlopen, Request
         from urllib.error import URLError, HTTPError
 
-        health_url = f"http://{mcp_host}:{mcp_port}/health"
+        health_url = f"http://{host}:{port}{path}"
         try:
             req = Request(health_url, headers={"User-Agent": "tspec-runner/doctor"})
             with urlopen(req, timeout=3) as resp:
                 status_code = resp.status
-            console.print(f"[green]MCP health[/green] {health_url} => HTTP {status_code}")
+            console.print(f"[green]{name} health[/green] {health_url} => HTTP {status_code}")
         except HTTPError as exc:
-            console.print(f"[red]MCP health failed[/red] {health_url} => HTTP {exc.code}")
+            console.print(f"[red]{name} health failed[/red] {health_url} => HTTP {exc.code}")
         except URLError as exc:
-            console.print(f"[red]MCP health failed[/red] {health_url} => {exc.reason}")
+            console.print(f"[red]{name} health failed[/red] {health_url} => {exc.reason}")
         except Exception as exc:  # pragma: no cover
-            console.print(f"[red]MCP health failed[/red] {health_url} => {exc}")
+            console.print(f"[red]{name} health failed[/red] {health_url} => {exc}")
+
+    if mcp_health:
+        _health_probe("MCP", mcp_host, mcp_port)
+    if unreal_mcp_health:
+        _health_probe("Unreal MCP", unreal_mcp_host, unreal_mcp_port)
+    if unity_mcp_health:
+        _health_probe("Unity MCP", unity_mcp_host, unity_mcp_port)
+    if blender_mcp_health:
+        _health_probe("Blender MCP", blender_mcp_host, blender_mcp_port)
 @app.command()
 def init(path: str = typer.Argument("example.tspec.md", help="Output path")):
     """Create a starter .tspec.md template."""
