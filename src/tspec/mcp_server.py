@@ -139,6 +139,7 @@ def start(
     @mcp.tool()
     def tspec_manual_list(base: str = "docs", lang: Optional[str] = None) -> Dict[str, Any]:
         b = _safe_path(wd, base)
+        lang = lang or os.environ.get("TSPEC_MANUAL_LANG")
         items = discover_manuals(b, lang=lang)
         return {
             "base": str(b),
@@ -157,6 +158,7 @@ def start(
     @mcp.tool()
     def tspec_manual_show(target: str, base: str = "docs", full: bool = False, lang: Optional[str] = None) -> Dict[str, Any]:
         tp = Path(target)
+        lang = lang or os.environ.get("TSPEC_MANUAL_LANG")
         if tp.exists():
             p = _safe_path(wd, target)
             mf = load_manual(p)

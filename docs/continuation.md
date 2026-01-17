@@ -38,6 +38,8 @@ Status
 - Knowledge.md rebuilt with English primary + JP appendix.
 - Manuals split into EN/JP files with `--lang en/jp` support in manual list/show.
 - README Japanese content moved into separate files (README.ja.md / README.ja.rst).
+- Added script to switch PyPI long_description between README.rst and README.ja.rst.
+- Manual default language can be set via TSPEC_MANUAL_LANG.
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"
@@ -95,6 +97,8 @@ Status
 - Knowledge.md を英語主体 + JP 付録に再構成。
 - マニュアルを EN/JP に分割し、manual list/show で `--lang en/jp` を指定可能にした。
 - README の日本語版を README.ja.md / README.ja.rst に分離。
+- PyPI long_description 切替スクリプトを追加（README.rst / README.ja.rst）。
+- TSPEC_MANUAL_LANG でマニュアル既定言語を指定可能。
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"

@@ -1,5 +1,6 @@
 from __future__ import annotations
 import builtins
+import os
 
 import json
 import re
@@ -201,6 +202,7 @@ def manual_list(
     lang: Optional[str] = typer.Option(None, "--lang", help="Filter manuals by language (en|jp)"),
 ):
     """List available manuals."""
+    lang = lang or os.environ.get("TSPEC_MANUAL_LANG")
     items = discover_manuals(base, lang=lang)
     table = Table(title=f"Manuals under {base}")
     table.add_column("id", no_wrap=True)
@@ -221,6 +223,7 @@ def manual_show(
     lang: Optional[str] = typer.Option(None, "--lang", help="Manual language (en|jp)"),
 ):
     """Show a manual on screen."""
+    lang = lang or os.environ.get("TSPEC_MANUAL_LANG")
     p = Path(target)
     if p.exists():
         mf = load_manual(p)

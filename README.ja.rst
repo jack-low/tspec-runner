@@ -8,6 +8,7 @@ Markdown の中にある ``tspec`` ブロックを読み取り、同じ手順を
 ----------------------------------------
 - GitHub: https://github.com/jack-low/tspec-runner
 - PyPI: https://pypi.org/project/tspec-runner/
+- English: https://github.com/jack-low/tspec-runner/blob/main/README.md
 
 できること
 ----------------------------------------
@@ -20,6 +21,15 @@ Markdown の中にある ``tspec`` ブロックを読み取り、同じ手順を
 
 .. note::
    Android/iOS は Appium を前提にしています（Appium Server + driver は別途セットアップ）。
+
+PyPI long_description 切替
+----------------------------------------
+既定は ``README.rst``（英語）です。
+
+切替::
+
+   python scripts/switch_pypi_readme.py --lang en
+   python scripts/switch_pypi_readme.py --lang jp
 
 クイックスタート（推奨: uv）
 ----------------------------------------
@@ -128,6 +138,8 @@ Unity MCP で「Cube 作成 → マテリアル変更 → 位置/回転変更」
 - ``manage_gameobject`` で Sphere 作成
 - ``manage_material`` で色付きマテリアル作成 + Renderer へ割当
 - ``manage_prefabs`` で Prefab を作成
+
+更新手順: ``docs/demo_assets.md``
 
 Blender MCP 操作デモ
 ----------------------------------------
@@ -306,6 +318,7 @@ MCP Server として起動し、AIクライアントから TSpec をツール呼
    tspec mcp --transport stdio --workdir .
 
 マニュアル: ``tspec manual show mcp-env --full --lang jp``
+既定言語は ``TSPEC_MANUAL_LANG`` で切替できます。
 
 TSPEC-Z1 圧縮（AI引き渡し用）
 ----------------------------------------

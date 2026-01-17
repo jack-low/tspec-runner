@@ -35,6 +35,14 @@ JP: bearer 認証が Authorization ヘッダに反映される
 - Expected: English vs Japanese titles/summaries are shown
 JP: マニュアルの言語切替が反映される
 
+### TC-CORE-005: manual default language (env)
+- Goal: default language uses TSPEC_MANUAL_LANG
+- Steps:
+  - `set TSPEC_MANUAL_LANG=jp` (Windows) / `export TSPEC_MANUAL_LANG=jp`
+  - `tspec manual show android-env --full`
+- Expected: Japanese manual is displayed
+JP: TSPEC_MANUAL_LANG で既定言語が切り替わる
+
 
 ## JP (original)
 # Core TestCase 仕様
@@ -47,13 +55,16 @@ JP: マニュアルの言語切替が反映される
 - TC-CORE-003: manual path key 指定で正しいマニュアルが取得できる
 - TC-CORE-004: agent-browser backend を指定できる（alias も含む）
 - TC-CORE-005: manual --lang en/jp が適用される
+- TC-CORE-006: TSPEC_MANUAL_LANG の既定言語が適用される
 - TC-NEKO-001: Neko base_url 未指定で ValidationError
 - TC-NEKO-002: allowlist に無い host が ValidationError
 - TC-NEKO-003: bearer 認証が Authorization ヘッダに反映される
 
 ## Manual / Integration (optional)
 - TC-CORE-006: `tspec manual show android-env --full --lang jp` が日本語を表示する
+- TC-CORE-007: `TSPEC_MANUAL_LANG=jp` の場合、`tspec manual show android-env --full` で日本語を表示する
 
 ## 設定/手順まとめ
 - unit: `pytest -q`
 - manual: `tspec manual show <id> --full --lang en/jp`
+- env: `TSPEC_MANUAL_LANG=jp` で既定言語を切り替え

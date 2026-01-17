@@ -5,6 +5,7 @@ TSpec runner for Markdown + `tspec` blocks. Validate, run, and report from the C
 ## Links
 - GitHub: https://github.com/jack-low/tspec-runner
 - PyPI: https://pypi.org/project/tspec-runner/
+- Japanese: https://github.com/jack-low/tspec-runner/blob/main/README.ja.md
 
 ## What you can do
 - Spec resolution (latest / range / last 3 generations)
@@ -15,6 +16,17 @@ TSpec runner for Markdown + `tspec` blocks. Validate, run, and report from the C
   - install extras only when needed
 
 > Appium (Android/iOS) requires Appium Server + driver setup.
+
+---
+
+## PyPI long_description language
+Default: `README.rst` (English).
+
+Switch:
+```bash
+python scripts/switch_pypi_readme.py --lang en
+python scripts/switch_pypi_readme.py --lang jp
+```
 
 ---
 
@@ -281,6 +293,7 @@ tspec mcp --transport stdio --workdir .
 ```
 
 Manual (EN/JP): `tspec manual show mcp-env --full --lang en` / `tspec manual show mcp-env --full --lang jp`
+Default language can be set via `TSPEC_MANUAL_LANG`.
 
 ---
 

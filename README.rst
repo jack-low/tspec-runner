@@ -8,6 +8,7 @@ Links
 ----------------------------------------
 - GitHub: https://github.com/jack-low/tspec-runner
 - PyPI: https://pypi.org/project/tspec-runner/
+- Japanese: https://github.com/jack-low/tspec-runner/blob/main/README.ja.md
 
 
 What you can do
@@ -22,6 +23,15 @@ What you can do
 
 .. note::
    Appium (Android/iOS) requires Appium Server + driver setup.
+
+PyPI long_description language
+----------------------------------------
+Default: ``README.rst`` (English).
+
+Switch::
+
+   python scripts/switch_pypi_readme.py --lang en
+   python scripts/switch_pypi_readme.py --lang jp
 
 
 Quick start (recommended: uv)
@@ -331,6 +341,7 @@ Start ``tspec`` as an MCP server and call tools from AI clients.
    tspec mcp --transport stdio --workdir .
 
 Manual (EN/JP): ``tspec manual show mcp-env --full --lang en`` / ``tspec manual show mcp-env --full --lang jp``
+Default language can be set via ``TSPEC_MANUAL_LANG``.
 
 TSPEC-Z1 (compressed handoff)
 ----------------------------------------

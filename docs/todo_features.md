@@ -8,6 +8,8 @@ JP: ToDo 一覧（日本語は下記）
 - [x] Add agent-browser manual and TestCase specs
 - [x] Add agent-browser smoke sample
 - [x] Add protocol fallback on Windows when daemon startup fails
+- [x] Split README into English/Japanese files
+- [x] Add script to switch PyPI long_description language
 
 ## Current errors
 - [x] Re-run pytest and confirm results (27 passed)
@@ -36,6 +38,8 @@ JP: ToDo 一覧（日本語は下記）
 - [x] agent-browser マニュアルと TestCase 仕様を追加
 - [x] agent-browser smoke サンプルを追加
 - [x] Windows で daemon 起動失敗時の protocol フォールバックを追加
+- [x] README を英語/日本語に分割
+- [x] PyPI long_description 切替スクリプトを追加
 
 ## Current errors
 - [x] pytest を再実行して結果を確認（27 passed）
