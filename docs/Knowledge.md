@@ -194,6 +194,11 @@ JP: 作業中のエラー/知見（日本語は下記）
 - result: uv environment created; server run timed out waiting for UE/plugin connection
 - status: blocked (requires Unreal Engine running)
 
+### Unreal Engine MCP verified (stdio)
+- action: MCP stdio client listed tools and called `get_actors_in_level`
+- result: tools list returned (43 tools), actor list returned from UE
+- status: resolved
+
 ### Release notes policy
 - action: add release notes per version in docs/release_notes_<version>.md
 - status: resolved (documented in update.md)
