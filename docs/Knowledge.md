@@ -171,6 +171,11 @@ JP: 作業中のエラー/知見（日本語は下記）
 - action: bump version to 1.1.0.post1 and keep README.rst as long_description
 - status: resolved (uploaded 1.1.0.post1)
 
+### tspec versions showed 1.0.7 after 1.1.0.post1 install
+- cause: __version__ in src/tspec/__init__.py remained 1.0.7
+- fix: update __version__ to 1.1.0.post1 (editable install reflects correct version)
+- status: resolved (repo)
+
 ## JP (original)
 # Knowledge.md - 作業中のエラー/知見
 
