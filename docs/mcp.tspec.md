@@ -35,6 +35,10 @@ manual:
       body: |
         tspec doctor --unity-mcp-health --blender-mcp-health --unreal-mcp-health
         (default ports: Unity=8080, Blender=7300, Unreal=8090)
+    - title: Auto-start helper MCP servers via tspec
+      body: |
+        tspec mcp --transport streamable-http --auto-unreal --auto-unity --auto-blender
+        Use `--auto-*-cmd <path>` if you keep helper scripts elsewhere.
     - title: Review Blender/Unity/Unreal MCP guides
       body: |
         tspec manual show blender-mcp --lang en

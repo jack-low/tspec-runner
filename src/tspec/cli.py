@@ -800,16 +800,40 @@ def mcp(
         "--blender-mcp-url",
         help="Blender MCP base URL (sets BLENDER_MCP_BASE_URL)",
     ),
+    auto_unreal: bool = typer.Option(False, "--auto-unreal", help="Auto-start Unreal MCP helper via uv"),
+    auto_unreal_cmd: Optional[Path] = typer.Option(
+        Path("local_notes/unreal-engine-mcp/Python/unreal_mcp_server_advanced.py"),
+        "--auto-unreal-cmd",
+        help="Path to Unreal MCP helper script",
+    ),
+    auto_unity: bool = typer.Option(False, "--auto-unity", help="Auto-start Unity MCP helper via uv if available"),
+    auto_unity_cmd: Optional[Path] = typer.Option(
+        None,
+        "--auto-unity-cmd",
+        help="Path to Unity MCP helper script (if any)",
+    ),
+    auto_blender: bool = typer.Option(False, "--auto-blender", help="Auto-start Blender MCP helper via uv if available"),
+    auto_blender_cmd: Optional[Path] = typer.Option(
+        None,
+        "--auto-blender-cmd",
+        help="Path to Blender MCP helper script (if any)",
+    ),
 ):
     """Start MCP server exposing tspec tools for AI clients."""
     try:
         mcp_start(
             transport=transport,
             workdir=str(workdir),
-            host=host,
-            port=port,
-            unity_mcp_url=unity_mcp_url,
-            blender_mcp_url=blender_mcp_url,
-        )
+        host=host,
+        port=port,
+        unity_mcp_url=unity_mcp_url,
+        blender_mcp_url=blender_mcp_url,
+        auto_unreal=auto_unreal,
+        auto_unreal_cmd=str(auto_unreal_cmd) if auto_unreal_cmd else None,
+        auto_unity=auto_unity,
+        auto_unity_cmd=str(auto_unity_cmd) if auto_unity_cmd else None,
+        auto_blender=auto_blender,
+        auto_blender_cmd=str(auto_blender_cmd) if auto_blender_cmd else None,
+    )
     except Exception as e:
         _exit(3, f"MCP ERROR: {e}")
