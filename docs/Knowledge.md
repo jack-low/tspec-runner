@@ -199,6 +199,12 @@ JP: 作業中のエラー/知見（日本語は下記）
 - result: tools list returned (43 tools), actor list returned from UE
 - status: resolved
 
+### Unreal Engine MCP create_castle_fortress is long-running
+- action: ran `create_castle_fortress` (small, medieval, no village/siege) on level `LandscapeStreamingProxy_4_4_0`
+- result: completed after extended timeout (~6 min), 769 actors created
+- fix: allow longer client timeout for large operations
+- status: resolved
+
 ### Release notes policy
 - action: add release notes per version in docs/release_notes_<version>.md
 - status: resolved (documented in update.md)

@@ -48,6 +48,7 @@ Status
 - Version bumped to 1.1.1 (Playwright release notes added).
 - Unreal Engine MCP docs/manuals added; server setup requires Unreal Engine running.
 - Unreal Engine MCP verified via stdio tools list + get_actors_in_level response.
+- Unreal Engine MCP create_castle_fortress (small, medieval) completed; ~6 min runtime, 769 actors.
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"
@@ -115,6 +116,7 @@ Status
 - バージョンを 1.1.1 に更新し、リリースノートを追加。
 - Unreal Engine MCP のドキュメント/マニュアルを追加（UE 起動が前提）。
 - Unreal Engine MCP を stdio 経由で検証（tools list / get_actors_in_level 応答）。
+- Unreal Engine MCP の create_castle_fortress（small/medieval）実行完了（約6分、769 actors）。
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"
