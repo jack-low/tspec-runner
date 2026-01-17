@@ -4,6 +4,7 @@ import os
 
 import json
 import re
+import shutil
 from pathlib import Path
 from typing import List, Optional
 
@@ -168,20 +169,40 @@ def doctor(
     ios: bool = typer.Option(False, "--ios", help="Run iOS/Xcode/XCUITest environment checks"),
 ):
     """Check optional backends availability."""
-    rows = []
-    for name, mod, extra in [
-        ("selenium", "selenium", ".[selenium]"),
-        ("appium", "appium", ".[appium]"),
-        ("pywinauto", "pywinauto", ".[pywinauto]"),
-        ("playwright", "playwright", ".[playwright]"),
-    ]:
+    rows: list[tuple[str, str, str]] = []
+
+    def _check_module(name: str, module: str, extra: str) -> None:
         try:
-            __import__(mod)
+            __import__(module)
             rows.append((name, "OK", ""))
-        except Exception as e:
+        except Exception:
             rows.append((name, "MISSING", f"pip install -e '{extra}'"))
-    table = Table(title="Backend doctor")
-    table.add_column("backend")
+
+    def _check_executable(name: str, command: str, install_hint: str, fallback: Optional[list[Path]] = None) -> None:
+        found = shutil.which(command) is not None
+        for path in fallback or []:
+            if path.exists():
+                found = True
+                break
+        rows.append((name, "OK" if found else "MISSING", "" if found else install_hint))
+
+    _check_module("selenium", "selenium", ".[selenium]")
+    _check_module("appium", "appium", ".[appium]")
+    _check_module("pywinauto", "pywinauto", ".[pywinauto]")
+    _check_module("playwright", "playwright", ".[playwright]")
+    _check_module("mcp", "mcp", ".[mcp]")
+    _check_executable(
+        "agent-browser",
+        "agent-browser",
+        "npm install -g agent-browser",
+        fallback=[
+            Path(os.environ.get("APPDATA") or "") / "npm" / "node_modules" / "agent-browser" / "bin" / "agent-browser-win32-x64.exe"
+        ],
+    )
+    _check_executable("uv", "uv", "See https://uv.dev/docs/install for installation steps")
+
+    table = Table(title="Backend & tool doctor")
+    table.add_column("component")
     table.add_column("status")
     table.add_column("install")
     for r in rows:
