@@ -167,6 +167,9 @@ def doctor(
     android: bool = typer.Option(False, "--android", help="Run Android/Appium environment checks"),
     selenium: bool = typer.Option(False, "--selenium", help="Run Selenium/ChromeDriver environment checks"),
     ios: bool = typer.Option(False, "--ios", help="Run iOS/Xcode/XCUITest environment checks"),
+    mcp_health: bool = typer.Option(False, "--mcp-health", help="Try hitting tspec MCP streamable-http /health"),
+    mcp_host: str = typer.Option("127.0.0.1", "--mcp-host", help="Host for MCP health checks"),
+    mcp_port: int = typer.Option(8765, "--mcp-port", help="Port for MCP health checks"),
 ):
     """Check optional backends availability."""
     rows: list[tuple[str, str, str]] = []
@@ -209,6 +212,22 @@ def doctor(
         table.add_row(*r)
     console.print(table)
 
+    if mcp_health:
+        from urllib.request import urlopen, Request
+        from urllib.error import URLError, HTTPError
+
+        health_url = f"http://{mcp_host}:{mcp_port}/health"
+        try:
+            req = Request(health_url, headers={"User-Agent": "tspec-runner/doctor"})
+            with urlopen(req, timeout=3) as resp:
+                status_code = resp.status
+            console.print(f"[green]MCP health[/green] {health_url} => HTTP {status_code}")
+        except HTTPError as exc:
+            console.print(f"[red]MCP health failed[/red] {health_url} => HTTP {exc.code}")
+        except URLError as exc:
+            console.print(f"[red]MCP health failed[/red] {health_url} => {exc.reason}")
+        except Exception as exc:  # pragma: no cover
+            console.print(f"[red]MCP health failed[/red] {health_url} => {exc}")
 @app.command()
 def init(path: str = typer.Argument("example.tspec.md", help="Output path")):
     """Create a starter .tspec.md template."""

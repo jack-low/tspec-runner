@@ -23,6 +23,14 @@ manual:
     - title: Run backend diagnostics
       body: |
         tspec doctor --selenium --android --ios
+    - title: Check MCP streamable-http health
+      body: |
+        tspec doctor --mcp-health --mcp-host 127.0.0.1 --mcp-port 8765
+        (EXPECT: HTTP 200 /health on the streamable HTTP port.)
+    - title: Confirm agent-browser + uv
+      body: |
+        tspec doctor
+        Look for `agent-browser` and `uv` rows marked OK; if missing, install the CLI or uv runtime.
     - title: Review Blender/Unity/Unreal MCP guides
       body: |
         tspec manual show blender-mcp --lang en
