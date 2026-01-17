@@ -65,7 +65,7 @@ def _run_tool(script: Path, tool_name: str, tool_args: Dict[str, Any], timeout_m
     timeout_secs = timeout_ms / 1000.0 if timeout_ms else None
 
     async def _inner():
-        return await _call_tool_async(script, tool_name, tool_args, timeout_secs)
+        return await _call_tool_async(script, tool_name, tool_args)
 
     try:
         if timeout_secs is None:
