@@ -22,7 +22,7 @@ class RunnerConfig:
 
 def load_config(path: Optional[Path]) -> RunnerConfig:
     if path is None:
-        return RunnerConfig(ui={}, selenium={}, appium={}, pywinauto={}, agent_browser={})
+        return RunnerConfig(ui={}, selenium={}, appium={}, pywinauto={}, agent_browser={}, playwright={})
     if tomllib is None:
         raise ValidationError("tomllib is not available; use Python 3.11+")
     p = path.resolve()
