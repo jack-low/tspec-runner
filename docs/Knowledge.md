@@ -205,6 +205,11 @@ JP: 作業中のエラー/知見（日本語は下記）
 - fix: allow longer client timeout for large operations
 - status: resolved
 
+### Unreal Engine castle automation spec
+- change: add `unreal.create_castle` action + `examples/unreal_castle.tspec.md` spec that runs `create_castle_fortress`
+- result: spec records castle creation and can be re-run with `tspec run examples/unreal_castle.tspec.md`
+- status: resolved
+
 ### Release notes policy
 - action: add release notes per version in docs/release_notes_<version>.md
 - status: resolved (documented in update.md)

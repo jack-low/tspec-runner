@@ -13,6 +13,7 @@ from .registry import ActionRegistry
 from .context import RunContext
 from . import actions_assert
 from . import actions_ui
+from . import actions_unreal
 
 
 @dataclass
@@ -254,4 +255,5 @@ def build_registry() -> ActionRegistry:
     reg.register("ui.get_text", lambda ctx, a: actions_ui.ui_get_text(ctx, a))
     reg.register("ui.screenshot", lambda ctx, a: actions_ui.ui_screenshot(ctx, a))
     reg.register("ui.close", lambda ctx, a: actions_ui.ui_close(ctx, a))
+    reg.register("unreal.create_castle", lambda ctx, a: actions_unreal.create_castle(ctx, a))
     return reg

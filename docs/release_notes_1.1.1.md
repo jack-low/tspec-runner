@@ -7,6 +7,7 @@ JP: リリースノート（日本語は下記）
 - Added Playwright extras and config examples
 - Updated docs/README with Playwright usage
 - Added Unreal Engine MCP docs/manuals/testcases
+- Added `unreal.create_castle` action + `examples/unreal_castle.tspec.md` for repeatable castle builds
 
 ## Major milestones (since 1.0.0)
 - agent-browser backend with Windows protocol fallback
@@ -23,6 +24,7 @@ JP:
 - Playwright extras と設定例を追加
 - README/ドキュメントに Playwright の使い方を追記
 - Unreal Engine MCP のドキュメント/マニュアル/テストケースを追加
+- `unreal.create_castle` アクションと `examples/unreal_castle.tspec.md` スペックで城ビルドを再現可能に
 
 ## 主要なマイルストーン（1.0.0 以降）
 - agent-browser backend と Windows での protocol フォールバック

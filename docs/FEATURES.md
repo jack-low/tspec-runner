@@ -37,12 +37,14 @@ JP:
 - [ ] One-command Blender demo generation (e.g., `tspec demo blender`, with GIF output)
 - [x] Unify demo asset update flow (optimize `docs/assets` and document the process)
 - [x] Add `tspec mcp --unity-mcp-url` / `--blender-mcp-url`
+- [x] Add `examples/unreal_castle.tspec.md` for castle creation via `unreal.create_castle`
 - [ ] Add CI job to run `pytest -q` and publish test results
 JP:
 - [ ] Unity MCP を `unity.tool` ベースに統一し、`unity_instances` / `read_resource` を CLI から扱えるサブコマンドを追加
 - [ ] Blender MCP デモ生成を `tspec demo blender` のようなワンコマンドに統合（GIF生成まで自動化）
 - [x] README/PyPI のデモアセット更新手順を一本化（`docs/assets` の最適化と更新フロー整備）
 - [x] `tspec mcp` に `--unity-mcp-url` / `--blender-mcp-url` を追加
+- [x] `examples/unreal_castle.tspec.md` で `unreal.create_castle` による城ビルドを実行
 - [ ] CI で `pytest -q` を実行しテスト結果を可視化
 
 ---
