@@ -3,6 +3,34 @@ JP: ToDo 一覧（日本語は下記）
 
 # Features ToDo
 
+- [x] Add agent-browser backend
+- [x] Document agent-browser settings in tspec.toml / README
+- [x] Add agent-browser manual and TestCase specs
+- [x] Add agent-browser smoke sample
+- [x] Add protocol fallback on Windows when daemon startup fails
+
+## Current errors
+- [x] Re-run pytest and confirm results (27 passed)
+- [x] Complete documentation output tests (manual show/validate/read)
+- [x] Add Appium smoke run (YouTube open + screenshot)
+- [x] Adjust android_youtube_search_play locators to match current UI structure
+- [x] Resolve PyPI README image rendering by switching to reST
+- [x] Embed data URI thumbnails in README.rst to address PyPI CSP
+- [x] Remove PyPI images and point README.rst to GitHub screenshots
+- [x] Add Blender MCP / Unity MCP tools
+- [x] Add Blender/Unity MCP specs and TestCase specs
+- [x] Add Unity MCP Streamable HTTP (/mcp) tool
+- [x] Clear Unity Editor licensing warnings (Hub sign-in/update)
+- [x] Recheck Unity Editor access token warning after short run
+- [x] Fix Unity MCP TestRunnerService compile error (add com.unity.test-framework)
+- [x] Reopen Unity project to resolve packages and recompile
+- [x] Verify Unity MCP (HTTP 8080) connect + manage_scene
+- [x] Verify Blender MCP GUI Connect + socket response
+
+
+## JP (original)
+# Features ToDo
+
 - [x] agent-browser backend を追加
 - [x] agent-browser 設定を tspec.toml / README に追記
 - [x] agent-browser マニュアルと TestCase 仕様を追加

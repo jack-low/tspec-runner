@@ -1,6 +1,173 @@
 # Knowledge.md - Issue log (English primary)
-JP: 現在のエラー/知見（日本語は下記）
+JP: 作業中のエラー/知見（日本語は下記）
 
+## 2026-01-15
+### "tspec manual show android --full" failed
+- error: Manual id not found: 'android'
+- cause: manual lookup matched id only; android is a tag for android-env
+- fix: allow lookup by tag/path key; add unit tests for tag/path/ambiguous match
+- status: resolved
+
+## 2026-01-16
+### pytest collection error: httpx missing
+- cause: tests/test_neko_client.py imports httpx but dependency not declared
+- fix: add httpx to optional extras "neko" and dev deps
+- status: resolved
+
+### "tspec spec" NameError
+- cause: spec() referenced android/selenium/ios options without defining them
+- fix: add options to spec() signature
+- status: resolved
+
+### agent-browser WSL fallback: UnicodeDecodeError in subprocess
+- cause: WSL command output decoded with cp932 by default, non-ASCII bytes raised decode errors
+- fix: set subprocess encoding to utf-8 with errors=replace
+- status: resolved
+
+### agent-browser WSL error output caused Windows console encoding failure
+- cause: agent-browser error output included Unicode symbols not encodable in cp932
+- fix: sanitize error text to ASCII before raising ExecutionError
+- status: resolved
+
+### agent-browser "Daemon failed to start" on Windows
+- cause: rust CLI could not connect/start daemon; Windows client reported generic error
+- fix: add protocol-based fallback via direct daemon TCP commands
+- status: resolved
+
+### examples/selenium_google.tspec.md YAML parse failure
+- cause: stray trailing "a" after ui.screenshot path line
+- fix: remove extra character
+- status: resolved
+
+### docs directory missing in local working tree
+- cause: local checkout missing docs directory
+- fix: restore docs from remote main
+- status: resolved
+
+### selenium google smoke timeout
+- cause: ui.wait_for timed out on https://www.google.com
+- fix: add stable selenium example (example.com) for screenshots
+- status: resolved
+
+### appium android login could not reach server
+- cause: Appium server not running on 127.0.0.1:4723
+- fix: start appium server (see docs/android_env.tspec.md)
+- status: blocked (env)
+
+### pytest-report html generation failures
+- cause: generated test module string formatting errors and JSON null usage
+- fix: escape newline in generated code and parse JSON via json.loads
+- status: resolved
+
+### Appium session creation timeouts on Android emulator
+- cause: UiAutomator2 hidden_api_policy setup and instrumentation launch timed out on API 36 emulator
+- fix: add capabilities to examples:
+  - forceAppLaunch: true
+  - ignoreHiddenApiPolicyError: true
+  - adbExecTimeout: 120000
+  - uiautomator2ServerInstallTimeout: 120000
+  - uiautomator2ServerLaunchTimeout: 120000
+  - skipDeviceInitialization: true
+  - open_app timeout_ms: 120000
+- status: mitigated (android_youtube_smoke passes; search/play flow may still be flaky)
+
+### android_youtube_search_play locator adjustments
+- cause: YouTube UI search/results resource-id structure changed; wait_for timed out
+- fix: update selectors for search icon/input/suggestions/results/player to match live UI
+- status: resolved
+
+### PyPI screenshots not rendering in Markdown README
+- cause: PyPI did not render Markdown image syntax in long_description
+- fix: switch long_description to README.rst (reStructuredText) with image directives
+- status: resolved
+
+### PyPI screenshots still not rendering after reST switch
+- cause: PyPI CSP blocks external images (img-src 'self' data:)
+- fix: embed resized screenshots as data URIs in README.rst
+- status: resolved
+
+### PyPI screenshots not visible for some clients
+- cause: PyPI rendering/CSP and client-side blocking
+- fix: remove images from PyPI README and refer to GitHub for screenshots
+- status: resolved
+
+## 2026-01-17
+### Blender/Unity MCP integration added
+- change: add blender/unity MCP clients and MCP tools (config/health/rpc)
+- status: resolved
+
+### PyPI screenshots restored (public repo)
+- cause: repo was private so raw URLs returned 404
+- fix: make repo public and restore README.rst image directives
+- status: resolved
+
+### Blender MCP background run does not respond
+- cause: Blender addon server relies on bpy.app.timers; background/headless execution does not progress timers
+- fix: start Blender UI and click "Connect" in BlenderMCP panel, then test socket
+- status: pending (UI action required)
+
+### Blender MCP UI auto-start test succeeded
+- action: started Blender UI with a startup script that calls `bpy.ops.blendermcp.start_server()`
+- result: TCP `get_scene_info` returned normal response (Scene/Cube/Light/Camera)
+- status: resolved (UI flow)
+
+### Unity MCP /rpc returns 404
+- cause: unity-mcp HTTP server exposes `/health` and `/mcp` (Streamable HTTP), not `/rpc`
+- fix: add MCP HTTP client (`unity.tool`) with `UNITY_MCP_MODE=mcp-http` + `UNITY_MCP_MCP_URL`, update docs/testcases
+- status: resolved
+
+### Unity MCP streamable HTTP tool call confirmed
+- action: `UnityMcpHttpClient` -> `debug_request_context` on `http://localhost:8090/mcp`
+- result: response payload returned (structuredContent + content)
+- status: resolved
+
+### Unity Editor launch shows licensing warnings
+- cause: Unity licensing client reports missing entitlements / access token (log shows Code 404 and com.unity.editor.ui not found)
+- fix: sign in via Unity Hub and refresh license/entitlements, then reopen project
+- status: resolved (Hub login/update)
+
+### Unity Editor short-run log still shows access token warning
+- action: launch Unity Editor for ~15s and scan log
+- result: `Licensing::Module` reported "Access token is unavailable; failed to update"
+- status: resolved (after ~60s run, access token updated successfully)
+
+### pytest -q picked up local_notes unity-mcp tests and failed
+- cause: local_notes contains cloned unity-mcp repo with its own tests and missing deps
+- fix: add pytest.ini to limit testpaths to tests and ignore local_notes
+- status: resolved
+
+### Unity MCP package compile error: ITestResultAdaptor not found
+- error: `Library\PackageCache\com.coplaydev.unity-mcp@...\Editor\Services\TestRunnerService.cs(483,88)`
+- cause: Unity Test Framework package is missing (type defined in test framework)
+- fix: install `com.unity.test-framework` via Package Manager, then reimport/recompile
+- status: resolved (manifest updated, batch recompile OK)
+
+### Unity Test Framework not in manifest.json
+- action: checked `UnityMCPTest/Packages/manifest.json`
+- result: `com.unity.test-framework` entry missing; added `1.4.5` manually
+- status: resolved (batch recompile has no related errors)
+
+### Unity MCP HTTP session verified (localhost:8080)
+- action: started MCP for Unity from Editor (HTTP 8080)
+- result: `debug_request_context`, `mcpforunity://instances`, and `manage_scene(action=get_hierarchy)` returned OK
+- status: resolved
+
+### twine upload failed on Windows console encoding
+- cause: rich progress bar emitted Unicode bullet that cp932 couldn't encode
+- fix: use `python -m twine upload --disable-progress-bar dist/*`
+- status: resolved
+
+### PyPI README.rst render error (text/x-rst)
+- cause: README.rst had list formatting without blank lines
+- fix: reformat README.rst and validate with `python -m twine check dist/*`
+- status: resolved
+
+### PyPI upload failed (file already exists)
+- cause: version 1.0.9 already uploaded; PyPI rejects filename reuse
+- fix: skip upload or bump version
+- status: resolved
+
+## JP (original)
 # Knowledge.md - 作業中のエラー/知見
 
 ## 2026-01-15
@@ -259,9 +426,4 @@ NameError: name 'android' is not defined
 ### twine upload failed on Windows console encoding
 - cause: rich progress bar emitted Unicode bullet that cp932 couldn't encode
 - fix: use `python -m twine upload --disable-progress-bar dist/*`
-- status: resolved
-
-### PyPI README.rst render error (text/x-rst)
-- cause: README.rst had list formatting without blank lines
-- fix: reformat README.rst and validate with `python -m twine check dist/*`
 - status: resolved
