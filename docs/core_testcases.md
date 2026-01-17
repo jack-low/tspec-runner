@@ -27,6 +27,14 @@ JP: run と report の基本動作
 - Expected: Authorization header is `Bearer <token>`
 JP: bearer 認証が Authorization ヘッダに反映される
 
+### TC-CORE-004: manual show (lang)
+- Goal: manual shows language-specific content
+- Steps:
+  - `tspec manual show android-env --full --lang en`
+  - `tspec manual show android-env --full --lang jp`
+- Expected: English vs Japanese titles/summaries are shown
+JP: マニュアルの言語切替が反映される
+
 
 ## JP (original)
 # Core TestCase 仕様
@@ -38,13 +46,14 @@ JP: bearer 認証が Authorization ヘッダに反映される
 - TC-CORE-002: manual tag 指定で正しいマニュアルが取得できる
 - TC-CORE-003: manual path key 指定で正しいマニュアルが取得できる
 - TC-CORE-004: agent-browser backend を指定できる（alias も含む）
+- TC-CORE-005: manual --lang en/jp が適用される
 - TC-NEKO-001: Neko base_url 未指定で ValidationError
 - TC-NEKO-002: allowlist に無い host が ValidationError
 - TC-NEKO-003: bearer 認証が Authorization ヘッダに反映される
 
 ## Manual / Integration (optional)
-- TC-CORE-005: `tspec manual show android --full` が android-env を表示する
+- TC-CORE-006: `tspec manual show android-env --full --lang jp` が日本語を表示する
 
 ## 設定/手順まとめ
 - unit: `pytest -q`
-- manual: `tspec manual show <id> --full`
+- manual: `tspec manual show <id> --full --lang en/jp`

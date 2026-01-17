@@ -6,13 +6,14 @@ from tspec.errors import ValidationError
 from tspec.manual_loader import find_manual_by_id
 
 
-def _write_manual(path: Path, manual_id: str, tags: list[str]) -> None:
+def _write_manual(path: Path, manual_id: str, tags: list[str], title: str | None = None) -> None:
+    manual_title = title or f"Manual {manual_id}"
     content = f"""# Manual
 
 ```tspec
 manual:
   id: {manual_id}
-  title: "Manual {manual_id}"
+  title: "{manual_title}"
   tags: [{", ".join(tags)}]
   summary: |
     Test manual.
@@ -51,3 +52,25 @@ def test_find_manual_by_id_ambiguous_tag_raises(tmp_path: Path) -> None:
 
     with pytest.raises(ValidationError, match="tag/path matches"):
         find_manual_by_id(base, "shared")
+
+
+def test_find_manual_by_id_prefers_en_when_multiple_langs(tmp_path: Path) -> None:
+    base = tmp_path / "docs"
+    base.mkdir()
+    _write_manual(base / "android_env.en.tspec.md", "android-env", ["android"], title="Manual EN")
+    _write_manual(base / "android_env.jp.tspec.md", "android-env", ["android"], title="Manual JP")
+
+    path, mf = find_manual_by_id(base, "android-env")
+    assert path.name.endswith(".en.tspec.md")
+    assert mf.manual.title == "Manual EN"
+
+
+def test_find_manual_by_id_lang_filter(tmp_path: Path) -> None:
+    base = tmp_path / "docs"
+    base.mkdir()
+    _write_manual(base / "android_env.en.tspec.md", "android-env", ["android"], title="Manual EN")
+    _write_manual(base / "android_env.jp.tspec.md", "android-env", ["android"], title="Manual JP")
+
+    path, mf = find_manual_by_id(base, "android-env", lang="jp")
+    assert path.name.endswith(".jp.tspec.md")
+    assert mf.manual.title == "Manual JP"

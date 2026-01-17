@@ -303,7 +303,7 @@ pip install -e ".[mcp]"
 tspec mcp --transport stdio --workdir .
 ```
 
-Manual: `tspec manual show mcp-env --full`
+Manual (EN/JP): `tspec manual show mcp-env --full --lang en` / `tspec manual show mcp-env --full --lang jp`
 
 ---
 
@@ -598,7 +598,7 @@ pip install -e ".[mcp]"
 tspec mcp --transport stdio --workdir .
 ```
 
-マニュアル: `tspec manual show mcp-env --full`
+マニュアル: `tspec manual show mcp-env --full --lang jp`
 
 ---
 

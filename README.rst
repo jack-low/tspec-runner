@@ -353,7 +353,7 @@ JP: MCP Server として起動し、AI クライアントからツール呼び�
    pip install -e ".[mcp]"
    tspec mcp --transport stdio --workdir .
 
-Manual: ``tspec manual show mcp-env --full``
+Manual (EN/JP): ``tspec manual show mcp-env --full --lang en`` / ``tspec manual show mcp-env --full --lang jp``
 
 TSPEC-Z1 (compressed handoff)
 ----------------------------------------
@@ -678,7 +678,7 @@ MCP Server として起動し、AIクライアントから TSpec をツール呼
    pip install -e ".[mcp]"
    tspec mcp --transport stdio --workdir .
 
-マニュアル: ``tspec manual show mcp-env --full``
+マニュアル: ``tspec manual show mcp-env --full --lang jp``
 
 TSPEC-Z1 圧縮（AI引き渡し用）
 ----------------------------------------

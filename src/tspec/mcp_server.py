@@ -43,7 +43,7 @@ def start(
     except Exception as e:  # pragma: no cover
         raise ExecutionError("MCP support requires: pip install -e '.[mcp]'") from e
 
-    from .manual_loader import discover_manuals, find_manual_by_id, load_manual
+    from .manual_loader import discover_manuals, find_manual_by_id, load_manual, manual_lang_from_path
     from .doctor_android import check_android_env
     from .doctor_selenium import check_selenium_env
     from .doctor_ios import check_ios_env
@@ -137,29 +137,36 @@ def start(
         return {"report": str(rp), "summary": summary, "rows": rows[:max_rows]}
 
     @mcp.tool()
-    def tspec_manual_list(base: str = "docs") -> Dict[str, Any]:
+    def tspec_manual_list(base: str = "docs", lang: Optional[str] = None) -> Dict[str, Any]:
         b = _safe_path(wd, base)
-        items = discover_manuals(b)
+        items = discover_manuals(b, lang=lang)
         return {
             "base": str(b),
             "manuals": [
-                {"id": mf.manual.id, "title": mf.manual.title, "tags": mf.manual.tags, "path": str(p)}
+                {
+                    "id": mf.manual.id,
+                    "lang": manual_lang_from_path(p),
+                    "title": mf.manual.title,
+                    "tags": mf.manual.tags,
+                    "path": str(p),
+                }
                 for p, mf in items
             ],
         }
 
     @mcp.tool()
-    def tspec_manual_show(target: str, base: str = "docs", full: bool = False) -> Dict[str, Any]:
+    def tspec_manual_show(target: str, base: str = "docs", full: bool = False, lang: Optional[str] = None) -> Dict[str, Any]:
         tp = Path(target)
         if tp.exists():
             p = _safe_path(wd, target)
             mf = load_manual(p)
         else:
             b = _safe_path(wd, base)
-            p, mf = find_manual_by_id(b, target)
+            p, mf = find_manual_by_id(b, target, lang=lang)
         man = mf.manual
         out: Dict[str, Any] = {
             "id": man.id,
+            "lang": manual_lang_from_path(p),
             "title": man.title,
             "tags": man.tags,
             "summary": man.summary,

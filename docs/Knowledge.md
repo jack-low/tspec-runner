@@ -51,7 +51,7 @@ JP: 作業中のエラー/知見（日本語は下記）
 
 ### appium android login could not reach server
 - cause: Appium server not running on 127.0.0.1:4723
-- fix: start appium server (see docs/android_env.tspec.md)
+- fix: start appium server (see docs/android_env.en.tspec.md)
 - status: blocked (env)
 
 ### pytest-report html generation failures
@@ -316,7 +316,7 @@ NameError: name 'android' is not defined
 
 ### appium android login could not reach server
 - cause: Appium server not running on 127.0.0.1:4723
-- fix: start appium server (see docs/android_env.tspec.md)
+- fix: start appium server (see docs/android_env.jp.tspec.md)
 - status: blocked (env)
 
 ### pytest-report html generation failures

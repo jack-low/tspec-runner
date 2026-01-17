@@ -18,7 +18,7 @@ from .context import RunContext
 from .model import OnError
 from .runner import Runner, build_registry
 from .actions_ui import create_ui_driver
-from .manual_loader import discover_manuals, find_manual_by_id, load_manual
+from .manual_loader import discover_manuals, find_manual_by_id, load_manual, manual_lang_from_path
 from .doctor_android import check_android_env
 from .doctor_selenium import check_selenium_env
 from .doctor_ios import check_ios_env
@@ -198,16 +198,18 @@ def init(path: str = typer.Argument("example.tspec.md", help="Output path")):
 @manual_app.command("list")
 def manual_list(
     base: Path = typer.Option(Path("docs"), "--base", help="Manual directory (default: docs)"),
+    lang: Optional[str] = typer.Option(None, "--lang", help="Filter manuals by language (en|jp)"),
 ):
     """List available manuals."""
-    items = discover_manuals(base)
+    items = discover_manuals(base, lang=lang)
     table = Table(title=f"Manuals under {base}")
     table.add_column("id", no_wrap=True)
+    table.add_column("lang", no_wrap=True)
     table.add_column("title")
     table.add_column("tags")
     table.add_column("path")
     for p, mf in items:
-        table.add_row(mf.manual.id, mf.manual.title, ",".join(mf.manual.tags), str(p))
+        table.add_row(mf.manual.id, manual_lang_from_path(p) or "-", mf.manual.title, ",".join(mf.manual.tags), str(p))
     console.print(table)
     _exit(0)
 
@@ -216,13 +218,14 @@ def manual_show(
     target: str = typer.Argument(..., help="Manual id (e.g. android-env) or path"),
     base: Path = typer.Option(Path("docs"), "--base", help="Manual directory for id lookup"),
     full: bool = typer.Option(False, "--full", help="Show troubleshooting & references"),
+    lang: Optional[str] = typer.Option(None, "--lang", help="Manual language (en|jp)"),
 ):
     """Show a manual on screen."""
     p = Path(target)
     if p.exists():
         mf = load_manual(p)
     else:
-        _p, mf = find_manual_by_id(base, target)
+        _p, mf = find_manual_by_id(base, target, lang=lang)
     man = mf.manual
 
     console.print(f"[bold]{man.title}[/bold]  (id={man.id})")

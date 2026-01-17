@@ -36,6 +36,7 @@ Status
 - pytest.ini added to ignore local_notes during test discovery.
 - Blender MCP UI auto-start script succeeded (socket get_scene_info OK).
 - Knowledge.md rebuilt with English primary + JP appendix.
+- Manuals split into EN/JP files with `--lang en/jp` support in manual list/show.
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"
@@ -91,6 +92,7 @@ Status
 - pytest.ini 追加（local_notes をテスト対象から除外）。
 - Blender MCP の UI 自動起動で get_scene_info 応答を確認。
 - Knowledge.md を英語主体 + JP 付録に再構成。
+- マニュアルを EN/JP に分割し、manual list/show で `--lang en/jp` を指定可能にした。
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"

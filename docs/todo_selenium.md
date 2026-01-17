@@ -3,7 +3,7 @@ JP: Selenium ToDo（日本語は下記）
 
 # Selenium Enhancement ToDo
 
-- [x] Review docs/selenium_env.tspec.md and list improvement targets
+- [x] Review docs/selenium_env.en.tspec.md and list improvement targets
 - [x] Extend Selenium settings (driver_path/browser_binary/args/prefs/timeout, etc.)
 - [x] Strengthen selector parsing (css/xpath/id/name/link, etc.)
 - [x] Add Chrome/ChromeDriver version diff check to doctor
@@ -20,7 +20,7 @@ JP: Selenium ToDo（日本語は下記）
 ## JP (original)
 # Selenium 強化 ToDo
 
-- [x] docs/selenium_env.tspec.md を参照し、改善対象を整理
+- [x] docs/selenium_env.jp.tspec.md を参照し、改善対象を整理
 - [x] Selenium 設定拡張（driver_path/browser_binary/args/prefs/timeout など）
 - [x] selector 解析強化（css/xpath/id/name/link 等）
 - [x] doctor に Chrome/ChromeDriver のバージョン差分チェックを追加

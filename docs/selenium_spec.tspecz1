@@ -1,5 +1,5 @@
 Z1|D{p=path;sc=scope;ch=change;tc=testcase;td=todo;rd=readme;se=selenium;dr=doctor;sl=selector;wt=wait;cfg=config;ut=unit;md=docs;py=pyproject;ver=version;cf=cli-flow}
-P{SCOPE:@sc=@se ??|FILES:@p=#src/tspec/ui/selenium_driver.py,#src/tspec/actions_ui.py,#src/tspec/doctor_selenium.py,#src/tspec/ui/selenium_utils.py,#README.md,#docs/selenium_env.tspec.md,#docs/selenium_testcases.md,#docs/todo_selenium.md,#tests/test_selenium_utils.py,#pyproject.toml|
+P{SCOPE:@sc=@se ??|FILES:@p=#src/tspec/ui/selenium_driver.py,#src/tspec/actions_ui.py,#src/tspec/doctor_selenium.py,#src/tspec/ui/selenium_utils.py,#README.md,#docs/selenium_env.en.tspec.md,#docs/selenium_testcases.md,#docs/todo_selenium.md,#tests/test_selenium_utils.py,#pyproject.toml|
 CHANGES:@ch+
 1:@cfg[supported]=driver_path,browser_binary,args,prefs,download_dir,window_size,page_load_timeout_ms,script_timeout_ms,auto_wait_ms
 2:@sl[parse]=css=,xpath=,id=,name=,link=,partial_link=,tag=,class=
