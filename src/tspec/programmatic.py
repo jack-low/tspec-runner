@@ -6,8 +6,7 @@ from typing import Any, Dict, Optional
 
 from .config import load_config  # reuse config loader
 from .context import RunContext
-from .registry import build_registry
-from .runner import Runner
+from .runner import Runner, build_registry
 from .validate import load_and_validate
 from .actions_ui import create_ui_driver
 from .errors import ExecutionError
