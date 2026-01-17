@@ -91,6 +91,28 @@ def create_castle(ctx: RunContext, args: Dict[str, Any]) -> Dict[str, Any]:
     return result
 
 
+def cleanup_prefix(ctx: RunContext, args: Dict[str, Any]) -> Dict[str, Any]:
+    script_arg = args.get("server_script")
+    script_path = Path(script_arg or "local_notes/unreal-engine-mcp/Python/unreal_mcp_server_advanced.py").resolve()
+    if not script_path.exists():
+        raise ExecutionError(f"Unreal MCP server script not found at {script_path}")
+
+    prefixes = args.get("prefixes") or ["FutureCity", "Town"]
+    timeout_ms = int(args.get("timeout_ms", 120000) or 120000)
+    results: list[Dict[str, Any]] = []
+
+    for prefix in prefixes:
+        find_args = {"pattern": f"{prefix}*"}
+        find_result = _run_tool(script_path, "find_actors_by_name", find_args, timeout_ms)
+        actors = find_result.get("actors") or []
+        for actor in actors:
+            name = actor.get("name") if isinstance(actor, dict) else actor
+            del_result = _run_tool(script_path, "delete_actor", {"name": name}, timeout_ms)
+            results.append({"actor": name, "deleted": del_result.get("success", True), "detail": del_result})
+
+    return {"deleted_actors": results}
+
+
 def _embed_city_args(args: Dict[str, Any]) -> Dict[str, Any]:
     location = _to_float_list(args.get("location"), 3)
     return {

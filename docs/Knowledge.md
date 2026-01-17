@@ -205,6 +205,18 @@ JP: 作業中のエラー/知見（日本語は下記）
 - fix: allow longer client timeout for large operations
 - status: resolved
 
+## 2026-01-18
+### Unreal city creation spec timed out at 10 minutes
+- action: `tspec run examples/unreal_city.tspec.md --auto-mcp`
+- result: helper launched, but spec timed out after 600000ms before recording success (future metropolis is large)
+- fix: extended `timeout_ms` to 1200000 and added cleanup spec; auto-MCP runner now handles helper processes
+- status: pending verification
+
+### Cleanup spec removes generated actors
+- change: add `examples/unreal_cleanup.tspec.md` + `unreal.cleanup_prefix` action to delete FutureCity/Town/Castle actors via `find_actors_by_name` + `delete_actor`
+- result: record of helper script runs can now clean up after failed builds
+- status: noted
+
 ### Unreal Engine castle automation spec
 - change: add `unreal.create_castle` action + `examples/unreal_castle.tspec.md` spec that runs `create_castle_fortress`
 - result: spec records castle creation and can be re-run with `tspec run examples/unreal_castle.tspec.md`

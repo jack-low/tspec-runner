@@ -15,7 +15,7 @@ cases:
       - do: unreal.create_city
         name: metropolis
         save: city
-        timeout_ms: 600000
+        timeout_ms: 1200000
         with:
           town_size: "metropolis"
           building_density: 0.95

@@ -32,6 +32,12 @@ JP: `examples/unreal_castle.tspec.md` を実行し、`unreal.create_castle` に�
 - Expected: spec completes with `city.success == true` and records the futuristic town summary.
 JP: `examples/unreal_city.tspec.md` を `--auto-mcp` で実行し、未来都市生成を検証
 
+### UE-005: Cleanup Unreal actors
+- Goal: Remove previously created FutureCity/Town/Castle actors.
+- Steps: `tspec run examples/unreal_cleanup.tspec.md --auto-mcp`
+- Expected: spec catalogs deleted actor names under `cleanup.deleted_actors`.
+JP: `examples/unreal_cleanup.tspec.md` を `--auto-mcp` で実行し、作成済みアクターを削除
+
 ## JP (original)
 # Unreal Engine MCP TestCase 仕様
 

@@ -51,10 +51,10 @@ def _shutdown_auto_processes() -> None:
 atexit.register(_shutdown_auto_processes)
 
 
-def resolve_uv_command(script_path: Optional[str], label: str, default: Optional[Path] = None) -> Tuple[List[str], Path]:
+def resolve_uv_command(script_path: Optional[str], label: str, default: Optional[Path] = None) -> Optional[Tuple[List[str], Path]]:
     target = Path(script_path) if script_path else default
     if target is None:
-        raise ValueError(f"{label} helper script path is required")
+        return None
     target = target.expanduser().resolve()
     if not target.exists():
         raise ValueError(f"{label} helper script not found at {target}")
@@ -62,5 +62,8 @@ def resolve_uv_command(script_path: Optional[str], label: str, default: Optional
 
 
 def launch_helper(label: str, script_path: Optional[str], default: Optional[Path] = None) -> None:
-    cmd, cwd = resolve_uv_command(script_path, label, default)
+    resolved = resolve_uv_command(script_path, label, default)
+    if resolved is None:
+        return
+    cmd, cwd = resolved
     _start_auto_process(AutoProcess(label, cmd, cwd))
