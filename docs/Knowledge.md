@@ -176,6 +176,11 @@ JP: 作業中のエラー/知見（日本語は下記）
 - fix: update __version__ to 1.1.0.post1 (editable install reflects correct version)
 - status: resolved (repo)
 
+### JP manual showed EN text in agent-browser env
+- cause: JP manual body still contained EN: lines after split
+- fix: remove EN lines from docs/agent_browser_env.jp.tspec.md and re-scan manuals
+- status: resolved
+
 ## JP (original)
 # Knowledge.md - 作業中のエラー/知見
 
