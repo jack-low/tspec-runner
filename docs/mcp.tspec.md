@@ -39,6 +39,10 @@ manual:
       body: |
         tspec mcp --transport streamable-http --auto-unreal --auto-unity --auto-blender
         Use `--auto-*-cmd <path>` if you keep helper scripts elsewhere.
+    - title: Run specs with auto MCP helpers
+      body: |
+        tspec run examples/unreal_castle.tspec.md --auto-mcp
+        (This launches Unreal/Unity/Blender helper scripts via `uv` before the run.)
     - title: Review Blender/Unity/Unreal MCP guides
       body: |
         tspec manual show blender-mcp --lang en

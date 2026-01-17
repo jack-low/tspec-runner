@@ -24,6 +24,7 @@ from .manual_loader import discover_manuals, find_manual_by_id, load_manual, man
 from .doctor_android import check_android_env
 from .doctor_selenium import check_selenium_env
 from .doctor_ios import check_ios_env
+from .auto_process import launch_helper
 from .mcp_server import start as mcp_start
 from .assets import list_assets, extract_asset
 from .pytest_reporting import generate_pytest_reports
@@ -42,6 +43,14 @@ def _coerce_opt_str(v):
     except Exception:
         pass
     return v
+
+_DEFAULT_UNREAL_SCRIPT = Path("local_notes/unreal-engine-mcp/Python/unreal_mcp_server_advanced.py")
+
+
+def _maybe_launch_cli(label: str, auto_flag: bool, script: Optional[Path], default: Optional[Path]) -> None:
+    if auto_flag:
+        launch_helper(label, str(script) if script else None, default)
+
 app = typer.Typer(add_completion=False, help="TSpec runner\nMarkdown + ```tspec blocks.")
 manual_app = typer.Typer(add_completion=False, help="Environment / ops manuals (tspec-backed).")
 app.add_typer(manual_app, name="manual")
@@ -516,6 +525,25 @@ def run(
     pytest_junitxml: Optional[str] = typer.Option(None, "--pytest-junitxml", help="Write pytest junitxml (requires extras: report)"),
     pytest_arg: List[str] = typer.Option([], "--pytest-arg", help="Extra arg passed to pytest (repeatable)"),
     on_error: str = typer.Option("abort", "--on-error", help="Default error policy: abort|skip_case|continue"),
+    auto_mcp: bool = typer.Option(False, "--auto-mcp", help="Auto-start MCP helpers (Unreal/Unity/Blender)"),
+    auto_unreal: bool = typer.Option(False, "--auto-unreal", help="Auto-start Unreal MCP helper"),
+    auto_unreal_cmd: Optional[Path] = typer.Option(
+        None,
+        "--auto-unreal-cmd",
+        help="Path to Unreal MCP helper script",
+    ),
+    auto_unity: bool = typer.Option(False, "--auto-unity", help="Auto-start Unity MCP helper"),
+    auto_unity_cmd: Optional[Path] = typer.Option(
+        None,
+        "--auto-unity-cmd",
+        help="Path to Unity MCP helper script",
+    ),
+    auto_blender: bool = typer.Option(False, "--auto-blender", help="Auto-start Blender MCP helper"),
+    auto_blender_cmd: Optional[Path] = typer.Option(
+        None,
+        "--auto-blender-cmd",
+        help="Path to Blender MCP helper script",
+    ),
 ):
     """Run cases. ui.* requires a backend."""
     try:
@@ -558,6 +586,9 @@ def run(
             doc.suite.default_on_error = OnError(action=oe)
 
         reg = build_registry()
+        _maybe_launch_cli("Unreal MCP helper", bool(auto_mcp or auto_unreal), auto_unreal_cmd, _DEFAULT_UNREAL_SCRIPT)
+        _maybe_launch_cli("Unity MCP helper", bool(auto_mcp or auto_unity), auto_unity_cmd, None)
+        _maybe_launch_cli("Blender MCP helper", bool(auto_mcp or auto_blender), auto_blender_cmd, None)
         runner = Runner(doc, ctx=ctx, registry=reg)
 
         console.print(f"Spec resolved: {spec.resolved}")

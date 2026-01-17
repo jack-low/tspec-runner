@@ -1,16 +1,10 @@
 from __future__ import annotations
 
-import atexit
 import os
-import shlex
-import subprocess
-import time
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, Optional
 
-from rich.console import Console
-
+from .auto_process import launch_helper
 from .errors import ExecutionError, ValidationError
 
 
@@ -31,53 +25,15 @@ def _safe_path(workdir: Path, p: str) -> Path:
     return rp
 
 
-@dataclass
-class AutoProcess:
-    label: str
-    cmd: List[str]
-    cwd: Optional[Path]
-    proc: Optional[subprocess.Popen] = None
 
 
-_auto_processes: List[AutoProcess] = []
-_AUTO_CONSOLE = Console()
 _DEFAULT_UNREAL_SCRIPT = Path("local_notes/unreal-engine-mcp/Python/unreal_mcp_server_advanced.py")
 
 
-def _resolve_uv_command(script_path: Optional[str], label: str, default: Optional[Path] = None) -> Tuple[List[str], Path]:
-    target = Path(script_path) if script_path else default
-    if target is None:
-        raise ValidationError(f"{label} command path is required")
-    target = target.expanduser().resolve()
-    if not target.exists():
-        raise ValidationError(f"{label} helper script not found at {target}")
-    return ["uv", "run", "--with", "mcp", "python", str(target)], target.parent
+def _maybe_launch(label: str, auto_flag: bool, script_path: Optional[str], default: Optional[Path]) -> None:
+    if auto_flag:
+        launch_helper(label, script_path, default)
 
-
-def _start_auto_process(auto: AutoProcess) -> None:
-    if auto.proc is not None:
-        return
-    _AUTO_CONSOLE.print(f"[blue]Starting auto process:[/blue] {auto.label} {' '.join(auto.cmd)}")
-    auto.proc = subprocess.Popen(auto.cmd, cwd=str(auto.cwd) if auto.cwd else None, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-    _auto_processes.append(auto)
-
-
-def _shutdown_auto_processes() -> None:
-    for auto in _auto_processes:
-        if auto.proc and auto.proc.poll() is None:
-            try:
-                auto.proc.terminate()
-                for _ in range(10):
-                    if auto.proc.poll() is not None:
-                        break
-                    time.sleep(0.1)
-                else:
-                    auto.proc.kill()
-            except Exception:
-                pass
-
-
-atexit.register(_shutdown_auto_processes)
 
 
 def start(
@@ -121,17 +77,9 @@ def start(
 
     wd = _resolve_workdir(workdir)
 
-    if auto_unreal:
-        cmd, cwd = _resolve_uv_command(auto_unreal_cmd, "Unreal MCP helper", _DEFAULT_UNREAL_SCRIPT)
-        _start_auto_process(AutoProcess("Unreal MCP helper", cmd, cwd))
-
-    if auto_unity:
-        cmd, cwd = _resolve_uv_command(auto_unity_cmd, "Unity MCP helper")
-        _start_auto_process(AutoProcess("Unity MCP helper", cmd, cwd))
-
-    if auto_blender:
-        cmd, cwd = _resolve_uv_command(auto_blender_cmd, "Blender MCP helper")
-        _start_auto_process(AutoProcess("Blender MCP helper", cmd, cwd))
+    _maybe_launch("Unreal MCP helper", auto_unreal, auto_unreal_cmd, _DEFAULT_UNREAL_SCRIPT)
+    _maybe_launch("Unity MCP helper", auto_unity, auto_unity_cmd, None)
+    _maybe_launch("Blender MCP helper", auto_blender, auto_blender_cmd, None)
 
     mcp = FastMCP(
         name="tspec-runner",
