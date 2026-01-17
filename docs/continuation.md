@@ -43,6 +43,7 @@ Status
 - Bumped version to 1.1.0.post1 for PyPI upload.
 - PyPI 1.1.0.post1 uploaded.
 - Version bump checklist: keep `pyproject.toml` and `src/tspec/__init__.py` in sync.
+- Added release notes for 1.1.0.post1 and noted release note policy.
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"
@@ -105,6 +106,7 @@ Status
 - PyPI アップロードのため 1.1.0.post1 に更新。
 - PyPI 1.1.0.post1 をアップロード済み。
 - バージョン更新時は `pyproject.toml` と `src/tspec/__init__.py` を揃える。
+- 1.1.0.post1 のリリースノートを追加し、リリースノート運用を明記。
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"

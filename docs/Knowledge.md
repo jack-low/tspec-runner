@@ -181,6 +181,10 @@ JP: 作業中のエラー/知見（日本語は下記）
 - fix: remove EN lines from docs/agent_browser_env.jp.tspec.md and re-scan manuals
 - status: resolved
 
+### Release notes policy
+- action: add release notes per version in docs/release_notes_<version>.md
+- status: resolved (documented in update.md)
+
 ## JP (original)
 # Knowledge.md - 作業中のエラー/知見
 

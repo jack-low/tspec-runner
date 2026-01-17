@@ -10,6 +10,7 @@ JP: 更新メモ（日本語は下記）
   - 英語: `python scripts/switch_pypi_readme.py --lang en`
   - 日本語: `python scripts/switch_pypi_readme.py --lang jp`
 - バージョン更新時は `pyproject.toml` と `src/tspec/__init__.py` を合わせる
+- リリース時は `docs/release_notes_<version>.md` を追加
 
 
 ## JP (original)
@@ -22,3 +23,4 @@ JP: 更新メモ（日本語は下記）
   - 英語: `python scripts/switch_pypi_readme.py --lang en`
   - 日本語: `python scripts/switch_pypi_readme.py --lang jp`
 - バージョン更新時は `pyproject.toml` と `src/tspec/__init__.py` を合わせる
+- リリース時は `docs/release_notes_<version>.md` を追加
