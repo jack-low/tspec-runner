@@ -22,28 +22,12 @@ manual:
 
       BLENDER_MCP_ALLOWLIST_HOSTS=localhost,localhost:7300
 
-      (optional) BLENDER_MCP_AUTH_MODE=none|bearer|token
-
-
-      JP:
-
-      BLENDER_MCP_BASE_URL=http://localhost:7300
-
-      BLENDER_MCP_ALLOWLIST_HOSTS=localhost,localhost:7300
-
-      (任意) BLENDER_MCP_AUTH_MODE=none|bearer|token'
+      (optional) BLENDER_MCP_AUTH_MODE=none|bearer|token'
   - title: 2) Start tspec MCP server
     body: "Optional CLI override:\n  tspec mcp --transport stdio --blender-mcp-url\
       \ http://localhost:7300"
   - title: 3) Verify tools
     body: 'blender.health
-
-      blender.rpc(method="scene.list", params={})
-
-
-      JP:
-
-      blender.health
 
       blender.rpc(method="scene.list", params={})'
   troubleshooting: []

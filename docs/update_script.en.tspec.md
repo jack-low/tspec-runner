@@ -16,30 +16,12 @@ manual:
   - git
   steps:
   - title: 1) Use update.ps1 in repo
-    body: '.\scripts\update.ps1 -ZipPath "$HOME\Downloads\tspec-runner-<version>.zip"
+    body: .\scripts\update.ps1 -ZipPath "$HOME\Downloads\tspec-runner-<version>.zip"
       -RepoDir .
-
-
-      JP:
-
-      .\scripts\update.ps1 -ZipPath "$HOME\Downloads\tspec-runner-<version>.zip" -RepoDir
-      .'
   - title: 2) Choose ZipPath
-    body: '.\scripts\update.ps1 -RepoDir .
-
-
-      JP:
-
-      .\scripts\update.ps1 -RepoDir .'
+    body: .\scripts\update.ps1 -RepoDir .
   - title: 3) Refresh install
     body: 'tspec asset list
-
-      tspec asset update.ps1 --to .
-
-
-      JP:
-
-      tspec asset list
 
       tspec asset update.ps1 --to .'
   troubleshooting:

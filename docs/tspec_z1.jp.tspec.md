@@ -15,12 +15,9 @@ manual:
   prerequisites: []
   steps:
   - title: 1) 先頭に Z1| を付与
-    body: "tspec z1-decode docs/selenium_spec.tspecz1 --format text\ntspec z1-decode\
-      \ docs/selenium_spec.tspecz1 --format json\n\nJP:\n例:\n  Z1|..."
+    body: "例:\n  Z1|..."
   - title: 2) 辞書 D{...}
-    body: "tspec z1-decompile docs/selenium_spec.tspecz1 --format text\ntspec z1-decompile\
-      \ docs/selenium_spec.tspecz1 --format yaml\n\nJP:\nkey=value を ; 区切りで列挙する。\n\
-      例:\n  D{p=path;sc=scope;ch=change}"
+    body: "key=value を ; 区切りで列挙する。\n例:\n  D{p=path;sc=scope;ch=change}"
   - title: 3) ペイロード P{...}
     body: "| 区切りでセクションを分割し、各セクションは TAG:... 形式。\n例:\n  P{SCOPE:...|FILES:...|CHANGES:...}"
   - title: 4) 辞書参照

@@ -16,30 +16,12 @@ manual:
   - git が利用可能
   steps:
   - title: 1) update.ps1 を使う（repo直下で）
-    body: '.\scripts\update.ps1 -ZipPath "$HOME\Downloads\tspec-runner-<version>.zip"
+    body: .\scripts\update.ps1 -ZipPath "$HOME\Downloads\tspec-runner-<version>.zip"
       -RepoDir .
-
-
-      JP:
-
-      .\scripts\update.ps1 -ZipPath "$HOME\Downloads\tspec-runner-<version>.zip" -RepoDir
-      .'
   - title: 2) ZipPath 省略（Downloadsから最新を自動選択）
-    body: '.\scripts\update.ps1 -RepoDir .
-
-
-      JP:
-
-      .\scripts\update.ps1 -RepoDir .'
+    body: .\scripts\update.ps1 -RepoDir .
   - title: 3) install版から取り出す（任意）
     body: 'tspec asset list
-
-      tspec asset update.ps1 --to .
-
-
-      JP:
-
-      tspec asset list
 
       tspec asset update.ps1 --to .'
   troubleshooting:

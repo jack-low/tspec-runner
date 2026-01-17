@@ -16,12 +16,13 @@ manual:
   - tspec-runner installed
   steps:
   - title: 1) Decode
-    body: "tspec z1-decode docs/selenium_spec.tspecz1 --format text\ntspec z1-decode\
-      \ docs/selenium_spec.tspecz1 --format json\n\nJP:\n例:\n  Z1|..."
+    body: 'tspec z1-decode docs/selenium_spec.tspecz1 --format text
+
+      tspec z1-decode docs/selenium_spec.tspecz1 --format json'
   - title: 2) Decompile
-    body: "tspec z1-decompile docs/selenium_spec.tspecz1 --format text\ntspec z1-decompile\
-      \ docs/selenium_spec.tspecz1 --format yaml\n\nJP:\nkey=value を ; 区切りで列挙する。\n\
-      例:\n  D{p=path;sc=scope;ch=change}"
+    body: 'tspec z1-decompile docs/selenium_spec.tspecz1 --format text
+
+      tspec z1-decompile docs/selenium_spec.tspecz1 --format yaml'
   troubleshooting: []
   references:
   - README.md の TSPEC-Z1 圧縮（AI引き渡し用）

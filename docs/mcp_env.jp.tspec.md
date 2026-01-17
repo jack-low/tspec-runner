@@ -17,12 +17,7 @@ manual:
   - AI側が MCP クライアントをサポートしていること
   steps:
   - title: 1) MCP 依存を入れる
-    body: 'pip install -e ".[mcp]"
-
-
-      JP:
-
-      pip install -e ".[mcp]"'
+    body: pip install -e ".[mcp]"
   - title: 2) MCP サーバを起動（stdio 推奨）
     body: tspec mcp --transport stdio --workdir .
   - title: '3) Inspector で動作確認（任意: HTTP）'
@@ -31,19 +26,6 @@ manual:
       \n接続先： http://127.0.0.1:8765/mcp"
   - title: 4) 代表ツール
     body: '- tspec_validate(path)
-
-      - tspec_run(path, backend, report)
-
-      - tspec_report(report, only_errors, case_id)
-
-      - tspec_manual_show(target)
-
-      - tspec_doctor(android/selenium/ios)
-
-
-      JP:
-
-      - tspec_validate(path)
 
       - tspec_run(path, backend, report)
 

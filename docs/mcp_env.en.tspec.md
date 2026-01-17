@@ -18,12 +18,7 @@ manual:
   - MCP client support (e.g., Claude Desktop)
   steps:
   - title: 1) Install MCP extras
-    body: 'pip install -e ".[mcp]"
-
-
-      JP:
-
-      pip install -e ".[mcp]"'
+    body: pip install -e ".[mcp]"
   - title: 2) Start MCP server (stdio recommended)
     body: "Optional CLI override for Unity/Blender URLs:\n  tspec mcp --transport\
       \ stdio --unity-mcp-url http://localhost:8080/mcp\n  tspec mcp --transport stdio\
@@ -34,19 +29,6 @@ manual:
       \nEndpoint: http://127.0.0.1:8765/mcp"
   - title: 4) Example tools
     body: '- tspec_validate(path)
-
-      - tspec_run(path, backend, report)
-
-      - tspec_report(report, only_errors, case_id)
-
-      - tspec_manual_show(target)
-
-      - tspec_doctor(android/selenium/ios)
-
-
-      JP:
-
-      - tspec_validate(path)
 
       - tspec_run(path, backend, report)
 

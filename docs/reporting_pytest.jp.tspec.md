@@ -16,23 +16,9 @@ manual:
   - uv pip install -e '.[report]'
   steps:
   - title: Run と同時に HTML を生成
-    body: 'tspec run examples/assert_only.tspec.md --report out/report.json
-
-
-      JP:
-
-      tspec run <spec> --report out/report.json --pytest-html out/report.html'
+    body: tspec run <spec> --report out/report.json --pytest-html out/report.html
   - title: 既存 JSON から HTML を生成
-    body: 'tspec report out/report.json --only-errors --show-steps
-
-      tspec pytest-report out/report.json --html out/report.html
-
-      tspec pytest-report out/report.json --junitxml out/report.xml
-
-
-      JP:
-
-      tspec pytest-report out/report.json --html out/report.html'
+    body: tspec pytest-report out/report.json --html out/report.html
   - title: CI向け junitxml
     body: tspec run <spec> --report out/report.json --pytest-junitxml out/report.xml
   troubleshooting:

@@ -24,13 +24,6 @@ manual:
   - title: 3) ツール動作確認
     body: 'unity.health
 
-      unity.tool(name="debug_request_context", arguments={})
-
-
-      JP:
-
-      unity.health
-
       unity.tool(name="debug_request_context", arguments={})'
   troubleshooting: []
   references: []
