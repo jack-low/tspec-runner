@@ -44,6 +44,8 @@ Status
 - PyPI 1.1.0.post1 uploaded.
 - Version bump checklist: keep `pyproject.toml` and `src/tspec/__init__.py` in sync.
 - Added release notes for 1.1.0.post1 and noted release note policy.
+- Added Playwright backend with allowlist guard and docs/manuals.
+- Version bumped to 1.1.1 (Playwright release notes added).
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"
@@ -107,6 +109,8 @@ Status
 - PyPI 1.1.0.post1 をアップロード済み。
 - バージョン更新時は `pyproject.toml` と `src/tspec/__init__.py` を揃える。
 - 1.1.0.post1 のリリースノートを追加し、リリースノート運用を明記。
+- Playwright backend を追加し、allowlist 制御とドキュメントを整備。
+- バージョンを 1.1.1 に更新し、リリースノートを追加。
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"

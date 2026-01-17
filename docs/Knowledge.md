@@ -181,6 +181,14 @@ JP: 作業中のエラー/知見（日本語は下記）
 - fix: remove EN lines from docs/agent_browser_env.jp.tspec.md and re-scan manuals
 - status: resolved
 
+### Playwright backend added
+- action: add Playwright UI driver + allowlist guard, docs, and manuals
+- status: resolved
+
+### Version bump for Playwright release
+- action: bump version to 1.1.1 and add release notes
+- status: resolved (repo)
+
 ### Release notes policy
 - action: add release notes per version in docs/release_notes_<version>.md
 - status: resolved (documented in update.md)

@@ -1,4 +1,4 @@
-# tspec-runner 1.1.0.post1
+# tspec-runner 1.1.1
 
 TSpec runner for Markdown + `tspec` blocks. Validate, run, and report from the CLI with a single, spec-versioned flow.
 
@@ -12,7 +12,7 @@ TSpec runner for Markdown + `tspec` blocks. Validate, run, and report from the C
 - validate / list / run / spec / init / doctor / report
 - Simple assertions via `assert.*`
 - Unified UI automation API: `ui.*`
-  - backends: `selenium` / `appium` (Android/iOS) / `pywinauto` / `agent-browser`
+  - backends: `selenium` / `playwright` / `appium` (Android/iOS) / `pywinauto` / `agent-browser`
   - install extras only when needed
 
 > Appium (Android/iOS) requires Appium Server + driver setup.
@@ -58,6 +58,11 @@ tspec report out/report.json --only-errors --show-steps
 ## UI run (Selenium)
 ```bash
 tspec run examples/selenium_google.tspec.md --backend selenium --report out/ui.json
+```
+
+## UI run (Playwright)
+```bash
+tspec run examples/selenium_google.tspec.md --backend playwright --report out/ui.json
 ```
 
 ## UI run (Appium/Android)
@@ -140,6 +145,12 @@ Update guide: `docs/demo_assets.md`
 pip install -e ".[selenium]"
 ```
 
+### Playwright
+```bash
+pip install -e ".[playwright]"
+python -m playwright install chromium
+```
+
 ### Appium (Android/iOS)
 ```bash
 pip install -e ".[appium]"
@@ -167,7 +178,7 @@ Load with `--config tspec.toml`.
 
 ```toml
 [ui]
-backend = "selenium"  # selenium|appium|pywinauto|agent-browser
+backend = "selenium"  # selenium|playwright|appium|pywinauto|agent-browser
 headless = true
 implicit_wait_ms = 2000
 
@@ -191,12 +202,21 @@ extra_args = []
 wsl_fallback = false
 wsl_distro = ""
 wsl_workdir = ""
+
+[playwright]
+browser = "chromium"  # chromium|firefox|webkit
+executable_path = ""
+args = []
+user_data_dir = ""
+window_size = "1280x720"
+timeout_ms = 30000
+allowlist_hosts = ["example.com", "localhost"]
 ```
 
 ---
 
 ## Common `ui.*` actions
-- `ui.open` with `{url}` (Selenium / agent-browser)
+- `ui.open` with `{url}` (Selenium / Playwright / agent-browser)
 - `ui.open_app` with `{caps, server_url}` (Appium)
 - `ui.click` with `{selector}`
 - `ui.type` with `{selector, text}`

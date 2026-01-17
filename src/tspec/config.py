@@ -18,6 +18,7 @@ class RunnerConfig:
     appium: Dict[str, Any]
     pywinauto: Dict[str, Any]
     agent_browser: Dict[str, Any]
+    playwright: Dict[str, Any]
 
 def load_config(path: Optional[Path]) -> RunnerConfig:
     if path is None:
@@ -38,4 +39,5 @@ def load_config(path: Optional[Path]) -> RunnerConfig:
         appium=dict(data.get("appium", {})),
         pywinauto=dict(data.get("pywinauto", {})),
         agent_browser=dict(data.get("agent_browser", {})),
+        playwright=dict(data.get("playwright", {})),
     )

@@ -43,6 +43,12 @@ JP: マニュアルの言語切替が反映される
 - Expected: Japanese manual is displayed
 JP: TSPEC_MANUAL_LANG で既定言語が切り替わる
 
+### TC-CORE-006: Playwright backend availability
+- Goal: Playwright backend is selectable
+- Steps: `tspec run examples/selenium_google.tspec.md --backend playwright --report out/playwright.json`
+- Expected: run completes (Playwright installed)
+JP: Playwright backend が選択できる
+
 
 ## JP (original)
 # Core TestCase 仕様
@@ -63,6 +69,7 @@ JP: TSPEC_MANUAL_LANG で既定言語が切り替わる
 ## Manual / Integration (optional)
 - TC-CORE-006: `tspec manual show android-env --full --lang jp` が日本語を表示する
 - TC-CORE-007: `TSPEC_MANUAL_LANG=jp` の場合、`tspec manual show android-env --full` で日本語を表示する
+- TC-CORE-008: `--backend playwright` が利用できる
 
 ## 設定/手順まとめ
 - unit: `pytest -q`

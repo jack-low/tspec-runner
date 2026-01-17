@@ -4,10 +4,12 @@ JP: 将来実装予定のまとめ（ロードマップ）
 ## Phase 0 (browser testing)
 - [x] Added integration: https://github.com/vercel-labs/agent-browser
 - [x] Adopt lightweight headless browser (agent-browser) for faster UI runs.
+- [x] Add Playwright backend for modern browser automation.
 - Related ToDo: docs/todo_features.md
 JP:
 - [x] 実装追加：https://github.com/vercel-labs/agent-browser
 - [x] ヘッダーレスブラウザ「agent-browser」を導入し、軽量、高速化を図りたい。
+- [x] Playwright backend を追加し、モダンなブラウザ自動化に対応。
 - 関連 ToDo: docs/todo_features.md
 
 ## Phase 1 (Android/Appium)

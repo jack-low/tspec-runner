@@ -7,6 +7,7 @@ from tspec.errors import ExecutionError
 def test_agent_browser_backend_supported():
     assert ensure_supported_backend("agent-browser") == "agent-browser"
     assert ensure_supported_backend("agent_browser") == "agent-browser"
+    assert ensure_supported_backend("playwright") == "playwright"
 
 
 def test_unknown_backend_rejected():

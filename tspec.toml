@@ -1,6 +1,6 @@
 # tspec.toml
 [ui]
-backend = "selenium"  # selenium|appium|pywinauto|agent-browser
+backend = "selenium"  # selenium|appium|pywinauto|agent-browser|playwright
 headless = true
 implicit_wait_ms = 2000
 
@@ -24,3 +24,12 @@ extra_args = []
 wsl_fallback = true
 wsl_distro = "Ubuntu-24.04"
 wsl_workdir = "/mnt/c/WorkSpace/Private/Python/tspec-runner"
+
+[playwright]
+browser = "chromium"  # chromium|firefox|webkit
+executable_path = ""  # optional: custom browser binary
+args = []
+user_data_dir = ""
+window_size = "1280x720"
+timeout_ms = 30000
+allowlist_hosts = ["example.com", "localhost", "127.0.0.1:8080"]

@@ -13,6 +13,7 @@ JP: 各ツールのURL一覧（日本語は下記）
 
 ## UI backends
 - agent-browser: https://github.com/vercel-labs/agent-browser
+- Playwright: https://playwright.dev/python/
 - Selenium: https://www.selenium.dev/documentation/
 - ChromeDriver: https://chromedriver.chromium.org/
 - Appium: https://appium.io/
@@ -53,6 +54,7 @@ JP: 各ツールのURL一覧（日本語は下記）
 
 ## UI backends
 - agent-browser: https://github.com/vercel-labs/agent-browser
+- Playwright: https://playwright.dev/python/
 - Selenium: https://www.selenium.dev/documentation/
 - ChromeDriver: https://chromedriver.chromium.org/
 - Appium: https://appium.io/

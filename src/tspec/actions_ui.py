@@ -10,6 +10,7 @@ from .ui.selenium_driver import SeleniumUIDriver, SeleniumSettings
 from .ui.appium_driver import AppiumUIDriver
 from .ui.pywinauto_driver import PyWinAutoUIDriver
 from .ui.agent_browser_driver import AgentBrowserUIDriver, AgentBrowserSettings
+from .ui.playwright_driver import PlaywrightUIDriver, PlaywrightSettings
 
 @dataclass
 class UIContext:
@@ -67,6 +68,31 @@ def create_ui_driver(ui_cfg: Dict[str, Any], backend_override: Optional[str], ba
             wsl_workdir=backend_cfg.get("wsl_workdir"),
         )
         return UIContext(driver=AgentBrowserUIDriver(ui, agent_browser), backend="agent-browser")
+    if ui.backend == "playwright":
+        def _as_list(value: Any) -> list[str]:
+            if value is None:
+                return []
+            if isinstance(value, (list, tuple)):
+                return [str(v) for v in value]
+            return [str(value)]
+
+        allowlist = backend_cfg.get("allowlist_hosts")
+        allowlist_hosts: list[str] = []
+        if isinstance(allowlist, (list, tuple)):
+            allowlist_hosts = [str(x) for x in allowlist]
+        elif isinstance(allowlist, str):
+            allowlist_hosts = [x.strip() for x in allowlist.split(",") if x.strip()]
+
+        playwright = PlaywrightSettings(
+            browser=str(backend_cfg.get("browser", "chromium")),
+            executable_path=backend_cfg.get("executable_path"),
+            args=_as_list(backend_cfg.get("args")),
+            user_data_dir=backend_cfg.get("user_data_dir"),
+            window_size=backend_cfg.get("window_size"),
+            timeout_ms=int(backend_cfg.get("timeout_ms", 30000) or 30000),
+            allowlist_hosts=allowlist_hosts or None,
+        )
+        return UIContext(driver=PlaywrightUIDriver(ui, playwright), backend="playwright")
     raise ExecutionError(f"Unknown backend: {ui.backend}")
 
 

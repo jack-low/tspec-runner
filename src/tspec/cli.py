@@ -173,6 +173,7 @@ def doctor(
         ("selenium", "selenium", ".[selenium]"),
         ("appium", "appium", ".[appium]"),
         ("pywinauto", "pywinauto", ".[pywinauto]"),
+        ("playwright", "playwright", ".[playwright]"),
     ]:
         try:
             __import__(mod)
@@ -476,7 +477,12 @@ def run(
         if uses_ui:
             ui_backend = backend or cfg.ui.get("backend", "selenium")
             # pick backend-specific config table
-            backend_cfg = cfg.selenium if ui_backend == "selenium" else (cfg.appium if ui_backend == "appium" else (cfg.pywinauto if ui_backend == "pywinauto" else cfg.agent_browser))
+            backend_cfg = (
+                cfg.selenium if ui_backend == "selenium"
+                else (cfg.appium if ui_backend == "appium"
+                else (cfg.pywinauto if ui_backend == "pywinauto"
+                else (cfg.agent_browser if ui_backend == "agent-browser" else cfg.playwright)))
+            )
             ctx.ui = create_ui_driver(cfg.ui, backend, backend_cfg)
 
         # live watch logs

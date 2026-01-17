@@ -4,13 +4,13 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tspec-runner"
-version = "1.1.0.post1"
+version = "1.1.1"
 description = "TSpec runner: Markdown + tspec fenced blocks for test automation (spec-versioned)"
 readme = { file = "README.rst", content-type = "text/x-rst" }
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "tspec", email = "devnull@example.com" }]
-keywords = ["testing", "automation", "spec", "markdown", "yaml", "selenium", "appium", "pywinauto", "mcp", "blender", "unity"]
+keywords = ["testing", "automation", "spec", "markdown", "yaml", "selenium", "appium", "pywinauto", "playwright", "mcp", "blender", "unity"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Programming Language :: Python :: 3",
@@ -48,6 +48,9 @@ appium = [
 ]
 pywinauto = [
   "pywinauto>=0.6.8",
+]
+playwright = [
+  "playwright>=1.44.0",
 ]
 
 [project.scripts]

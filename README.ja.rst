@@ -1,5 +1,5 @@
-tspec-runner 1.1.0.post1
-========================
+tspec-runner 1.1.1
+==================
 
 TSpec (Markdown + ``tspec``) を読み込み、CLI で検証・実行・レポートまで完結する自動化ランナーです。
 Markdown の中にある ``tspec`` ブロックを読み取り、同じ手順を複数環境で再現できます。
@@ -16,7 +16,7 @@ Markdown の中にある ``tspec`` ブロックを読み取り、同じ手順を
 - validate / list / run / spec / init / doctor / report
 - ``assert.*`` による簡易テスト
 - **UI 自動化インターフェース（統一 API）**：``ui.*``
-  - backend: ``selenium`` / ``appium``(Android/iOS) / ``pywinauto`` / ``agent-browser``
+  - backend: ``selenium`` / ``playwright`` / ``appium``(Android/iOS) / ``pywinauto`` / ``agent-browser``
   - 依存は extras で追加（軽いコア）
 
 .. note::
@@ -64,6 +64,12 @@ UI 実行（例：Selenium）
 .. code-block:: bash
 
    tspec run examples/selenium_google.tspec.md --backend selenium --report out/ui.json
+
+UI 実行（例：Playwright）
+----------------------------------------
+.. code-block:: bash
+
+   tspec run examples/selenium_google.tspec.md --backend playwright --report out/ui.json
 
 UI 実行（例：Appium/Android）
 ----------------------------------------
@@ -161,6 +167,13 @@ Selenium
 
    pip install -e ".[selenium]"
 
+Playwright
+
+.. code-block:: bash
+
+   pip install -e ".[playwright]"
+   python -m playwright install chromium
+
 Appium（Android/iOS）
 
 .. code-block:: bash
@@ -193,7 +206,7 @@ Windows で install が失敗する場合は exe を直接実行する：
 .. code-block:: toml
 
    [ui]
-   backend = "selenium"  # selenium|appium|pywinauto|agent-browser
+   backend = "selenium"  # selenium|playwright|appium|pywinauto|agent-browser
    headless = true
    implicit_wait_ms = 2000
 
@@ -218,9 +231,18 @@ Windows で install が失敗する場合は exe を直接実行する：
    wsl_distro = ""
    wsl_workdir = ""
 
+   [playwright]
+   browser = "chromium"  # chromium|firefox|webkit
+   executable_path = ""
+   args = []
+   user_data_dir = ""
+   window_size = "1280x720"
+   timeout_ms = 30000
+   allowlist_hosts = ["example.com", "localhost"]
+
 ``ui.*`` の主なアクション
 ----------------------------------------
-- ``ui.open`` with ``{url}`` （Selenium / agent-browser）
+- ``ui.open`` with ``{url}`` （Selenium / Playwright / agent-browser）
 - ``ui.open_app`` with ``{caps, server_url}`` （Appium）
 - ``ui.click`` with ``{selector}``
 - ``ui.type`` with ``{selector, text}``
