@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "tspec-runner"
-version = "1.0.9"
+version = "1.1.0.post1"
 description = "TSpec runner: Markdown + tspec fenced blocks for test automation (spec-versioned)"
 readme = { file = "README.rst", content-type = "text/x-rst" }
 requires-python = ">=3.11"

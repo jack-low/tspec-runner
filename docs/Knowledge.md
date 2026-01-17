@@ -167,6 +167,10 @@ JP: 作業中のエラー/知見（日本語は下記）
 - fix: skip upload or bump version
 - status: resolved
 
+### PyPI upload prepared for 1.1.0.post1
+- action: bump version to 1.1.0.post1 and keep README.rst as long_description
+- status: resolved (uploaded 1.1.0.post1)
+
 ## JP (original)
 # Knowledge.md - 作業中のエラー/知見
 

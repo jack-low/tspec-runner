@@ -40,6 +40,8 @@ Status
 - README Japanese content moved into separate files (README.ja.md / README.ja.rst).
 - Added script to switch PyPI long_description between README.rst and README.ja.rst.
 - Manual default language can be set via TSPEC_MANUAL_LANG.
+- Bumped version to 1.1.0.post1 for PyPI upload.
+- PyPI 1.1.0.post1 uploaded.
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"
@@ -99,6 +101,8 @@ Status
 - README の日本語版を README.ja.md / README.ja.rst に分離。
 - PyPI long_description 切替スクリプトを追加（README.rst / README.ja.rst）。
 - TSPEC_MANUAL_LANG でマニュアル既定言語を指定可能。
+- PyPI アップロードのため 1.1.0.post1 に更新。
+- PyPI 1.1.0.post1 をアップロード済み。
 
 Last known good command
 - tspec run examples/agent_browser_smoke.tspec.md --backend agent-browser --report "out/agent-browser.json"

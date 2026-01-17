@@ -1,5 +1,5 @@
-tspec-runner 1.0.9
-==================
+tspec-runner 1.1.0.post1
+========================
 
 TSpec runner for Markdown + ``tspec`` blocks. Validate, run, and report from the CLI with a single, spec-versioned flow.
 
