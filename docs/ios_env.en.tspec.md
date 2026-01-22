@@ -26,4 +26,5 @@ manual:
   references:
   - 'Appium XCUITest driver: https://github.com/appium/appium-xcuitest-driver'
   - 'Apple Xcode: https://developer.apple.com/xcode/'
+  - "Skill: docs/skills/mobile_skill.md"
 ```

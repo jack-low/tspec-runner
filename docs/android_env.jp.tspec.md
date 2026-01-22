@@ -59,4 +59,5 @@ manual:
       \    adbExecTimeout: 120000\n    skipDeviceInitialization: true"
   references:
   - 'Android SDK 環境変数: https://developer.android.com/studio/command-line/variables'
+  - "Skill: docs/skills/mobile_skill.md"
 ```

@@ -14,7 +14,7 @@ cases:
     steps:
       - do: ui.open
         with:
-          url: "https://example.com"
+          url: "https://api.solo-map.app/"
       - do: ui.wait_for
         with:
           selector: "h1"

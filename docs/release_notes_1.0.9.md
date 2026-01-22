@@ -1,4 +1,5 @@
 # Release Notes 1.0.9 (English primary)
+Skill: docs/skills/release_skill.md
 JP: リリースノート（日本語は下記）
 
 - Documentation updated to be English-first with Japanese subtext

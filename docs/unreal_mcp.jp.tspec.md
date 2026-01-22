@@ -50,4 +50,5 @@ manual:
     body: uv をインストールするか、MCP 設定で絶対パスを指定する。
   references:
   - 'Unreal Engine MCP: https://github.com/flopperam/unreal-engine-mcp'
+  - "Skill: docs/skills/game_engine_skill.md"
 ```

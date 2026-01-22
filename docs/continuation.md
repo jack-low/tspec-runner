@@ -1,4 +1,5 @@
 # Continuation Notes (English primary)
+Skill: docs/skills/pm_skill.md
 JP: 継続メモ（日本語は下記）
 
 # Continuation Notes

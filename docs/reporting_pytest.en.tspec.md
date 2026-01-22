@@ -25,4 +25,6 @@ manual:
       tspec pytest-report out/report.json --junitxml out/report.xml'
   troubleshooting: []
   references: []
+  references:
+  - "Skill: docs/skills/qa_skill.md"
 ```

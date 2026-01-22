@@ -1,4 +1,5 @@
 # Blender MCP tools (tspec-runner)
+Skill: docs/skills/game_engine_skill.md
 JP: Blender MCP ツール（tspec-runner）
 
 We add Blender MCP REST wrapper tools to the tspec MCP server.

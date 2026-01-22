@@ -1,4 +1,5 @@
 # Core TestCases
+Skill: docs/skills/qa_skill.md
 JP: コア機能テストケース
 
 ## Preconditions

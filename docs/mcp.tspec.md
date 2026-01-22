@@ -57,5 +57,6 @@ manual:
       body: |
         Run `tspec manual list --lang en` to see available manuals. Use an exact id (e.g., `mcp-env`, `blender-mcp`, `unity-mcp`, `unreal-mcp`) or specify the file path.
   references:
+  - "Skill: docs/skills/backend_skill.md"
     - 'MCP tools doc: docs/mcp_env.en.tspec.md'
 ```

@@ -1,4 +1,5 @@
 # Update notes (English primary)
+Skill: docs/skills/release_skill.md
 JP: 更新メモ（日本語は下記）
 
 # update.md

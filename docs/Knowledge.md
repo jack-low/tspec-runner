@@ -1,6 +1,32 @@
 # Knowledge.md - Issue log (English primary)
 JP: 作業中のエラー/知見（日本語は下記）
 
+## Skill mapping
+- `docs/mcp_env*.tspec.md` / `docs/mcp.tspec.md` / `docs/neko_mcp.md` → `docs/skills/backend_skill.md`
+- `docs/agent_browser_env*.tspec.md` / `docs/selenium_env*.tspec.md` / `docs/playwright_env*.tspec.md` → `docs/skills/frontend_skill.md`
+- `docs/android_env*.tspec.md` / `docs/ios_env*.tspec.md` → `docs/skills/mobile_skill.md`
+- `docs/blender_mcp*.tspec.md` / `docs/unity_mcp*.tspec.md` / `docs/unreal_mcp*.tspec.md` / `docs/*_mcp.md` → `docs/skills/game_engine_skill.md`
+- `docs/tspec_z1*.tspec.md` → `docs/skills/tspec_runner_skill.md`
+- `docs/reporting_pytest*.tspec.md` / `docs/*_testcases.md` → `docs/skills/qa_skill.md`
+- `docs/update*.tspec.md` / `docs/update.md` / `docs/release_notes_*.md` → `docs/skills/release_skill.md`
+- `docs/FEATURES.md` / `docs/todo_features.md` / `docs/todo_selenium.md` / `docs/continuation.md` → `docs/skills/pm_skill.md`
+- `docs/demo_assets.md` / `docs/tools_urls.md` → `docs/skills/docs_writer_skill.md`
+- `docs/Knowledge.md` → `docs/skills/pm_skill.md` + `docs/skills/qa_skill.md`
+- Skill folders now include English and Japanese leaf files:
+  - `docs/skills/<role>` → `skill.en.md` + `skill.jp.md` describe duties and list support members.
+  - Roles: backend, frontend, mobile, game_engine, qa, docs_writer, release, pm, tspec_runner.
+
+### Unreal MCP health hints
+- `tspec doctor --unreal-mcp-health` only probes `http://<host>:<port>/health`. Unreal Engine + UnrealMCP plugin must be running and have accepted `uv run unreal_mcp_server_advanced.py` before this check can succeed.  
+- If the health probe reports `WinError 10061`, start the UE project manually, wait for the plugin to connect, then rerun the doctor command; it is not an install failure.  
+- Documented because health failure is common when Unreal is not running and the CLI does not auto-start the editor.
+
+## 2026-01-22
+### PyPI + repo release 1.1.1
+- action: built via `python -m build`, validated `python -m twine check dist/tspec_runner-1.1.1*`, uploaded with `python -m twine upload --disable-progress-bar dist/tspec_runner-1.1.1*`
+- result: https://pypi.org/project/tspec-runner/1.1.1/
+- status: released
+
 ## 2026-01-15
 ### "tspec manual show android --full" failed
 - error: Manual id not found: 'android'
@@ -157,6 +183,54 @@ JP: 作業中のエラー/知見（日本語は下記）
 - fix: use `python -m twine upload --disable-progress-bar dist/*`
 - status: resolved
 
+## 2026-01-19
+### `tspec run examples/assert_only.tspec.md --report out/report.json`
+- observation: QA + PM verified the previously reported failure; the command now completes with `Passed: 1  Failed: 0` and produces `out/report.json`.
+- follow-up: `pytest -q` also runs cleanly (29 tests; see pyproject/dev suite).
+- status: verified (QA/PM alerted the engineer that no reproducible bug exists; monitoring continues for new reports).
+
+### Auto verification script
+- action: added `scripts/auto_verify_assert_only.py` to run the failing `tspec run` + `pytest -q` sequence automatically.
+- benefit: future checks can be invoked without manually typing the command list, and the QA/PM team can call it from CI or their local shell.
+- status: ready (documented and stored under QA skill follow-up).
+- update: `scripts/auto_verify_assert_only.py` now also attempts `examples/agent_browser_smoke.tspec.md --backend agent-browser` when the CLI is available, and skips gracefully when the binary cannot be found.
+
+### Auto verification run
+- action: ran `python scripts/auto_verify_assert_only.py` locally; it executed `assert_only`, `agent-browser` smoke, and `pytest -q`.
+- status: passed (all commands exited 0 and the script reported success).
+
+### agent-browser logging & Postman run
+- action: `AgentBrowserUIDriver` now writes `Run local`/`Run wsl` logs plus protocol exchanges to `artifacts/agent-browser/agent-browser.log`, so every command, fallback, and protocol message can be audited.
+- action: Added Postman instructions for hitting `http://127.0.0.1:8765/run` (compatible with `tspec mcp --transport streamable-http`) to execute `tspec run` via agent-browser or other backends.
+- follow-up: QA/PM should attach the log and screenshot artifacts to bug reports and rerun via Postman if CLI automation is needed; doc updates also mention `artifacts/agent-browser/agent-browser.log`.
+- status: documented (skill files and `docs/tools_urls.md` link to the new Postman endpoint).
+- resources: Postman public workspace collection linked in `docs/tools_urls.md` for quick import (https://www.postman.com/postman/postman-public-workspace/collection/681dc649440b35935978b8b7?action=share&source=copy-link&creator=0).
+- update: Documented Postman CLI usage (`postman-cli run ...`) in the agent-browser manual so CLI-only teams can execute the same MCP call without the Postman UI.
+- enhancement: Added `tspec postman-run` command to start the MCP streamable HTTP server (`--postman-mcp`/`--auto-mcp`), optionally pass `--postman-arg` flags, and execute a Postman collection from the CLI. This covers the `tspec run examples/postman_env.tspec.md` workflow mentioned in QA/PM requests.
+- note: `examples/postman_env.tspec.md` now defines a Postman-friendly assert-only spec so CLI runs do not require agent-browser; use it to validate the Postman/MCP pipeline via `tspec postman-run`.
+- http tool: Added `http.request` action so specs (e.g., `examples/api_solo_map.tspec.md`) can call `https://api.solo-map.app/` directly; combine with Postman CLI or `tspec postman-run` to verify connectivity without agent-browser.
+- execution: `tspec run examples/postman_env.tspec.md --backend agent-browser --report out/postman-agent-browser.json` failed because `agent-browser` reported "Browser not launched" (daemon not started yet). Starting the daemon via `agent-browser launch` or running another sample first resolves it; re-run once the agent-browser CLI is ready so `POSTMAN-001` can succeed.
+### agent-browser local search check
+- action: added `examples/agent_browser_local_search.tspec.md` to open `http://localhost:3000/search` via agent-browser and capture a screenshot.
+- run: `tspec run examples/agent_browser_local_search.tspec.md --backend agent-browser --report out/agent-browser-local.json`.
+- result: failed at `ui.open` because agent-browser reported `net::ERR_CONNECTION_REFUSED` (localhost:3000 not serving). Report logged in `out/agent-browser-local.json`.
+- follow-up: document reminds QA/PM that the local service must be running before this test; if the page is reachable, re-run the spec to gather the screenshot at `artifacts/agent-browser/AB-LOCAL-001.png`.
+### agent-browser local search check
+- action: initially created `examples/agent_browser_local_search.tspec.md` for local `http://localhost:3000/search` verification.
+- status: moved the spec into `local_notes/agent_browser_local_search.tspec.md` per project-local handling conventions.
+- run: `tspec run local_notes/agent_browser_local_search.tspec.md --backend agent-browser --report out/agent-browser-local.json`.
+- result: failure persists until localhost:3000 is available; once the service responds, rerun from the local_notes path to capture `artifacts/agent-browser/AB-LOCAL-001.png`.
+
+### QA testcase inventory audit
+- action: QA skill executed `scripts/qa_testcase_inventory.py` and generated `docs/qa_reports/testcase_inventory.md`, confirming each `_testcases.md` document contains reusable commands; PM asked engineering to treat this generated report as the canonical checklist and keep it current.
+- follow-up: QA agent has requested any missing or outdated commands be updated by the respective backend/frontend/game-engine teams via the report; no failures were detected during this run.
+- status: documented for PM/QA alignment and will be rerun whenever manual changes occur.
+
+### Doctor health probes now report availability
+- action: `_health_probe` now labels connection refusals (WinError 10061/ECONNREFUSED) as `[yellow]... unavailable` and explicitly notes the helper is not running rather than crashing.
+- benefit: When Unreal/Unity/Blender MCP helpers or other environment-dependent tools are not present, `tspec doctor --unreal-mcp-health` (or similar) now clarifies the backend is unavailable instead of surfacing a generic error.
+- status: behavior shipped; QA/PM notified the relevant service owners to mention the new messaging in manuals.
+
 ### PyPI README.rst render error (text/x-rst)
 - cause: README.rst had list formatting without blank lines
 - fix: reformat README.rst and validate with `python -m twine check dist/*`
@@ -214,8 +288,21 @@ JP: 作業中のエラー/知見（日本語は下記）
 
 ### Cleanup spec removes generated actors
 - change: add `examples/unreal_cleanup.tspec.md` + `unreal.cleanup_prefix` action to delete FutureCity/Town/Castle actors via `find_actors_by_name` + `delete_actor`
-- result: record of helper script runs can now clean up after failed builds
-- status: noted
+- result: cleanup_prefix now removes matching actors, and `tspec run examples/unreal_cleanup.tspec.md --backend unreal-mcp --auto-mcp` succeeds
+- status: resolved
+
+
+### Unreal cleanup spec parsing failure
+- cause: the spec was missing a closing ```tspec fence, so the parser raised "No ```tspec blocks found"
+- fix: add the trailing code fence to `examples/unreal_cleanup.tspec.md` and rerun the spec
+- result: `tspec run examples/unreal_cleanup.tspec.md --backend unreal-mcp --auto-mcp` now completes successfully (auto-MCP helper adds the cleanup steps)
+- status: resolved
+
+### Unreal cleanup tool result normalization
+- cause: `_run_tool` returned `CallToolResult` but handlers treated the response as a plain dict
+- fix: normalize MCP tool responses by preferring `structuredContent` (or falling back to JSON text) before returning to callers
+- result: cleanup, castle, and city actions now see consistent dict outputs; cleanup spec verified
+- status: resolved
 
 ### Unreal Engine castle automation spec
 - change: add `unreal.create_castle` action + `examples/unreal_castle.tspec.md` spec that runs `create_castle_fortress`
@@ -226,78 +313,33 @@ JP: 作業中のエラー/知見（日本語は下記）
 - action: add release notes per version in docs/release_notes_<version>.md
 - status: resolved (documented in update.md)
 
+## 2026-01-19
+### Unreal race prototype rollback
+- reason: race track builder implementation rejected
+- action: removed race MCP tools/spec (`helpers/race_creation.py`, `examples/unreal_race.tspec.md`) and restored cleanup prefixes to FutureCity/Town/Castle only
+- status: resolved
+
 ## JP (original)
 # Knowledge.md - 作業中のエラー/知見
 
+## 2026-01-22
+### PyPI + リポジトリ公開 1.1.1
+- 対応: `python -m build` でビルドし、`python -m twine check dist/tspec_runner-1.1.1*` を確認後、`python -m twine upload --disable-progress-bar dist/tspec_runner-1.1.1*` で公開
+- 結果: https://pypi.org/project/tspec-runner/1.1.1/
+- 状態: 公開済み
+
+## 2026-01-19
+### Unreal レース試作のロールバック
+- 理由: レーストラック実装が不要と判断
+- 対応: race MCP ツール/スペックを削除し、cleanup も FutureCity/Town/Castle のみに戻す
+- ステータス: 対応済み
+
 ## 2026-01-15
 ### "tspec manual show android --full"で失敗
-╭───────────────────────────────────────── Traceback (most recent call last) ──────────────────────────────────────────╮
-│ C:\WorkSpace\Private\Python\tspec-runner\src\tspec\cli.py:221 in manual_show                                         │
-│                                                                                                                      │
-│   218 │   if p.exists():                                                                                             │
-│   219 │   │   mf = load_manual(p)                                                                                    │
-│   220 │   else:                                                                                                      │
-│ ❱ 221 │   │   _p, mf = find_manual_by_id(base, target)                                                               │
-│   222 │   man = mf.manual                                                                                            │
-│   223 │                                                                                                              │
-│   224 │   console.print(f"[bold]{man.title}[/bold]  (id={man.id})")                                                  │
-│                                                                                                                      │
-│ ╭──────────── locals ─────────────╮                                                                                  │
-│ │   base = WindowsPath('docs')    │                                                                                  │
-│ │   full = True                   │                                                                                  │
-│ │      p = WindowsPath('android') │                                                                                  │
-│ │ target = 'android'              │                                                                                  │
-│ ╰─────────────────────────────────╯                                                                                  │
-│                                                                                                                      │
-│ C:\WorkSpace\Private\Python\tspec-runner\src\tspec\manual_loader.py:51 in find_manual_by_id                          │
-│                                                                                                                      │
-│   48 │   for p, mf in discover_manuals(base):                                                                        │
-│   49 │   │   if mf.manual.id == manual_id:                                                                           │
-│   50 │   │   │   return p, mf                                                                                        │
-│ ❱ 51 │   raise ValidationError(f"Manual id not found: {manual_id!r} (searched under {base})")                        │
-│   52                                                                                                                 │
-│                                                                                                                      │
-│ ╭───────────────────────────────────────────────────── locals ─────────────────────────────────────────────────────╮ │
-│ │      base = WindowsPath('docs')                                                                                  │ │
-│ │ manual_id = 'android'                                                                                            │ │
-│ │        mf = ManualFile(                                                                                          │ │
-│ │             │   manual=ManualDoc(                                                                                │ │
-│ │             │   │   id='update-script',                                                                          │ │
-│ │             │   │   title='更新取り込み（PowerShell update.ps1）',                                               │ │
-│ │             │   │   tags=['update', 'powershell', 'git'],                                                        │ │
-│ │             │   │                                                                                                │ │
-│ │             summary='配布zipを既存リポジトリに取り込む際の事故（上書き、タグ忘れ）を減らすための補助。\nブラン … │ │
-│ │             を一括で行う。\n',                                                                                   │ │
-│ │             │   │   prerequisites=['Windows PowerShell / PowerShell 7', 'git が利用可能'],                       │ │
-│ │             │   │   steps=[                                                                                      │ │
-│ │             │   │   │   ManualStep(                                                                              │ │
-│ │             │   │   │   │   title='1) update.ps1 を使う（repo直下で）',                                          │ │
-│ │             │   │   │   │   body='.\\scripts\\update.ps1 -ZipPath "$HOME\\Downloads\\tspec-runner-<version>.zip" │ │
-│ │             -Repo'+6                                                                                             │ │
-│ │             │   │   │   ),                                                                                       │ │
-│ │             │   │   │   ManualStep(                                                                              │ │
-│ │             │   │   │   │   title='2) ZipPath 省略（Downloadsから最新を自動選択）',                              │ │
-│ │             │   │   │   │   body='.\\scripts\\update.ps1 -RepoDir .\n'                                           │ │
-│ │             │   │   │   ),                                                                                       │ │
-│ │             │   │   │   ManualStep(                                                                              │ │
-│ │             │   │   │   │   title='3) install版から取り出す（任意）',                                            │ │
-│ │             │   │   │   │   body='tspec asset list\ntspec asset update.ps1 --to .\n'                             │ │
-│ │             │   │   │   )                                                                                        │ │
-│ │             │   │   ],                                                                                           │ │
-│ │             │   │   troubleshooting=[                                                                            │ │
-│ │             │   │   │   ManualStep(                                                                              │ │
-│ │             │   │   │   │   title='not a git repository',                                                        │ │
-│ │             │   │   │   │   body='先に git init / commit を作ってから利用する。'                                 │ │
-│ │             │   │   │   )                                                                                        │ │
-│ │             │   │   ],                                                                                           │ │
-│ │             │   │   references=[]                                                                                │ │
-│ │             │   ),                                                                                               │ │
-│ │             │   meta={}                                                                                          │ │
-│ │             )                                                                                                    │ │
-│ │         p = WindowsPath('docs/update_script.tspec.md')                                                           │ │
-│ ╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯ │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-ValidationError: Manual id not found: 'android' (searched under docs)
+- 原因: manual の検索が id のみ対象で、android は android-env のタグだった
+- 対応: タグ/パスキーでの検索を許可し、タグ/パス/曖昧一致のテストを追加
+- 状態: 解決済み
+
 ## 2026-01-16
 ### pytest collection error: httpx missing
 - cause: tests/test_neko_client.py imports httpx but dependency not declared
@@ -309,32 +351,10 @@ ValidationError: Manual id not found: 'android' (searched under docs)
 - fix: allow lookup by tag/path key; add unit tests for tag/path/ambiguous match
 - status: resolved
 
-### "tspec spec"で失敗
-                     Spec support
-┏━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┓
-┃ latest ┃ supported generations ┃ supported versions ┃
-┡━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━┩
-│ 0.1.0  │ -2..1                 │ 0.1.0              │
-└────────┴───────────────────────┴────────────────────┘
-╭───────────────────────────────────────── Traceback (most recent call last) ──────────────────────────────────────────╮
-│ C:\WorkSpace\Private\Python\tspec-runner\src\tspec\cli.py:115 in spec                                                │
-│                                                                                                                      │
-│   112 │   console.print(table)                                                                                       │
-│   113 │                                                                                                              │
-│   114 │                                                                                                              │
-│ ❱ 115 │   if android:                                                                                                │
-│   116 │   │   at = Table(title="Android/Appium checks")                                                              │
-│   117 │   │   at.add_column("check")                                                                                 │
-│   118 │   │   at.add_column("status")                                                                                │
-│                                                                                                                      │
-│ ╭────────────────────────── locals ──────────────────────────╮                                                       │
-│ │ g_latest = 1                                               │                                                       │
-│ │    g_min = -2                                              │                                                       │
-│ │   latest = <Version('0.1.0')>                              │                                                       │
-│ │    table = <rich.table.Table object at 0x0000024A9D6A8CB0> │                                                       │
-│ ╰────────────────────────────────────────────────────────────╯                                                       │
-╰──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-NameError: name 'android' is not defined
+### "tspec spec"でNameError
+- 原因: spec() が android/selenium/ios オプション定義前に参照していた
+- 対応: spec() のシグネチャに各オプションを追加
+- 状態: 解決済み
 
 ## 2026-01-16
 ### "tspec spec" NameError

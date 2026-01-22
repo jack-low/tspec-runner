@@ -31,4 +31,6 @@ manual:
       blender.rpc(method="scene.list", params={})'
   troubleshooting: []
   references: []
+  references:
+  - "Skill: docs/skills/game_engine_skill.md"
 ```

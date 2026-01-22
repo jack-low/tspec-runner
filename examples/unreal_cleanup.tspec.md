@@ -24,3 +24,4 @@ cases:
       - do: assert.true
         with:
           value: "${len(cleanup.deleted_actors) >= 0}"
+```

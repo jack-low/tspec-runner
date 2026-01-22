@@ -1,4 +1,5 @@
 # Playwright TestCases
+Skill: docs/skills/qa_skill.md
 JP: Playwright テストケース
 
 ## Preconditions

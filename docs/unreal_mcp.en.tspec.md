@@ -45,9 +45,10 @@ manual:
         }
   troubleshooting:
   - title: Server starts but no responses
-    body: Ensure Unreal Engine is running with the UnrealMCP plugin enabled.
+    body: Ensure Unreal Engine is running with the UnrealMCP plugin enabled and that `uv run unreal_mcp_server_advanced.py` has connected before running health checks.
   - title: uv not found
     body: Install uv or set an absolute path in MCP config.
   references:
   - 'Unreal Engine MCP: https://github.com/flopperam/unreal-engine-mcp'
+  - "Skill: docs/skills/game_engine_skill.md"
 ```

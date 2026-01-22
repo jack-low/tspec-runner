@@ -28,4 +28,6 @@ manual:
   - title: not a git repository
     body: git init / commit を先に行う。
   references: []
+  references:
+  - "Skill: docs/skills/release_skill.md"
 ```

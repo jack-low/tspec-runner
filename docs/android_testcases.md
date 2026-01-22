@@ -1,4 +1,5 @@
 # Android (Appium) TestCases
+Skill: docs/skills/qa_skill.md
 JP: Android (Appium) テストケース
 
 ## Preconditions

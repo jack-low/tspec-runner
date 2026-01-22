@@ -12,6 +12,7 @@ from .when_expr import eval_when
 from .registry import ActionRegistry
 from .context import RunContext
 from . import actions_assert
+from . import actions_http
 from . import actions_ui
 from . import actions_unreal
 
@@ -100,6 +101,10 @@ class Runner:
 
     def _dispatch_with_timeout(self, action: str, args: Dict[str, Any], timeout_ms: int) -> Any:
         """Run a single action with a runner-side hard timeout."""
+        # Playwright sync API must stay on the same thread that created it.
+        if getattr(self.ctx, "ui", None) and getattr(self.ctx.ui, "backend", None) == "playwright":
+            return self._dispatch(action, args)
+
         def _call():
             return self._dispatch(action, args)
 
@@ -247,6 +252,7 @@ def build_registry() -> ActionRegistry:
     reg.register("assert.matches", lambda ctx, a: actions_assert.matches(a))
 
     # ui.* actions depend on ctx.ui
+    reg.register("http.request", lambda ctx, a: actions_http.http_request(a))
     reg.register("ui.open", lambda ctx, a: actions_ui.ui_open(ctx, a))
     reg.register("ui.open_app", lambda ctx, a: actions_ui.ui_open_app(ctx, a))
     reg.register("ui.click", lambda ctx, a: actions_ui.ui_click(ctx, a))
@@ -257,4 +263,5 @@ def build_registry() -> ActionRegistry:
     reg.register("ui.close", lambda ctx, a: actions_ui.ui_close(ctx, a))
     reg.register("unreal.create_castle", lambda ctx, a: actions_unreal.create_castle(ctx, a))
     reg.register("unreal.create_city", lambda ctx, a: actions_unreal.create_city(ctx, a))
+    reg.register("unreal.cleanup_prefix", lambda ctx, a: actions_unreal.cleanup_prefix(ctx, a))
     return reg

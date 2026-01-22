@@ -1,4 +1,5 @@
 # Demo assets update flow
+Skill: docs/skills/docs_writer_skill.md
 JP: README と PyPI のデモ画像/アニメーション更新手順
 
 This guide keeps README (GitHub) and PyPI demo assets in sync.

@@ -24,7 +24,27 @@ manual:
     body: "HTTP で立てる：\n  tspec mcp --transport streamable-http --workdir . --host\
       \ 127.0.0.1 --port 8765\n\nInspector：\n  npx -y @modelcontextprotocol/inspector\n\
       \n接続先： http://127.0.0.1:8765/mcp"
-  - title: 4) 代表ツール
+  - title: 4) Postman からの tspec run
+    body: |
+      tspec mcp --transport streamable-http --host 127.0.0.1 --port 8765
+      POST http://127.0.0.1:8765/run
+      Headers: Content-Type: application/json
+      Body:
+      {
+        "path": "examples/assert_only.tspec.md",
+        "backend": "selenium",
+        "report": "out/postman-agent-browser.json"
+      }
+      レスポンスには `passed`/`failed`/`report` が含まれます。Postman の環境変数で各値を切り替えられます。
+  - title: 5) Postman CLI helper
+    body: |
+      tspec postman-run https://www.postman.com/postman/postman-public-workspace/collection/681dc649440b35935978b8b7?action=share&source=copy-link&creator=0 --postman-mcp
+      `--postman-arg` で `--env-var baseUrl=http://localhost:3000` のような追加オプションを渡せます。
+  - title: SoloMap API への直接確認
+    body: |
+      `examples/api_solo_map.tspec.md` は `http.request` で https://api.solo-map.app/ を GET するスペックです。
+      Postman CLI はコレクションの JSON body に `path=examples/api_solo_map.tspec.md` を指定して `/run` を呼び、API 接続を確認できます。
+  - title: 5) 代表ツール
     body: '- tspec_validate(path)
 
       - tspec_run(path, backend, report)
@@ -39,5 +59,6 @@ manual:
     body: extras を入れていない：pip install -e ".[mcp]"
   - title: path must be under workdir
     body: セキュリティのため workdir 配下のみアクセス可能。
-  references: []
+  references:
+  - "Skill: docs/skills/backend_skill.md"
 ```

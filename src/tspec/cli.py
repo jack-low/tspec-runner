@@ -1,6 +1,10 @@
 from __future__ import annotations
 import builtins
 import os
+import socket
+import subprocess
+import sys
+import time
 
 import json
 import re
@@ -43,6 +47,35 @@ def _coerce_opt_str(v):
     except Exception:
         pass
     return v
+
+
+def _start_streamable_mcp(host: str, port: int) -> subprocess.Popen:
+    cmd = [
+        sys.executable,
+        "-m",
+        "tspec.cli",
+        "mcp",
+        "--transport",
+        "streamable-http",
+        "--host",
+        host,
+        "--port",
+        str(port),
+    ]
+    proc = subprocess.Popen(
+        cmd,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+    )
+    deadline = time.monotonic() + 10.0
+    while time.monotonic() < deadline:
+        try:
+            with socket.create_connection((host, port), timeout=0.5):
+                return proc
+        except Exception:
+            time.sleep(0.25)
+    proc.terminate()
+    raise ExecutionError(f"MCP helper failed to start on {host}:{port}; check logs")
 
 _DEFAULT_UNREAL_SCRIPT = Path("local_notes/unreal-engine-mcp/Python/unreal_mcp_server_advanced.py")
 
@@ -243,7 +276,15 @@ def doctor(
         except HTTPError as exc:
             console.print(f"[red]{name} health failed[/red] {health_url} => HTTP {exc.code}")
         except URLError as exc:
-            console.print(f"[red]{name} health failed[/red] {health_url} => {exc.reason}")
+            detail = exc.reason
+            detail_text = getattr(detail, "strerror", str(detail))
+            reason_code = getattr(detail, "errno", None)
+            if reason_code in (61, 111, 10061):
+                console.print(
+                    f"[yellow]{name} unavailable[/yellow] {health_url} => {detail_text} (unreal/Unity/Blender helper not running)"
+                )
+            else:
+                console.print(f"[red]{name} health failed[/red] {health_url} => {detail_text}")
         except Exception as exc:  # pragma: no cover
             console.print(f"[red]{name} health failed[/red] {health_url} => {exc}")
 
@@ -493,7 +534,7 @@ def report(
                 st.add_column("error")
                 for i, s in enumerate(c.steps, start=1):
                     err = format_error_message(s.error, full_trace=full_trace, max_len=max_message_len)
-                st.add_row(str(i), s.status, s.do, str(s.name or ""), str(s.duration_ms), err)
+                    st.add_row(str(i), s.status, s.do, str(s.name or ""), str(s.duration_ms), err)
                 console.print(st)
 
         # If errors exist, show a compact failure summary at the end
@@ -641,7 +682,7 @@ def run(
                 else:
                     out = Path(report)
 
-                                # Typer should pass str, but be defensive if a list slips in
+                # Typer should pass str, but be defensive if a list slips in
                 if isinstance(pytest_html, builtins.list):
                     pytest_html = pytest_html[0] if pytest_html else None
                 if isinstance(pytest_junitxml, builtins.list):
@@ -670,6 +711,43 @@ def run(
         _exit(2, f"ERROR: {e}")
     except ExecutionError as e:
         _exit(3, f"RUNTIME ERROR: {e}")
+
+
+@app.command("postman-run")
+def postman_run(
+    collection: str = typer.Argument(..., help="Postman collection URL or path"),
+    environment: Optional[Path] = typer.Option(None, "--environment", "-e", help="Postman environment JSON"),
+    host: str = typer.Option("127.0.0.1", "--host", help="MCP host for Postman run"),
+    port: int = typer.Option(8765, "--port", help="MCP port for Postman run"),
+    postman_cmd: str = typer.Option("postman-cli", "--postman-cmd", help="Postman CLI executable"),
+    postman_mcp: bool = typer.Option(False, "--postman-mcp", help="Ensure tspec mcp streamable-http server is running"),
+    auto_mcp: bool = typer.Option(False, "--auto-mcp", help="Alias for --postman-mcp"),
+    postman_arg: List[str] = typer.Option([], "--postman-arg", help="Extra arguments forwarded to postman-cli"),
+):
+    """Run a Postman CLI collection against the tspec MCP HTTP run endpoint."""
+    mcp_proc: Optional[subprocess.Popen] = None
+    ensure_mcp = postman_mcp or auto_mcp
+    try:
+        if ensure_mcp:
+            console.print(f"[blue]Starting MCP helper for Postman[/blue] {host}:{port}")
+            mcp_proc = _start_streamable_mcp(host, port)
+        cmd = [postman_cmd, "run", "--collection", collection]
+        if environment:
+            cmd.extend(["--environment", str(environment)])
+        if host:
+            cmd.extend(["--env-var", f"host={host}"])
+        if postman_arg:
+            cmd.extend(postman_arg)
+        console.print(f"[green]Running Postman CLI[/green] {' '.join(cmd)}")
+        subprocess.run(cmd, check=True)
+    except FileNotFoundError as exc:
+        raise ExecutionError(
+            f"Postman CLI '{postman_cmd}' not found. Install via npm install -g postman-cli"
+        ) from exc
+    finally:
+        if mcp_proc:
+            mcp_proc.terminate()
+            mcp_proc.wait(timeout=5)
 
 
 
@@ -855,16 +933,24 @@ def mcp(
         mcp_start(
             transport=transport,
             workdir=str(workdir),
-        host=host,
-        port=port,
-        unity_mcp_url=unity_mcp_url,
-        blender_mcp_url=blender_mcp_url,
-        auto_unreal=auto_unreal,
-        auto_unreal_cmd=str(auto_unreal_cmd) if auto_unreal_cmd else None,
-        auto_unity=auto_unity,
-        auto_unity_cmd=str(auto_unity_cmd) if auto_unity_cmd else None,
-        auto_blender=auto_blender,
-        auto_blender_cmd=str(auto_blender_cmd) if auto_blender_cmd else None,
-    )
+            host=host,
+            port=port,
+            unity_mcp_url=unity_mcp_url,
+            blender_mcp_url=blender_mcp_url,
+            auto_unreal=auto_unreal,
+            auto_unreal_cmd=str(auto_unreal_cmd) if auto_unreal_cmd else None,
+            auto_unity=auto_unity,
+            auto_unity_cmd=str(auto_unity_cmd) if auto_unity_cmd else None,
+            auto_blender=auto_blender,
+            auto_blender_cmd=str(auto_blender_cmd) if auto_blender_cmd else None,
+        )
     except Exception as e:
         _exit(3, f"MCP ERROR: {e}")
+
+
+def main() -> None:
+    app()
+
+
+if __name__ == "__main__":
+    main()

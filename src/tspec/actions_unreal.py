@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 import asyncio
+import json
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
+
+from mcp.types import CallToolResult
 
 from .context import RunContext
 from .errors import ExecutionError
@@ -42,6 +45,43 @@ def _embed_tool_args(args: Dict[str, Any]) -> Dict[str, Any]:
     return tool_args
 
 
+def _dump_content_blocks(blocks: Iterable[Any] | None) -> list[Any]:
+    values: list[Any] = []
+    for block in blocks or []:
+        values.append(block.model_dump() if hasattr(block, "model_dump") else block)
+    return values
+
+
+def _parse_content_json(blocks: Iterable[Any] | None) -> Any | None:
+    for block in blocks or []:
+        text = getattr(block, "text", None)
+        if isinstance(text, str):
+            try:
+                return json.loads(text)
+            except json.JSONDecodeError:
+                continue
+    return None
+
+
+def _normalize_tool_result(result: Any) -> Any:
+    if isinstance(result, CallToolResult):
+        if result.structuredContent is not None:
+            return dict(result.structuredContent)
+        parsed = _parse_content_json(result.content)
+        if parsed is not None:
+            return parsed
+        return {"content": _dump_content_blocks(result.content), "_meta": result.meta}
+    return result
+
+
+def _resolve_server_script_path(args: Dict[str, Any]) -> Path:
+    script_arg = args.get("server_script")
+    script_path = Path(script_arg or "local_notes/unreal-engine-mcp/Python/unreal_mcp_server_advanced.py").resolve()
+    if not script_path.exists():
+        raise ExecutionError(f"Unreal MCP server script not found at {script_path}")
+    return script_path
+
+
 async def _call_tool_async(
     script: Path,
     tool_name: str,
@@ -69,8 +109,10 @@ def _run_tool(script: Path, tool_name: str, tool_args: Dict[str, Any], timeout_m
 
     try:
         if timeout_secs is None:
-            return asyncio.run(_inner())
-        return asyncio.run(asyncio.wait_for(_inner(), timeout_secs))
+            result = asyncio.run(_inner())
+        else:
+            result = asyncio.run(asyncio.wait_for(_inner(), timeout_secs))
+        return _normalize_tool_result(result)
     except asyncio.TimeoutError as exc:
         raise ExecutionError(f"Unreal MCP tool '{tool_name}' timed out after {timeout_ms} ms") from exc
     except Exception as exc:
@@ -78,10 +120,7 @@ def _run_tool(script: Path, tool_name: str, tool_args: Dict[str, Any], timeout_m
 
 
 def create_castle(ctx: RunContext, args: Dict[str, Any]) -> Dict[str, Any]:
-    script_arg = args.get("server_script")
-    script_path = Path(script_arg or "local_notes/unreal-engine-mcp/Python/unreal_mcp_server_advanced.py").resolve()
-    if not script_path.exists():
-        raise ExecutionError(f"Unreal MCP server script not found at {script_path}")
+    script_path = _resolve_server_script_path(args)
 
     tool_name = args.get("tool", "create_castle_fortress")
     timeout_ms = int(args.get("timeout_ms", 420000) or 420000)
@@ -92,10 +131,7 @@ def create_castle(ctx: RunContext, args: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def cleanup_prefix(ctx: RunContext, args: Dict[str, Any]) -> Dict[str, Any]:
-    script_arg = args.get("server_script")
-    script_path = Path(script_arg or "local_notes/unreal-engine-mcp/Python/unreal_mcp_server_advanced.py").resolve()
-    if not script_path.exists():
-        raise ExecutionError(f"Unreal MCP server script not found at {script_path}")
+    script_path = _resolve_server_script_path(args)
 
     prefixes = args.get("prefixes") or ["FutureCity", "Town"]
     timeout_ms = int(args.get("timeout_ms", 120000) or 120000)
@@ -126,10 +162,7 @@ def _embed_city_args(args: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def create_city(ctx: RunContext, args: Dict[str, Any]) -> Dict[str, Any]:
-    script_arg = args.get("server_script")
-    script_path = Path(script_arg or "local_notes/unreal-engine-mcp/Python/unreal_mcp_server_advanced.py").resolve()
-    if not script_path.exists():
-        raise ExecutionError(f"Unreal MCP server script not found at {script_path}")
+    script_path = _resolve_server_script_path(args)
 
     tool_name = args.get("tool", "create_town")
     timeout_ms = int(args.get("timeout_ms", 420000) or 420000)

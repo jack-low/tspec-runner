@@ -38,4 +38,5 @@ manual:
     body: "tspec.toml の executable_path を指定するか、再インストールする。"
   references:
   - 'Playwright Python: https://playwright.dev/python/'
+  - "Skill: docs/skills/frontend_skill.md"
 ```

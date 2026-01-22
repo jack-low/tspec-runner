@@ -1,4 +1,5 @@
 # Release Notes 1.0.8 (English primary)
+Skill: docs/skills/release_skill.md
 JP: リリースノート（日本語は下記）
 
 # Release Notes 1.0.8

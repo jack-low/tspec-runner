@@ -1,4 +1,5 @@
 # Selenium ToDo (English primary)
+Skill: docs/skills/pm_skill.md
 JP: Selenium ToDo（日本語は下記）
 
 # Selenium Enhancement ToDo

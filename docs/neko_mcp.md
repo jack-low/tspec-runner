@@ -1,4 +1,5 @@
 # Neko MCP tools (tspec-runner)
+Skill: docs/skills/backend_skill.md
 JP: Neko MCP ツール（tspec-runner）
 
 Expose Neko REST API as MCP tools under `neko.*`.

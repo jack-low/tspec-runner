@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
 from pathlib import Path
 import json
 import os
@@ -24,6 +25,7 @@ class AgentBrowserSettings:
     wsl_fallback: bool = False
     wsl_distro: Optional[str] = None
     wsl_workdir: Optional[str] = None
+    log_path: Optional[str] = None
 
 
 def _windows_path_to_wsl(path: str) -> str:
@@ -140,6 +142,7 @@ class AgentBrowserUIDriver:
             resolved = _resolve_windows_agent_browser(self.settings.binary)
             if resolved:
                 self.settings.binary = resolved
+        self._log_path = self._resolve_log_path()
 
     def _build_cmd(self, *args: str) -> list[str]:
         cmd = [self.settings.binary]
@@ -149,6 +152,7 @@ class AgentBrowserUIDriver:
         return cmd
 
     def _run_local(self, cmd: list[str]) -> str:
+        self._log(f"Run local: {' '.join(cmd)}")
         try:
             proc = subprocess.run(
                 cmd,
@@ -166,10 +170,14 @@ class AgentBrowserUIDriver:
             stdout = (e.stdout or "").strip()
             detail = stderr or stdout or str(e)
             detail = detail.encode("ascii", "replace").decode("ascii")
+            self._log(f"Run local error: {' '.join(cmd)} => {detail}")
             raise ExecutionError(f"agent-browser failed: {' '.join(cmd)} ({detail})") from e
-        return (proc.stdout or "").strip()
+        out = (proc.stdout or "").strip()
+        self._log(f"Run local result: {' '.join(cmd)} => {out}")
+        return out
 
     def _run_wsl(self, cmd: list[str]) -> str:
+        self._log(f"Run wsl: {' '.join(cmd)}")
         if os.name != "nt":
             raise ExecutionError("WSL fallback is only supported on Windows.")
         quoted = " ".join(shlex.quote(arg) for arg in cmd)
@@ -194,6 +202,7 @@ class AgentBrowserUIDriver:
             stdout = (e.stdout or "").strip()
             detail = stderr or stdout or str(e)
             detail = detail.encode("ascii", "replace").decode("ascii")
+            self._log(f"Run wsl error: {quoted} => {detail}")
             raise ExecutionError(f"agent-browser failed (wsl): {quoted} ({detail})") from e
         return (proc.stdout or "").strip()
 
@@ -318,6 +327,7 @@ class AgentBrowserUIDriver:
         payload = dict(payload)
         payload["id"] = str(self._seq)
         msg = json.dumps(payload) + "\n"
+        self._log(f"Protocol request: {json.dumps(payload)}")
         with socket.create_connection(("127.0.0.1", port), timeout=5) as s:
             s.sendall(msg.encode("utf-8"))
             s.settimeout(self.settings.timeout_ms / 1000.0)
@@ -328,10 +338,24 @@ class AgentBrowserUIDriver:
                     break
                 buf += chunk
         line = buf.decode("utf-8", errors="replace").strip()
+        self._log(f"Protocol response: {line}")
         if not line:
             raise ExecutionError("agent-browser protocol: empty response")
         data = json.loads(line)
         if not data.get("success", False):
             msg = str(data.get("error") or data.get("message") or "unknown error")
+            self._log(f"Protocol error: {msg}")
             raise ExecutionError(f"agent-browser protocol error: {msg}")
         return data.get("data", {})
+
+    def _resolve_log_path(self) -> Path:
+        if self.settings.log_path:
+            return Path(self.settings.log_path)
+        return Path("artifacts") / "agent-browser" / "agent-browser.log"
+
+    def _log(self, message: str) -> None:
+        path = self._log_path
+        path.parent.mkdir(parents=True, exist_ok=True)
+        ts = datetime.utcnow().isoformat()
+        with path.open("a", encoding="utf-8") as fh:
+            fh.write(f"{ts} {message}\n")

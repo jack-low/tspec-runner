@@ -38,4 +38,5 @@ manual:
     body: Set `executable_path` in `tspec.toml` or reinstall Playwright browsers.
   references:
   - 'Playwright Python: https://playwright.dev/python/'
+  - "Skill: docs/skills/frontend_skill.md"
 ```

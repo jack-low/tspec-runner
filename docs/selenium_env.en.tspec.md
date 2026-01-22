@@ -27,4 +27,5 @@ manual:
   references:
   - 'Selenium Documentation: https://www.selenium.dev/documentation/'
   - 'ChromeDriver: https://chromedriver.chromium.org/'
+  - "Skill: docs/skills/frontend_skill.md"
 ```

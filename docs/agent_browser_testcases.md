@@ -1,4 +1,5 @@
 # agent-browser TestCases
+Skill: docs/skills/qa_skill.md
 JP: agent-browser テストケース
 
 ## Preconditions

@@ -27,4 +27,6 @@ manual:
       unity.tool(name="debug_request_context", arguments={})'
   troubleshooting: []
   references: []
+  references:
+  - "Skill: docs/skills/game_engine_skill.md"
 ```

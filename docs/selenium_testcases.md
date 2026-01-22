@@ -1,4 +1,5 @@
 # Selenium TestCases
+Skill: docs/skills/qa_skill.md
 JP: Selenium テストケース
 
 ## Preconditions

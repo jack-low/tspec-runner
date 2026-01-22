@@ -75,3 +75,8 @@ packages = ["src/tspec"]
 line-length = 100
 target-version = "1.0.3"
 select = ["E", "F", "I", "UP", "B"]
+
+[tool.uv.workspace]
+members = [
+    "local_notes/unreal-engine-mcp/tests",
+]

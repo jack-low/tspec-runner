@@ -1,4 +1,5 @@
 # Blender MCP TestCases
+Skill: docs/skills/qa_skill.md
 JP: Blender MCP テストケース
 
 ## Preconditions

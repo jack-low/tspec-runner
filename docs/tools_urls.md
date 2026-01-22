@@ -1,4 +1,5 @@
 # Tool URLs (English primary)
+Skill: docs/skills/docs_writer_skill.md
 JP: 各ツールのURL一覧（日本語は下記）
 
 # Tools URLs
@@ -13,6 +14,9 @@ JP: 各ツールのURL一覧（日本語は下記）
 
 ## UI backends
 - agent-browser: https://github.com/vercel-labs/agent-browser
+- Postman collection (Postman Public Workspace): https://www.postman.com/postman/postman-public-workspace/collection/681dc649440b35935978b8b7?action=share&source=copy-link&creator=0
+- Postman CLI (postman-cli): https://www.npmjs.com/package/postman-cli
+- tspec postman-run command docs: docs/agent_browser_env.en.tspec.md
 - Playwright: https://playwright.dev/python/
 - Selenium: https://www.selenium.dev/documentation/
 - ChromeDriver: https://chromedriver.chromium.org/
@@ -56,6 +60,8 @@ JP: 各ツールのURL一覧（日本語は下記）
 
 ## UI backends
 - agent-browser: https://github.com/vercel-labs/agent-browser
+- Postman + tspec-runner streamable HTTP run: http://127.0.0.1:8765/run (POST JSON {"path": "...", "backend": "...", "report": "..."})
+- tspec postman-run command docs: docs/agent_browser_env.jp.tspec.md
 - Playwright: https://playwright.dev/python/
 - Selenium: https://www.selenium.dev/documentation/
 - ChromeDriver: https://chromedriver.chromium.org/

@@ -28,4 +28,5 @@ manual:
     body: Ensure appium is running on 127.0.0.1:4723.
   references:
   - 'Android SDK 環境変数: https://developer.android.com/studio/command-line/variables'
+  - "Skill: docs/skills/mobile_skill.md"
 ```

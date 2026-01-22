@@ -1,4 +1,5 @@
 # FEATURES.md - Roadmap
+Skill: docs/skills/pm_skill.md
 JP: 将来実装予定のまとめ（ロードマップ）
 
 ## Phase 0 (browser testing)

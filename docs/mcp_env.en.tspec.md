@@ -42,5 +42,25 @@ manual:
     body: 'MCP extras not installed: pip install -e ".[mcp]"'
   - title: path must be under workdir
     body: For safety, only paths under workdir are allowed.
-  references: []
+  - title: Postman → tspec run
+    body: |
+      Use Postman to POST the JSON body described below to http://127.0.0.1:8765/run.
+      Headers: Content-Type: application/json
+      Body example:
+      {
+        "path": "examples/assert_only.tspec.md",
+        "backend": "selenium",
+        "report": "out/agent-browser-postman.json"
+      }
+      The response returns `passed`, `failed`, and `report`. Use Postman's environment variables to swap spec/backend/report paths.
+  - title: Postman CLI helper
+    body: |
+      tspec postman-run https://www.postman.com/postman/postman-public-workspace/collection/681dc649440b35935978b8b7?action=share&source=copy-link&creator=0 --postman-mcp
+      Add `--postman-arg` entries to pass extra flags (e.g., `--postman-arg --env-var baseUrl=http://localhost:3000`).
+  - title: SoloMap API direct check
+    body: |
+      Use `examples/api_solo_map.tspec.md` with `http.request` to verify https://api.solo-map.app/.
+      Postman CLI can execute this spec by pointing `--env-var path=examples/api_solo_map.tspec.md` when running a collection against `/run`.
+  references:
+  - "Skill: docs/skills/backend_skill.md"
 ```

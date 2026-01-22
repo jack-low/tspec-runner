@@ -37,4 +37,5 @@ manual:
   troubleshooting: []
   references:
   - README.md の TSPEC-Z1 圧縮（AI引き渡し用）
+  - "Skill: docs/skills/tspec_runner_skill.md"
 ```

@@ -28,4 +28,6 @@ manual:
   - title: not a git repository
     body: run git init / commit first.
   references: []
+  references:
+  - "Skill: docs/skills/release_skill.md"
 ```

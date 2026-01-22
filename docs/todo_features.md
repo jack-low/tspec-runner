@@ -1,4 +1,5 @@
 # Features ToDo (English primary)
+Skill: docs/skills/pm_skill.md
 JP: ToDo 一覧（日本語は下記）
 
 # Features ToDo

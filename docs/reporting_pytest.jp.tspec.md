@@ -25,4 +25,6 @@ manual:
   - title: pytest-html が無い
     body: 'extras が未導入: uv pip install -e ".[report]"'
   references: []
+  references:
+  - "Skill: docs/skills/qa_skill.md"
 ```

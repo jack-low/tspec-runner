@@ -1,4 +1,5 @@
 # Unity MCP TestCases
+Skill: docs/skills/qa_skill.md
 JP: Unity MCP テストケース
 
 ## Preconditions

@@ -1,4 +1,5 @@
 # Unreal Engine MCP (English primary)
+Skill: docs/skills/game_engine_skill.md
 JP: Unreal Engine MCP（日本語は下記）
 
 This repo integrates the Unreal Engine MCP server maintained by flopperam.

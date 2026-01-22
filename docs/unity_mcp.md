@@ -1,4 +1,5 @@
 # Unity MCP tools (tspec-runner)
+Skill: docs/skills/game_engine_skill.md
 JP: Unity MCP ツール（tspec-runner）
 
 We add Unity MCP REST/MCP wrapper tools to the tspec MCP server.
